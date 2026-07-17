@@ -1,0 +1,1036 @@
+# 此文件由 bun run openapi:generate 生成，请勿手工修改。
+openapi: 3.1.0
+info:
+  title: 技能管家浏览器本地 API
+  version: 1.0.0
+  description: 只在本机回环地址提供的 Skills Manager 数据浏览与场景归属接口。
+  license:
+    name: Proprietary
+    url: https://choosealicense.com/no-permission/
+servers:
+  - url: http://127.0.0.1:4173
+    description: 本地服务
+security: []
+components:
+  schemas:
+    ApplicationStatusEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/ApplicationStatus"
+        meta:
+          type: object
+          properties:
+            requestId:
+              type: string
+              format: uuid
+              example: 8d59b246-5e62-4a2e-bf67-2579a456a882
+          required:
+            - requestId
+          additionalProperties: false
+      required:
+        - data
+        - meta
+      additionalProperties: false
+    ApplicationStatus:
+      type: object
+      properties:
+        database:
+          type: object
+          properties:
+            state:
+              $ref: "#/components/schemas/DatabaseState"
+            writable:
+              type: boolean
+              example: true
+            label:
+              type: string
+              example: skills-manager.db
+            issues:
+              type: array
+              items:
+                type: string
+              example: []
+          required:
+            - state
+            - writable
+            - label
+            - issues
+          additionalProperties: false
+      required:
+        - database
+      additionalProperties: false
+    DatabaseState:
+      type: string
+      enum:
+        - ready
+        - missing
+        - incompatible
+        - unavailable
+      example: ready
+    ErrorEnvelope:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: {}
+          required:
+            - code
+            - message
+            - details
+          additionalProperties: false
+        meta:
+          type: object
+          properties:
+            requestId:
+              type: string
+          required:
+            - requestId
+          additionalProperties: false
+      required:
+        - error
+        - meta
+      additionalProperties: false
+    OverviewEnvelope:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            skills:
+              type: integer
+            sources:
+              type: integer
+            scenarios:
+              type: integer
+            orphanSkills:
+              type: integer
+            multiScenarioSkills:
+              type: integer
+          required:
+            - skills
+            - sources
+            - scenarios
+            - orphanSkills
+            - multiScenarioSkills
+          additionalProperties: false
+        meta:
+          type: object
+          properties:
+            requestId:
+              type: string
+          required:
+            - requestId
+          additionalProperties: false
+      required:
+        - data
+        - meta
+      additionalProperties: false
+    SourcesEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Source"
+        meta:
+          type: object
+          properties:
+            page:
+              type: integer
+            pageSize:
+              type: integer
+            total:
+              type: integer
+              minimum: 0
+            requestId:
+              type: string
+          required:
+            - page
+            - pageSize
+            - total
+            - requestId
+          additionalProperties: false
+      required:
+        - data
+        - meta
+      additionalProperties: false
+    Source:
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        externalUrl:
+          type:
+            - string
+            - "null"
+          format: uri
+        skillCount:
+          type: integer
+        assignedSkillCount:
+          type: integer
+        orphanSkillCount:
+          type: integer
+      required:
+        - id
+        - key
+        - name
+        - type
+        - externalUrl
+        - skillCount
+        - assignedSkillCount
+        - orphanSkillCount
+      additionalProperties: false
+    ScenariosEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Scenario"
+        meta:
+          type: object
+          properties:
+            page:
+              type: integer
+            pageSize:
+              type: integer
+            total:
+              type: integer
+              minimum: 0
+            requestId:
+              type: string
+          required:
+            - page
+            - pageSize
+            - total
+            - requestId
+          additionalProperties: false
+      required:
+        - data
+        - meta
+      additionalProperties: false
+    Scenario:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type:
+            - string
+            - "null"
+        icon:
+          type:
+            - string
+            - "null"
+        sortOrder:
+          type: integer
+        createdAt:
+          type:
+            - number
+            - "null"
+        updatedAt:
+          type:
+            - number
+            - "null"
+        skillCount:
+          type: integer
+      required:
+        - id
+        - name
+        - description
+        - icon
+        - sortOrder
+        - createdAt
+        - updatedAt
+        - skillCount
+      additionalProperties: false
+    SkillsEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/SkillSummary"
+        meta:
+          type: object
+          properties:
+            page:
+              type: integer
+            pageSize:
+              type: integer
+            total:
+              type: integer
+              minimum: 0
+            requestId:
+              type: string
+          required:
+            - page
+            - pageSize
+            - total
+            - requestId
+          additionalProperties: false
+      required:
+        - data
+        - meta
+      additionalProperties: false
+    SkillSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type:
+            - string
+            - "null"
+        enabled:
+          type: boolean
+        status:
+          type:
+            - string
+            - "null"
+        updateStatus:
+          type:
+            - string
+            - "null"
+        source:
+          type:
+            - object
+            - "null"
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            type:
+              type: string
+            externalUrl:
+              type:
+                - string
+                - "null"
+              format: uri
+          required:
+            - id
+            - name
+            - type
+            - externalUrl
+          additionalProperties: false
+        scenarios:
+          type: array
+          items:
+            $ref: "#/components/schemas/SkillScenario"
+        createdAt:
+          type:
+            - number
+            - "null"
+        updatedAt:
+          type:
+            - number
+            - "null"
+      required:
+        - id
+        - name
+        - description
+        - enabled
+        - status
+        - updateStatus
+        - source
+        - scenarios
+        - createdAt
+        - updatedAt
+      additionalProperties: false
+    SkillScenario:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        sortOrder:
+          type: integer
+      required:
+        - id
+        - name
+        - sortOrder
+      additionalProperties: false
+    SkillDetailEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/SkillDetail"
+        meta:
+          type: object
+          properties:
+            requestId:
+              type: string
+          required:
+            - requestId
+          additionalProperties: false
+      required:
+        - data
+        - meta
+      additionalProperties: false
+    SkillDetail:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type:
+            - string
+            - "null"
+        enabled:
+          type: boolean
+        status:
+          type:
+            - string
+            - "null"
+        updateStatus:
+          type:
+            - string
+            - "null"
+        source:
+          type:
+            - object
+            - "null"
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            type:
+              type: string
+            externalUrl:
+              type:
+                - string
+                - "null"
+              format: uri
+          required:
+            - id
+            - name
+            - type
+            - externalUrl
+          additionalProperties: false
+        scenarios:
+          type: array
+          items:
+            $ref: "#/components/schemas/SkillScenario"
+        createdAt:
+          type:
+            - number
+            - "null"
+        updatedAt:
+          type:
+            - number
+            - "null"
+        sourceType:
+          type:
+            - string
+            - "null"
+        sourceRef:
+          type:
+            - string
+            - "null"
+        sourceRefResolved:
+          type:
+            - string
+            - "null"
+        sourceSubpath:
+          type:
+            - string
+            - "null"
+        sourceBranch:
+          type:
+            - string
+            - "null"
+        sourceRevision:
+          type:
+            - string
+            - "null"
+        remoteRevision:
+          type:
+            - string
+            - "null"
+        centralPath:
+          type:
+            - string
+            - "null"
+        contentHash:
+          type:
+            - string
+            - "null"
+        lastCheckedAt:
+          type:
+            - number
+            - "null"
+        lastCheckError:
+          type:
+            - string
+            - "null"
+      required:
+        - id
+        - name
+        - description
+        - enabled
+        - status
+        - updateStatus
+        - source
+        - scenarios
+        - createdAt
+        - updatedAt
+        - sourceType
+        - sourceRef
+        - sourceRefResolved
+        - sourceSubpath
+        - sourceBranch
+        - sourceRevision
+        - remoteRevision
+        - centralPath
+        - contentHash
+        - lastCheckedAt
+        - lastCheckError
+      additionalProperties: false
+    SkillComparisonEnvelope:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            leftTotal:
+              type: integer
+            rightTotal:
+              type: integer
+            counts:
+              type: object
+              properties:
+                common:
+                  type: integer
+                leftOnly:
+                  type: integer
+                rightOnly:
+                  type: integer
+                difference:
+                  type: integer
+              required:
+                - common
+                - leftOnly
+                - rightOnly
+                - difference
+              additionalProperties: false
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/SkillSummary"
+          required:
+            - leftTotal
+            - rightTotal
+            - counts
+            - items
+          additionalProperties: false
+        meta:
+          type: object
+          properties:
+            requestId:
+              type: string
+            page:
+              type: integer
+            pageSize:
+              type: integer
+            total:
+              type: integer
+          required:
+            - requestId
+            - page
+            - pageSize
+            - total
+          additionalProperties: false
+      required:
+        - data
+        - meta
+      additionalProperties: false
+    SkillComparisonInput:
+      type: object
+      properties:
+        left:
+          $ref: "#/components/schemas/ComparisonOperand"
+        right:
+          $ref: "#/components/schemas/ComparisonOperand"
+        result:
+          type: string
+          enum:
+            - common
+            - leftOnly
+            - rightOnly
+            - difference
+          default: difference
+        q:
+          type: string
+          maxLength: 200
+        sort:
+          type: string
+          enum:
+            - name
+            - updatedAt
+          default: name
+        order:
+          type: string
+          enum:
+            - asc
+            - desc
+          default: asc
+        page:
+          type: integer
+          minimum: 1
+          default: 1
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      required:
+        - left
+        - right
+      additionalProperties: false
+    ComparisonOperand:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - source
+            - scenario
+        id:
+          type: string
+          minLength: 1
+      required:
+        - type
+        - id
+      additionalProperties: false
+    SkillAssignmentEnvelope:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            scenarios:
+              type: array
+              items:
+                $ref: "#/components/schemas/SkillScenario"
+            addedScenarioIds:
+              type: array
+              items:
+                type: string
+            removedScenarioIds:
+              type: array
+              items:
+                type: string
+          required:
+            - scenarios
+            - addedScenarioIds
+            - removedScenarioIds
+          additionalProperties: false
+        meta:
+          type: object
+          properties:
+            requestId:
+              type: string
+          required:
+            - requestId
+          additionalProperties: false
+      required:
+        - data
+        - meta
+      additionalProperties: false
+    SkillAssignmentInput:
+      type: object
+      properties:
+        scenarioIds:
+          type: array
+          items:
+            type: string
+          maxItems: 500
+        expectedScenarioIds:
+          type: array
+          items:
+            type: string
+          maxItems: 500
+      required:
+        - scenarioIds
+        - expectedScenarioIds
+      additionalProperties: false
+  parameters: {}
+paths:
+  /api/v1/status:
+    get:
+      operationId: getApplicationStatus
+      tags:
+        - Application
+      summary: 获取本地数据库状态
+      responses:
+        "200":
+          description: 数据库连接、结构兼容和写入能力状态
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicationStatusEnvelope"
+        "400":
+          description: 请求不合法
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+  /api/v1/overview:
+    get:
+      operationId: getOverview
+      tags:
+        - Catalog
+      summary: 获取概览指标
+      responses:
+        "200":
+          description: 概览指标
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OverviewEnvelope"
+        "422":
+          description: 数据库结构不兼容
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+  /api/v1/sources:
+    get:
+      operationId: listSources
+      tags:
+        - Catalog
+      summary: 分页获取来源
+      parameters:
+        - schema:
+            type: string
+            maxLength: 200
+          required: false
+          name: q
+          in: query
+        - schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          name: page
+          in: query
+        - schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          required: false
+          name: pageSize
+          in: query
+        - schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+          required: false
+          name: order
+          in: query
+        - schema:
+            type: string
+            enum:
+              - name
+              - skillCount
+            default: name
+          required: false
+          name: sort
+          in: query
+      responses:
+        "200":
+          description: 来源列表
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SourcesEnvelope"
+        "400":
+          description: 查询参数不合法
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+  /api/v1/scenarios:
+    get:
+      operationId: listScenarios
+      tags:
+        - Catalog
+      summary: 分页获取场景
+      parameters:
+        - schema:
+            type: string
+            maxLength: 200
+          required: false
+          name: q
+          in: query
+        - schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          name: page
+          in: query
+        - schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          required: false
+          name: pageSize
+          in: query
+        - schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+          required: false
+          name: order
+          in: query
+        - schema:
+            type: string
+            enum:
+              - sortOrder
+              - name
+              - skillCount
+            default: sortOrder
+          required: false
+          name: sort
+          in: query
+      responses:
+        "200":
+          description: 场景列表
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScenariosEnvelope"
+        "400":
+          description: 查询参数不合法
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+  /api/v1/skills:
+    get:
+      operationId: listSkills
+      tags:
+        - Skills
+      summary: 搜索与筛选 Skills
+      parameters:
+        - schema:
+            type: string
+            maxLength: 200
+          required: false
+          name: q
+          in: query
+        - schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          name: page
+          in: query
+        - schema:
+            type:
+              - integer
+              - "null"
+            minimum: 0
+            maximum: 100
+            default: 0
+          required: false
+          name: pageSize
+          in: query
+        - schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+          required: false
+          name: order
+          in: query
+        - schema:
+            type: string
+            enum:
+              - name
+              - createdAt
+              - updatedAt
+              - status
+            default: name
+          required: false
+          name: sort
+          in: query
+        - schema:
+            type: string
+          required: false
+          name: sourceIds
+          in: query
+        - schema:
+            type: string
+          required: false
+          name: scenarioIds
+          in: query
+        - schema:
+            type: string
+            enum:
+              - "true"
+              - "false"
+          required: false
+          name: orphan
+          in: query
+        - schema:
+            type: string
+            enum:
+              - "true"
+              - "false"
+          required: false
+          name: multiScenario
+          in: query
+      responses:
+        "200":
+          description: Skill 列表
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillsEnvelope"
+        "400":
+          description: 查询参数不合法
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+  /api/v1/skills/{skillId}:
+    get:
+      operationId: getSkill
+      tags:
+        - Skills
+      summary: 获取 Skill 全字段详情
+      parameters:
+        - schema:
+            type: string
+            minLength: 1
+            maxLength: 200
+          required: true
+          name: skillId
+          in: path
+      responses:
+        "200":
+          description: Skill 详情
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillDetailEnvelope"
+        "404":
+          description: Skill 不存在
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+  /api/v1/skill-comparisons:
+    post:
+      operationId: compareSkills
+      tags:
+        - Comparison
+      summary: 比较两个来源或场景中的 Skill 集合
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkillComparisonInput"
+      responses:
+        "200":
+          description: 比对计数与当前结果页
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillComparisonEnvelope"
+        "400":
+          description: 请求或操作数不合法
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+        "404":
+          description: 操作数不存在
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+  /api/v1/skills/{skillId}/scenarios:
+    put:
+      operationId: replaceSkillScenarios
+      tags:
+        - Skills
+      summary: 原子替换单个 Skill 的场景归属
+      parameters:
+        - schema:
+            type: string
+            minLength: 1
+          required: true
+          name: skillId
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkillAssignmentInput"
+      responses:
+        "200":
+          description: 更新后的归属与变更摘要
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillAssignmentEnvelope"
+        "400":
+          description: 请求不合法
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+        "404":
+          description: Skill 或场景不存在
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+        "409":
+          description: 归属冲突或数据库锁定
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+        "503":
+          description: 数据库只读
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+webhooks: {}

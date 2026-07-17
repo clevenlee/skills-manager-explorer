@@ -2,13 +2,13 @@
 
 ## 1. 文档信息
 
-| 项目 | 内容 |
-| --- | --- |
+| 项目     | 内容                                |
+| -------- | ----------------------------------- |
 | 对应 PRD | `skills-manager-browser-prd-1.0.md` |
-| 规格版本 | 1.0 |
-| 规格状态 | 已批准 |
-| 当前门禁 | PLAN/TASKS；计划与任务批准前不得开始编码 |
-| 编写日期 | 2026-07-17 |
+| 规格版本 | 1.0                                 |
+| 规格状态 | 已实施并通过验收                    |
+| 当前门禁 | VERIFY/DELIVER；实施门禁已通过      |
+| 编写日期 | 2026-07-17                          |
 
 ## 2. 前置假设
 
@@ -40,23 +40,23 @@
 
 以下版本是 2026-07-17 的初始化基线。创建 `package.json` 时锁定精确版本；升级必须单独验证并更新规格或决策记录。
 
-| 层次 | 技术 | 初始化基线 | 用途 |
-| --- | --- | --- | --- |
-| 运行时与包管理 | Bun | 1.3.14 | TypeScript 运行、依赖安装、测试、构建和打包 |
-| 前端 | Vue | 3.5.x | 页面和组件 |
-| 前端构建 | Vite | 8.1.x | 开发服务器与前端构建 |
-| UI | Ant Design Vue | 4.2.x | 桌面端列表、筛选、弹窗和反馈组件 |
-| 路由 | Vue Router | 5.2.x | 一级导航和详情页路由 |
-| 本地 API | Hono | 4.12.x | Bun 上的 REST 路由和中间件 |
-| 输入输出 Schema | Zod | 4.4.x | 配置、请求、响应和领域边界校验 |
-| OpenAPI | `@hono/zod-openapi` | 1.5.x | 从 Zod 契约生成 OpenAPI |
-| SQLite | `bun:sqlite` | 随 Bun | 查询、参数绑定和事务 |
-| 语言 | TypeScript | 7.0.x | 前后端及共享契约 |
-| 类型检查 | `vue-tsc` | 3.3.x | Vue SFC 类型检查 |
-| 单元与集成测试 | `bun:test` | 随 Bun | 领域、数据库和 API 测试 |
-| 浏览器验收 | Playwright | 初始化时锁定 | 核心用户流程和响应式检查 |
-| 契约校验 | Redocly CLI | 2.39.x | OpenAPI lint |
-| 契约 Mock | Prism CLI | 5.15.x | 基于 OpenAPI examples 的前端 Mock |
+| 层次            | 技术                | 初始化基线   | 用途                                        |
+| --------------- | ------------------- | ------------ | ------------------------------------------- |
+| 运行时与包管理  | Bun                 | 1.3.14       | TypeScript 运行、依赖安装、测试、构建和打包 |
+| 前端            | Vue                 | 3.5.x        | 页面和组件                                  |
+| 前端构建        | Vite                | 8.1.x        | 开发服务器与前端构建                        |
+| UI              | Ant Design Vue      | 4.2.x        | 桌面端列表、筛选、弹窗和反馈组件            |
+| 路由            | Vue Router          | 5.2.x        | 一级导航和详情页路由                        |
+| 本地 API        | Hono                | 4.12.x       | Bun 上的 REST 路由和中间件                  |
+| 输入输出 Schema | Zod                 | 4.4.x        | 配置、请求、响应和领域边界校验              |
+| OpenAPI         | `@hono/zod-openapi` | 1.5.x        | 从 Zod 契约生成 OpenAPI                     |
+| SQLite          | `bun:sqlite`        | 随 Bun       | 查询、参数绑定和事务                        |
+| 语言            | TypeScript          | 6.0.x        | 前后端及共享契约                            |
+| 类型检查        | `vue-tsc`           | 3.3.x        | Vue SFC 类型检查                            |
+| 单元与集成测试  | `bun:test`          | 随 Bun       | 领域、数据库和 API 测试                     |
+| 浏览器验收      | Playwright          | 初始化时锁定 | 核心用户流程和响应式检查                    |
+| 契约校验        | Redocly CLI         | 2.39.x       | OpenAPI lint                                |
+| 契约 Mock       | Prism CLI           | 5.15.x       | 基于 OpenAPI examples 的前端 Mock           |
 
 明确不采用：
 
@@ -90,15 +90,15 @@ Hono application on Bun
 
 ### 5.2 模块职责
 
-| 模块 | 职责 | 不得承担 |
-| --- | --- | --- |
-| `contracts` | Zod 请求、响应、枚举、错误和 OpenAPI 元数据 | SQL、页面状态、数据库实体泄漏 |
-| `routes` | HTTP 参数解析、Schema 校验、状态码和统一错误映射 | 来源归一化、集合计算和事务细节 |
-| `services` | 来源归一化、筛选语义、集合比对和归属变更编排 | 拼接不受控 SQL、直接依赖页面组件 |
-| `repositories` | 参数化 SQL、数据库行映射、事务内增删关联 | HTTP 响应、界面文案 |
-| `database` | 配置校验、连接模式、结构兼容检查和事务入口 | 自动迁移、修改数据库日志模式 |
-| `web/api` | 封装本地 API 调用并解析契约响应 | 裸散落 `fetch`、自定义接口字段 |
-| `web/views` | 页面流程、查询条件和用户反馈 | 直接访问 SQLite、充当最终权限边界 |
+| 模块           | 职责                                             | 不得承担                          |
+| -------------- | ------------------------------------------------ | --------------------------------- |
+| `contracts`    | Zod 请求、响应、枚举、错误和 OpenAPI 元数据      | SQL、页面状态、数据库实体泄漏     |
+| `routes`       | HTTP 参数解析、Schema 校验、状态码和统一错误映射 | 来源归一化、集合计算和事务细节    |
+| `services`     | 来源归一化、筛选语义、集合比对和归属变更编排     | 拼接不受控 SQL、直接依赖页面组件  |
+| `repositories` | 参数化 SQL、数据库行映射、事务内增删关联         | HTTP 响应、界面文案               |
+| `database`     | 配置校验、连接模式、结构兼容检查和事务入口       | 自动迁移、修改数据库日志模式      |
+| `web/api`      | 封装本地 API 调用并解析契约响应                  | 裸散落 `fetch`、自定义接口字段    |
+| `web/views`    | 页面流程、查询条件和用户反馈                     | 直接访问 SQLite、充当最终权限边界 |
 
 ### 5.3 依赖方向
 
@@ -116,12 +116,14 @@ contracts ← web/api ← web/views
 
 ### 6.1 环境变量
 
-| 变量 | 必填 | 默认值 | 规则 |
-| --- | --- | --- | --- |
-| `SKILLS_MANAGER_DB` | 是 | 无 | Skills Manager SQLite 数据库绝对路径 |
-| `HOST` | 否 | `127.0.0.1` | 1.0 只允许回环地址；其他值启动失败 |
-| `PORT` | 否 | `4173` | 本地服务端口，必须为有效 TCP 端口 |
-| `LOG_LEVEL` | 否 | `info` | `debug`、`info`、`warn`、`error` |
+| 变量                | 必填 | 默认值      | 规则                                 |
+| ------------------- | ---- | ----------- | ------------------------------------ |
+| `SKILLS_MANAGER_DB` | 是   | 无          | Skills Manager SQLite 数据库绝对路径 |
+| `HOST`              | 否   | `127.0.0.1` | 1.0 只允许回环地址；其他值启动失败   |
+| `PORT`              | 否   | `4173`      | 本地服务端口，必须为有效 TCP 端口    |
+| `VITE_PORT`         | 否   | `5173`      | Vite 开发服务器端口                  |
+| `VITE_API_PORT`     | 否   | `4173`      | Vite 开发代理连接的本地服务端口      |
+| `LOG_LEVEL`         | 否   | `info`      | `debug`、`info`、`warn`、`error`     |
 
 ### 6.2 配置校验
 
@@ -189,8 +191,10 @@ contracts ← web/api ← web/views
 - 数据库 ID 在 API 中统一表示为字符串。
 - 数据库毫秒时间戳在 API 中保持整数，前端负责按本地时区格式化。
 - 所有列表接口从第一版开始支持分页。
-- 默认分页：`page=1`、`pageSize=20`；最大 `pageSize=100`。
+- 来源与场景列表默认分页：`page=1`、`pageSize=20`；最大 `pageSize=100`。
+- Skill 列表使用 `pageSize=0` 表示不分页，默认值为 `0`；网页仅提供 20、50 与不分页三种选择。
 - 排序只接受 Schema 枚举中的字段和 `asc`、`desc`，不得直接拼接用户输入。
+- `GET /api/v1/skills` 的 `sort` 支持 `name`、`createdAt`、`updatedAt` 和 `status`；默认 `name asc`。
 
 统一成功列表结构：
 
@@ -220,47 +224,47 @@ contracts ← web/api ← web/views
 
 ### 8.3 端点
 
-| 方法 | 路径 | `operationId` | 用途 |
-| --- | --- | --- | --- |
-| GET | `/api/v1/status` | `getApplicationStatus` | 数据库连接、兼容性和可写能力 |
-| GET | `/api/v1/overview` | `getOverview` | 概览指标 |
-| GET | `/api/v1/sources` | `listSources` | 来源聚合列表 |
-| GET | `/api/v1/scenarios` | `listScenarios` | 场景列表 |
-| GET | `/api/v1/skills` | `listSkills` | Skill 搜索、筛选、排序和分页 |
-| GET | `/api/v1/skills/{skillId}` | `getSkill` | Skill 全字段详情和场景归属 |
-| POST | `/api/v1/skill-comparisons` | `compareSkills` | 两个来源或场景集合的比较 |
-| PUT | `/api/v1/skills/{skillId}/scenarios` | `replaceSkillScenarios` | 原子替换单个 Skill 场景归属 |
+| 方法 | 路径                                 | `operationId`           | 用途                                       |
+| ---- | ------------------------------------ | ----------------------- | ------------------------------------------ |
+| GET  | `/api/v1/status`                     | `getApplicationStatus`  | 数据库连接、兼容性和可写能力               |
+| GET  | `/api/v1/overview`                   | `getOverview`           | 概览指标                                   |
+| GET  | `/api/v1/sources`                    | `listSources`           | 来源聚合列表                               |
+| GET  | `/api/v1/scenarios`                  | `listScenarios`         | 场景列表                                   |
+| GET  | `/api/v1/skills`                     | `listSkills`            | Skill 搜索、筛选、排序、重复归属筛选和分页 |
+| GET  | `/api/v1/skills/{skillId}`           | `getSkill`              | Skill 全字段详情和场景归属                 |
+| POST | `/api/v1/skill-comparisons`          | `compareSkills`         | 两个来源或场景集合的比较                   |
+| PUT  | `/api/v1/skills/{skillId}/scenarios` | `replaceSkillScenarios` | 原子替换单个 Skill 场景归属                |
 
 来源详情页和场景详情页由来源或场景列表数据加已过滤的 Skill 列表组成，不新增重复详情端点。
 
 ### 8.4 错误码
 
-| HTTP 状态 | 错误码 | 条件 |
-| --- | --- | --- |
-| 400 | `VALIDATION_ERROR` | 查询、路径或请求体不合法 |
-| 404 | `SKILL_NOT_FOUND` | Skill 不存在 |
-| 404 | `SCENARIO_NOT_FOUND` | 提交的场景不存在 |
-| 409 | `ASSIGNMENT_CONFLICT` | 归属自页面加载后已被其他进程修改 |
-| 409 | `DATABASE_LOCKED` | 数据库正在被其他进程占用 |
-| 422 | `DATABASE_SCHEMA_INCOMPATIBLE` | 必需表或字段不兼容 |
-| 503 | `DATABASE_UNAVAILABLE` | 数据库缺失、不可读或连接失败 |
-| 503 | `DATABASE_READ_ONLY` | 用户尝试写入只读数据库 |
-| 500 | `INTERNAL_ERROR` | 未预期错误，不返回堆栈和 SQL |
+| HTTP 状态 | 错误码                         | 条件                             |
+| --------- | ------------------------------ | -------------------------------- |
+| 400       | `VALIDATION_ERROR`             | 查询、路径或请求体不合法         |
+| 404       | `SKILL_NOT_FOUND`              | Skill 不存在                     |
+| 404       | `SCENARIO_NOT_FOUND`           | 提交的场景不存在                 |
+| 409       | `ASSIGNMENT_CONFLICT`          | 归属自页面加载后已被其他进程修改 |
+| 409       | `DATABASE_LOCKED`              | 数据库正在被其他进程占用         |
+| 422       | `DATABASE_SCHEMA_INCOMPATIBLE` | 必需表或字段不兼容               |
+| 503       | `DATABASE_UNAVAILABLE`         | 数据库缺失、不可读或连接失败     |
+| 503       | `DATABASE_READ_ONLY`           | 用户尝试写入只读数据库           |
+| 500       | `INTERNAL_ERROR`               | 未预期错误，不返回堆栈和 SQL     |
 
 ## 9. Frontend Contract
 
 ### 9.1 页面路由
 
-| 路径 | 页面 |
-| --- | --- |
-| `/` | 概览 |
-| `/sources` | 来源清单 |
-| `/sources/:sourceId` | 来源详情；`sourceId` 使用 URL-safe 编码 |
-| `/scenarios` | 场景清单 |
-| `/scenarios/:scenarioId` | 场景详情 |
-| `/skills` | Skill 清单 |
-| `/skills/:skillId` | Skill 详情和场景归属调整 |
-| `/compare` | 来源与场景比对 |
+| 路径                     | 页面                                    |
+| ------------------------ | --------------------------------------- |
+| `/`                      | 概览                                    |
+| `/sources`               | 来源清单                                |
+| `/sources/:sourceId`     | 来源详情；`sourceId` 使用 URL-safe 编码 |
+| `/scenarios`             | 场景清单                                |
+| `/scenarios/:scenarioId` | 场景详情                                |
+| `/skills`                | Skill 清单                              |
+| `/skills/:skillId`       | Skill 详情和场景归属调整                |
+| `/compare`               | 来源与场景比对                          |
 
 ### 9.2 状态管理
 
@@ -287,27 +291,27 @@ contracts ← web/api ← web/views
 
 以下命令是实施后必须存在的稳定入口：
 
-| 目的 | 命令 |
-| --- | --- |
-| 安装依赖 | `bun install --frozen-lockfile` |
-| 首次安装或更新锁文件 | `bun install` |
-| 同时启动前端和本地服务 | `bun run dev` |
-| 仅启动 Vite | `bun run dev:web` |
-| 仅启动 Bun 服务 | `bun run dev:server` |
-| 类型检查 | `bun run typecheck` |
-| 代码检查 | `bun run lint` |
-| 格式检查 | `bun run format:check` |
-| 单元和集成测试 | `bun test` |
-| 覆盖率测试 | `bun test --coverage` |
-| 生成 OpenAPI | `bun run openapi:generate` |
-| 校验 OpenAPI | `bun run openapi:lint` |
-| 检查契约漂移 | `bun run openapi:check` |
-| 启动 Prism Mock | `bun run mock` |
-| 构建前端和服务端 | `bun run build` |
-| 启动构建产物 | `bun run start` |
-| 浏览器验收 | `bun run test:e2e` |
-| 完整提交前验证 | `bun run verify` |
-| 生成当前平台可执行文件 | `bun run package` |
+| 目的                   | 命令                            |
+| ---------------------- | ------------------------------- |
+| 安装依赖               | `bun install --frozen-lockfile` |
+| 首次安装或更新锁文件   | `bun install`                   |
+| 同时启动前端和本地服务 | `bun run dev`                   |
+| 仅启动 Vite            | `bun run dev:web`               |
+| 仅启动 Bun 服务        | `bun run dev:server`            |
+| 类型检查               | `bun run typecheck`             |
+| 代码检查               | `bun run lint`                  |
+| 格式检查               | `bun run format:check`          |
+| 单元和集成测试         | `bun test`                      |
+| 覆盖率测试             | `bun test --coverage`           |
+| 生成 OpenAPI           | `bun run openapi:generate`      |
+| 校验 OpenAPI           | `bun run openapi:lint`          |
+| 检查契约漂移           | `bun run openapi:check`         |
+| 启动 Prism Mock        | `bun run mock`                  |
+| 构建前端和服务端       | `bun run build`                 |
+| 启动构建产物           | `bun run start`                 |
+| 浏览器验收             | `bun run test:e2e`              |
+| 完整提交前验证         | `bun run verify`                |
+| 生成当前平台可执行文件 | `bun run package`               |
 
 `bun run verify` 至少串联格式检查、lint、类型检查、契约漂移检查、单元/集成测试和构建；浏览器验收可作为独立较慢门禁。
 
@@ -351,8 +355,10 @@ contracts ← web/api ← web/views
 ├── docs/
 │   ├── modules/skills-manager-browser/
 │   │   ├── openapi/
-│   │   ├── skills-manager-browser-prd-1.0.md
-│   │   └── skills-manager-browser-spec-1.0.md
+│   │   ├── prd/
+│   │   │   └── skills-manager-browser-prd-1.0.md
+│   │   └── spec/
+│   │       └── skills-manager-browser-spec-1.0.md
 │   └── project-specs/
 └── dist/
 ```
@@ -379,28 +385,28 @@ contracts ← web/api ← web/views
 
 ```ts
 const replaceSkillScenariosRoute = createRoute({
-  method: 'put',
-  path: '/api/v1/skills/{skillId}/scenarios',
+  method: "put",
+  path: "/api/v1/skills/{skillId}/scenarios",
   request: {
     params: skillIdParamsSchema,
     body: {
       content: {
-        'application/json': {
+        "application/json": {
           schema: replaceSkillScenariosInputSchema,
         },
       },
     },
   },
   responses: replaceSkillScenariosResponses,
-})
+});
 
 app.openapi(replaceSkillScenariosRoute, (context) => {
-  const { skillId } = context.req.valid('param')
-  const input = context.req.valid('json')
-  const result = skillAssignmentService.replace(skillId, input)
+  const { skillId } = context.req.valid("param");
+  const input = context.req.valid("json");
+  const result = skillAssignmentService.replace(skillId, input);
 
-  return context.json(result, 200)
-})
+  return context.json(result, 200);
+});
 ```
 
 路由只负责边界校验和响应；事务、差异计算和冲突检查属于 service 与 repository。
@@ -409,13 +415,13 @@ app.openapi(replaceSkillScenariosRoute, (context) => {
 
 ### 13.1 测试层次
 
-| 层次 | 工具 | 重点 |
-| --- | --- | --- |
-| 单元测试 | `bun:test` | 来源规范化、筛选语义、集合运算、错误映射 |
-| 数据库集成测试 | `bun:test` + 临时 SQLite | 兼容性检查、参数化查询、事务、回滚和冲突 |
-| API 集成测试 | Hono `app.request` + `bun:test` | Schema、状态码、分页、错误结构和 OpenAPI 一致性 |
-| 浏览器验收 | Playwright | 导航、列表、筛选、比对、详情和归属调整完整流程 |
-| 真实库 smoke | 人工只读命令 | 使用用户数据库验证读取兼容性，禁止写入 |
+| 层次           | 工具                            | 重点                                            |
+| -------------- | ------------------------------- | ----------------------------------------------- |
+| 单元测试       | `bun:test`                      | 来源规范化、筛选语义、集合运算、错误映射        |
+| 数据库集成测试 | `bun:test` + 临时 SQLite        | 兼容性检查、参数化查询、事务、回滚和冲突        |
+| API 集成测试   | Hono `app.request` + `bun:test` | Schema、状态码、分页、错误结构和 OpenAPI 一致性 |
+| 浏览器验收     | Playwright                      | 导航、列表、筛选、比对、详情和归属调整完整流程  |
+| 真实库 smoke   | 人工只读命令                    | 使用用户数据库验证读取兼容性，禁止写入          |
 
 ### 13.2 测试要求
 
@@ -469,17 +475,17 @@ app.openapi(replaceSkillScenariosRoute, (context) => {
 
 本规格通过并完成实施后，必须满足：
 
-- [ ] Bun 版本、依赖精确版本和 `bun.lock` 已提交且可复现安装。
-- [ ] `bun run dev` 可同时启动网页和本地服务，服务只监听回环地址。
-- [ ] 有效数据库可读取；配置错误、缺表和只读能力可被准确诊断。
-- [ ] PRD 1.0 的概览、来源、场景、Skill、比对和归属调整全部可用。
-- [ ] 所有列表具备分页，搜索、筛选和排序语义与 PRD 一致。
-- [ ] 归属修改具备确认、乐观冲突检查、即时事务和完整回滚。
-- [ ] 自动化证明确认写操作只改变 `scenario_skills`。
-- [ ] Zod 契约、生成 OpenAPI、Prism Mock、API 实现和前端调用无漂移。
-- [ ] 所有页面覆盖加载、空、无结果和错误状态；写入页面覆盖只读、锁定和冲突。
-- [ ] `bun run verify` 与 `bun run test:e2e` 通过。
-- [ ] 不包含 PRD 明确排除的场景管理、Skill 管理、云同步和任意 SQL 能力。
+- [x] Bun 版本、依赖精确版本和 `bun.lock` 已提交且可复现安装。
+- [x] `bun run dev` 可同时启动网页和本地服务，服务只监听回环地址。
+- [x] 有效数据库可读取；配置错误、缺表和只读能力可被准确诊断。
+- [x] PRD 1.0 的概览、来源、场景、Skill、比对和归属调整全部可用。
+- [x] 所有列表具备分页，搜索、筛选和排序语义与 PRD 一致。
+- [x] 归属修改具备确认、乐观冲突检查、即时事务和完整回滚。
+- [x] 自动化证明确认写操作只改变 `scenario_skills`。
+- [x] Zod 契约、生成 OpenAPI、Prism Mock、API 实现和前端调用无漂移。
+- [x] 所有页面覆盖加载、空、无结果和错误状态；写入页面覆盖只读、锁定和冲突。
+- [x] `bun run verify` 与 `bun run test:e2e` 通过。
+- [x] 不包含 PRD 明确排除的场景管理、Skill 管理、云同步和任意 SQL 能力。
 
 ## 16. 已确认决策
 
@@ -489,7 +495,8 @@ app.openapi(replaceSkillScenariosRoute, (context) => {
 2. 1.0 不引入 Pinia，直到出现真实的跨页面全局状态。
 3. 单文件可执行程序属于交付阶段任务，不阻塞早期纵向功能切片。
 4. Zod 是契约定义源，OpenAPI YAML 是生成并提交的评审与 Mock 产物。
+5. 实施验证确认 `vue-tsc` 3.3.7 与 TypeScript 7.0.2 的编译器导出不兼容，因此将 TypeScript 固定为 6.0.3；待 Vue 工具链正式兼容 TypeScript 7 后再独立升级。
 
 ## 17. Gate Decision
 
-SPECIFY 门禁已通过，允许进入 PLAN 和 TASKS 阶段。批准规格不等于批准实施；正式计划与 TODO 仍需用户审核后才能开始编码。
+SPECIFY、PLAN、TASKS、IMPLEMENT 与 VERIFY 门禁均已通过，当前进入 DELIVER 阶段。

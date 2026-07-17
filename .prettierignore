@@ -1,0 +1,7 @@
+node_modules
+dist
+coverage
+playwright-report
+test-results
+bun.lock
+src/server/generated-static-assets.ts

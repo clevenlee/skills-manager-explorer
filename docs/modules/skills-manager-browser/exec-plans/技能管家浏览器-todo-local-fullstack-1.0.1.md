@@ -3,7 +3,7 @@
 ## 使用说明
 
 - 对应计划：`技能管家浏览器-plan-local-fullstack-1.0.1.md`。
-- 当前状态：待用户审核；未批准前不得开始 Task 1。
+- 当前状态：Tasks 1-27 与 Checkpoint A-E 已完成。
 - 严格按依赖顺序实施。每个任务应在一个聚焦会话内完成，原则上不超过约 5 个文件。
 - 每项完成后勾选验收与验证，并在“执行记录”中写入命令结果和剩余风险。
 - 所有写入测试只允许使用临时 SQLite fixture。
@@ -16,15 +16,15 @@
 
 **Acceptance criteria：**
 
-- [ ] `package.json` 声明 Bun 版本、生产依赖、开发依赖和规格要求的命令入口。
-- [ ] `bun.lock` 锁定精确依赖，冻结安装可复现。
-- [ ] TypeScript、ESLint 和 Prettier 使用严格且互相兼容的配置。
+- [x] `package.json` 声明 Bun 版本、生产依赖、开发依赖和规格要求的命令入口。
+- [x] `bun.lock` 锁定精确依赖，冻结安装可复现。
+- [x] TypeScript、ESLint 和 Prettier 使用严格且互相兼容的配置。
 
 **Verification：**
 
-- [ ] `bun --version` 输出规格基线版本。
-- [ ] `bun install --frozen-lockfile` 成功。
-- [ ] `bun run typecheck`、`bun run lint`、`bun run format:check` 能执行；允许因尚无源码而空通过。
+- [x] `bun --version` 输出规格基线版本。
+- [x] `bun install --frozen-lockfile` 成功。
+- [x] `bun run typecheck`、`bun run lint`、`bun run format:check` 能执行；允许因尚无源码而空通过。
 
 **Dependencies：** 无。
 
@@ -44,15 +44,15 @@
 
 **Acceptance criteria：**
 
-- [ ] Vue 应用可渲染基础页面，Hono 服务可启动。
-- [ ] Vite 将 `/api` 代理到本地 Bun 服务。
-- [ ] 服务显式监听 `127.0.0.1`，拒绝配置为非回环地址。
+- [x] Vue 应用可渲染基础页面，Hono 服务可启动。
+- [x] Vite 将 `/api` 代理到本地 Bun 服务。
+- [x] 服务显式监听 `127.0.0.1`，拒绝配置为非回环地址。
 
 **Verification：**
 
-- [ ] `bun run dev` 启动成功。
-- [ ] 浏览器可打开首页。
-- [ ] 请求本地服务占位 API 返回 200，监听地址不是 `0.0.0.0`。
+- [x] `bun run dev` 启动成功。
+- [x] 浏览器可打开首页。
+- [x] 请求本地服务占位 API 返回 200，监听地址不是 `0.0.0.0`。
 
 **Dependencies：** Task 1。
 
@@ -72,15 +72,15 @@
 
 **Acceptance criteria：**
 
-- [ ] `SKILLS_MANAGER_DB`、`HOST`、`PORT`、`LOG_LEVEL` 在启动边界完成校验。
-- [ ] 数据库文件不存在时不会被创建。
-- [ ] 兼容检查允许额外表和字段，但准确报告三张必需表或字段缺失。
+- [x] `SKILLS_MANAGER_DB`、`HOST`、`PORT`、`LOG_LEVEL` 在启动边界完成校验。
+- [x] 数据库文件不存在时不会被创建。
+- [x] 兼容检查允许额外表和字段，但准确报告三张必需表或字段缺失。
 
 **Verification：**
 
-- [ ] 先观察数据库兼容测试失败，再实现至通过。
-- [ ] `bun test tests/integration/database-compatibility.test.ts` 通过。
-- [ ] 测试结束后临时 fixture 被清理，真实数据库未变化。
+- [x] 先观察数据库兼容测试失败，再实现至通过。
+- [x] `bun test tests/integration/database-compatibility.test.ts` 通过。
+- [x] 测试结束后临时 fixture 被清理，真实数据库未变化。
 
 **Dependencies：** Task 2。
 
@@ -100,16 +100,16 @@
 
 **Acceptance criteria：**
 
-- [ ] Zod Schema 是唯一契约定义源。
-- [ ] OpenAPI YAML 可重复生成，带生成说明并禁止手改。
-- [ ] OpenAPI lint、漂移检查和 Prism Mock 均有稳定命令。
+- [x] Zod Schema 是唯一契约定义源。
+- [x] OpenAPI YAML 可重复生成，带生成说明并禁止手改。
+- [x] OpenAPI lint、漂移检查和 Prism Mock 均有稳定命令。
 
 **Verification：**
 
-- [ ] `bun run openapi:generate` 成功。
-- [ ] `bun run openapi:lint` 成功。
-- [ ] `bun run openapi:check` 成功且工作区无生成差异。
-- [ ] `bun run mock` 可根据生成契约启动。
+- [x] `bun run openapi:generate` 成功。
+- [x] `bun run openapi:lint` 成功。
+- [x] `bun run openapi:check` 成功且工作区无生成差异。
+- [x] `bun run mock` 可根据生成契约启动。
 
 **Dependencies：** Task 1。
 
@@ -129,15 +129,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 有效、缺失、不兼容和只读数据库得到契约定义的状态。
-- [ ] 响应不包含 SQL、异常堆栈或完整数据库路径。
-- [ ] API 实现和 OpenAPI examples 一致。
+- [x] 有效、缺失、不兼容和只读数据库得到契约定义的状态。
+- [x] 响应不包含 SQL、异常堆栈或完整数据库路径。
+- [x] API 实现和 OpenAPI examples 一致。
 
 **Verification：**
 
-- [ ] 先观察状态 API 测试失败，再实现至通过。
-- [ ] `bun test tests/integration/status-api.test.ts` 通过。
-- [ ] `bun run openapi:check` 通过。
+- [x] 先观察状态 API 测试失败，再实现至通过。
+- [x] `bun test tests/integration/status-api.test.ts` 通过。
+- [x] `bun run openapi:check` 通过。
 
 **Dependencies：** Task 3、Task 4。
 
@@ -157,15 +157,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 应用壳包含概览、来源、场景、Skill 和比对导航入口。
-- [ ] API 客户端统一解析成功和错误结构。
-- [ ] 状态页覆盖加载、正常、缺失、不兼容和只读状态。
+- [x] 应用壳包含概览、来源、场景、Skill 和比对导航入口。
+- [x] API 客户端统一解析成功和错误结构。
+- [x] 状态页覆盖加载、正常、缺失、不兼容和只读状态。
 
 **Verification：**
 
-- [ ] `bun run typecheck` 通过。
-- [ ] `bun run test:e2e -- e2e/status.spec.ts` 通过。
-- [ ] 手动确认窄屏下导航仍可使用。
+- [x] `bun run typecheck` 通过。
+- [x] `bun run test:e2e -- e2e/status.spec.ts` 通过。
+- [x] 手动确认窄屏下导航仍可使用。
 
 **Dependencies：** Task 5。
 
@@ -181,11 +181,11 @@
 
 ## Checkpoint A：基础可用
 
-- [ ] Tasks 1-6 全部完成。
-- [ ] `bun run verify` 通过。
-- [ ] OpenAPI 可生成、lint、Mock 且无漂移。
-- [ ] 有效与异常数据库状态可被正确观察。
-- [ ] 用户确认基础架构后再继续 Phase 2。
+- [x] Tasks 1-6 全部完成。
+- [x] `bun run verify` 通过。
+- [x] OpenAPI 可生成、lint、Mock 且无漂移。
+- [x] 有效与异常数据库状态可被正确观察。
+- [x] 用户确认基础架构后再继续 Phase 2。
 
 ## Phase 2：概览与目录浏览
 
@@ -195,15 +195,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 四项核心指标与直接 SQL 结果一致。
-- [ ] 空数据库返回零值，不被视为错误。
-- [ ] 响应通过 Zod Schema 且 OpenAPI example 可用。
+- [x] 四项核心指标与直接 SQL 结果一致。
+- [x] 空数据库返回零值，不被视为错误。
+- [x] 响应通过 Zod Schema 且 OpenAPI example 可用。
 
 **Verification：**
 
-- [ ] 先观察概览 API 测试失败，再实现至通过。
-- [ ] `bun test tests/integration/overview-api.test.ts` 通过。
-- [ ] `bun run openapi:check` 通过。
+- [x] 先观察概览 API 测试失败，再实现至通过。
+- [x] `bun test tests/integration/overview-api.test.ts` 通过。
+- [x] `bun run openapi:check` 通过。
 
 **Dependencies：** Checkpoint A。
 
@@ -223,15 +223,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 展示 Skill、来源、场景和孤立 Skill 数量。
-- [ ] 点击指标跳转到正确页面，孤立 Skill 自动带入筛选。
-- [ ] 覆盖加载、空数据和请求失败状态。
+- [x] 展示 Skill、来源、场景和孤立 Skill 数量。
+- [x] 点击指标跳转到正确页面，孤立 Skill 自动带入筛选。
+- [x] 覆盖加载、空数据和请求失败状态。
 
 **Verification：**
 
-- [ ] `bun run typecheck` 通过。
-- [ ] `bun run test:e2e -- e2e/overview.spec.ts` 通过。
-- [ ] 手动确认指标跳转后的 URL 查询参数可恢复。
+- [x] `bun run typecheck` 通过。
+- [x] `bun run test:e2e -- e2e/overview.spec.ts` 通过。
+- [x] 手动确认指标跳转后的 URL 查询参数可恢复。
 
 **Dependencies：** Task 7。
 
@@ -251,15 +251,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 正确处理 HTTP/HTTPS、`.git`、尾斜杠、查询参数和片段。
-- [ ] GitHub 地址展示 `owner/repository`。
-- [ ] `source_ref_resolved` 缺失时才安全回退，不误删与 Skill 名不匹配的路径段。
+- [x] 正确处理 HTTP/HTTPS、`.git`、尾斜杠、查询参数和片段。
+- [x] GitHub 地址展示 `owner/repository`。
+- [x] `source_ref_resolved` 缺失时才安全回退，不误删与 Skill 名不匹配的路径段。
 
 **Verification：**
 
-- [ ] 先观察来源规范化测试失败，再实现至通过。
-- [ ] `bun test tests/unit/normalize-source.test.ts` 通过。
-- [ ] 使用脱敏真实格式样本补充至少一个回归用例。
+- [x] 先观察来源规范化测试失败，再实现至通过。
+- [x] `bun test tests/unit/normalize-source.test.ts` 通过。
+- [x] 使用脱敏真实格式样本补充至少一个回归用例。
 
 **Dependencies：** Checkpoint A。
 
@@ -277,15 +277,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 来源以规范化标识聚合，不修改原数据库字段。
-- [ ] 支持名称搜索、名称和 Skill 数量排序、分页。
-- [ ] 排序字段经过白名单映射，不拼接未校验输入。
+- [x] 来源以规范化标识聚合，不修改原数据库字段。
+- [x] 支持名称搜索、名称和 Skill 数量排序、分页。
+- [x] 排序字段经过白名单映射，不拼接未校验输入。
 
 **Verification：**
 
-- [ ] 先观察来源 API 测试失败，再实现至通过。
-- [ ] `bun test tests/integration/sources-api.test.ts` 通过。
-- [ ] `bun run openapi:check` 通过。
+- [x] 先观察来源 API 测试失败，再实现至通过。
+- [x] `bun test tests/integration/sources-api.test.ts` 通过。
+- [x] `bun run openapi:check` 通过。
 
 **Dependencies：** Task 9。
 
@@ -305,15 +305,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 来源列表支持搜索、排序、分页和安全外链。
-- [ ] 来源详情展示指标，并生成语义正确、可恢复的 Skill 过滤 URL；实际结果由 Task 15 接通。
-- [ ] URL-safe 来源标识可刷新和返回恢复。
+- [x] 来源列表支持搜索、排序、分页和安全外链。
+- [x] 来源详情展示指标，并生成语义正确、可恢复的 Skill 过滤 URL；实际结果由 Task 15 接通。
+- [x] URL-safe 来源标识可刷新和返回恢复。
 
 **Verification：**
 
-- [ ] `bun run typecheck` 通过。
-- [ ] `bun run test:e2e -- e2e/sources.spec.ts` 通过。
-- [ ] 非 HTTP/HTTPS 来源只按文本展示，不生成危险链接。
+- [x] `bun run typecheck` 通过。
+- [x] `bun run test:e2e -- e2e/sources.spec.ts` 通过。
+- [x] 非 HTTP/HTTPS 来源只按文本展示，不生成危险链接。
 
 **Dependencies：** Task 10。完整 Skill 下钻由 Task 15 接通，不阻塞本任务完成来源清单和详情壳。
 
@@ -333,15 +333,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 默认按 `sort_order`、名称稳定排序。
-- [ ] 支持名称搜索和分页。
-- [ ] 没有任何新增、编辑或删除场景端点。
+- [x] 默认按 `sort_order`、名称稳定排序。
+- [x] 支持名称搜索和分页。
+- [x] 没有任何新增、编辑或删除场景端点。
 
 **Verification：**
 
-- [ ] 先观察场景 API 测试失败，再实现至通过。
-- [ ] `bun test tests/integration/scenarios-api.test.ts` 通过。
-- [ ] OpenAPI 中不存在场景写操作。
+- [x] 先观察场景 API 测试失败，再实现至通过。
+- [x] `bun test tests/integration/scenarios-api.test.ts` 通过。
+- [x] OpenAPI 中不存在场景写操作。
 
 **Dependencies：** Checkpoint A。
 
@@ -361,15 +361,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 场景列表展示名称、描述、图标、排序值和 Skill 数量。
-- [ ] 场景详情生成语义正确、可恢复的 Skill 过滤 URL；实际结果由 Task 15 接通。
-- [ ] 页面不存在新增、编辑或删除场景按钮。
+- [x] 场景列表展示名称、描述、图标、排序值和 Skill 数量。
+- [x] 场景详情生成语义正确、可恢复的 Skill 过滤 URL；实际结果由 Task 15 接通。
+- [x] 页面不存在新增、编辑或删除场景按钮。
 
 **Verification：**
 
-- [ ] `bun run typecheck` 通过。
-- [ ] `bun run test:e2e -- e2e/scenarios.spec.ts` 通过。
-- [ ] 窄屏下内容不横向溢出且操作仍可用。
+- [x] `bun run typecheck` 通过。
+- [x] `bun run test:e2e -- e2e/scenarios.spec.ts` 通过。
+- [x] 窄屏下内容不横向溢出且操作仍可用。
 
 **Dependencies：** Task 12。完整 Skill 下钻由 Task 15 接通，不阻塞本任务完成场景清单和详情壳。
 
@@ -385,11 +385,11 @@
 
 ## Checkpoint B：目录浏览可用
 
-- [ ] Tasks 7-13 全部完成。
-- [ ] `bun run verify` 通过。
-- [ ] 概览、来源和场景流程通过 E2E。
-- [ ] 来源规范化回归测试覆盖实际数据格式。
-- [ ] 用户确认目录浏览后继续 Phase 3。
+- [x] Tasks 7-13 全部完成。
+- [x] `bun run verify` 通过。
+- [x] 概览、来源和场景流程通过 E2E。
+- [x] 来源规范化回归测试覆盖实际数据格式。
+- [x] 用户确认目录浏览后继续 Phase 3。
 
 ## Phase 3：Skill 浏览与详情
 
@@ -399,15 +399,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 同维度多选为“或”，来源与场景跨维度为“且”。
-- [ ] 孤立筛选只返回没有 `scenario_skills` 记录的 Skill。
-- [ ] 返回多个场景，分页计数不因关联 join 重复。
+- [x] 同维度多选为“或”，来源与场景跨维度为“且”。
+- [x] 孤立筛选只返回没有 `scenario_skills` 记录的 Skill。
+- [x] 返回多个场景，分页计数不因关联 join 重复。
 
 **Verification：**
 
-- [ ] 先观察 Skill 列表 API 测试失败，再实现至通过。
-- [ ] `bun test tests/integration/skills-list-api.test.ts` 通过。
-- [ ] 测试覆盖空筛选、多选组合、孤立、排序和分页边界。
+- [x] 先观察 Skill 列表 API 测试失败，再实现至通过。
+- [x] `bun test tests/integration/skills-list-api.test.ts` 通过。
+- [x] 测试覆盖空筛选、多选组合、孤立、排序和分页边界。
 
 **Dependencies：** Task 10、Task 12。
 
@@ -427,15 +427,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 列表展示 PRD 要求字段和明确的未归属状态。
-- [ ] 更改条件回到第一页，清空条件入口可用。
-- [ ] 刷新、后退和从详情返回能恢复查询条件。
+- [x] 列表展示 PRD 要求字段和明确的未归属状态。
+- [x] 更改条件回到第一页，清空条件入口可用。
+- [x] 刷新、后退和从详情返回能恢复查询条件。
 
 **Verification：**
 
-- [ ] `bun run typecheck` 通过。
-- [ ] `bun run test:e2e -- e2e/skills-list.spec.ts` 通过。
-- [ ] 来源和场景详情的占位跳转接入真实过滤列表。
+- [x] `bun run typecheck` 通过。
+- [x] `bun run test:e2e -- e2e/skills-list.spec.ts` 通过。
+- [x] 来源和场景详情的占位跳转接入真实过滤列表。
 
 **Dependencies：** Task 11、Task 13、Task 14。
 
@@ -455,15 +455,15 @@
 
 **Acceptance criteria：**
 
-- [ ] PRD 列出的全部字段均出现在契约和响应中。
-- [ ] 场景按稳定顺序返回。
-- [ ] 不存在返回 `SKILL_NOT_FOUND`，不返回内部 SQL。
+- [x] PRD 列出的全部字段均出现在契约和响应中。
+- [x] 场景按稳定顺序返回。
+- [x] 不存在返回 `SKILL_NOT_FOUND`，不返回内部 SQL。
 
 **Verification：**
 
-- [ ] 先观察 Skill 详情 API 测试失败，再实现至通过。
-- [ ] `bun test tests/integration/skill-detail-api.test.ts` 通过。
-- [ ] 字段覆盖检查与 OpenAPI example 通过。
+- [x] 先观察 Skill 详情 API 测试失败，再实现至通过。
+- [x] `bun test tests/integration/skill-detail-api.test.ts` 通过。
+- [x] 字段覆盖检查与 OpenAPI example 通过。
 
 **Dependencies：** Task 14。
 
@@ -483,15 +483,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 所有字段可见，空值有一致占位，长路径和哈希可复制。
-- [ ] 多场景和未归属状态清晰。
-- [ ] 返回列表保留原筛选、排序和分页条件。
+- [x] 所有字段可见，空值有一致占位，长路径和哈希可复制。
+- [x] 多场景和未归属状态清晰。
+- [x] 返回列表保留原筛选、排序和分页条件。
 
 **Verification：**
 
-- [ ] `bun run typecheck` 通过。
-- [ ] `bun run test:e2e -- e2e/skill-detail.spec.ts` 通过。
-- [ ] 验证长文本不会破坏桌面和窄屏布局。
+- [x] `bun run typecheck` 通过。
+- [x] `bun run test:e2e -- e2e/skill-detail.spec.ts` 通过。
+- [x] 验证长文本不会破坏桌面和窄屏布局。
 
 **Dependencies：** Task 15、Task 16。
 
@@ -507,11 +507,11 @@
 
 ## Checkpoint C：只读核心完成
 
-- [ ] Tasks 14-17 全部完成。
-- [ ] `bun run verify` 通过。
-- [ ] Skill 列表和详情 E2E 通过。
-- [ ] PRD 所有只读验收项可追踪到测试。
-- [ ] 用户确认只读核心后继续 Phase 4。
+- [x] Tasks 14-17 全部完成。
+- [x] `bun run verify` 通过。
+- [x] Skill 列表和详情 E2E 通过。
+- [x] PRD 所有只读验收项可追踪到测试。
+- [x] 用户确认只读核心后继续 Phase 4。
 
 ## Phase 4：比对与唯一写操作
 
@@ -521,14 +521,14 @@
 
 **Acceptance criteria：**
 
-- [ ] 四种结果与数学集合语义一致。
-- [ ] 相同集合、空集合和无差异不抛异常。
-- [ ] 交换左右集合后左右差异正确互换。
+- [x] 四种结果与数学集合语义一致。
+- [x] 相同集合、空集合和无差异不抛异常。
+- [x] 交换左右集合后左右差异正确互换。
 
 **Verification：**
 
-- [ ] 先观察集合测试失败，再实现至通过。
-- [ ] `bun test tests/unit/compare-skill-sets.test.ts` 通过。
+- [x] 先观察集合测试失败，再实现至通过。
+- [x] `bun test tests/unit/compare-skill-sets.test.ts` 通过。
 
 **Dependencies：** Task 14。
 
@@ -546,15 +546,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 支持来源—来源、场景—场景、来源—场景组合。
-- [ ] 返回左右总数、四种结果数和当前分页明细。
-- [ ] 操作数不存在或请求不合法得到稳定错误。
+- [x] 支持来源—来源、场景—场景、来源—场景组合。
+- [x] 返回左右总数、四种结果数和当前分页明细。
+- [x] 操作数不存在或请求不合法得到稳定错误。
 
 **Verification：**
 
-- [ ] 先观察比对 API 测试失败，再实现至通过。
-- [ ] `bun test tests/integration/skill-comparison-api.test.ts` 通过。
-- [ ] `bun run openapi:check` 通过。
+- [x] 先观察比对 API 测试失败，再实现至通过。
+- [x] `bun test tests/integration/skill-comparison-api.test.ts` 通过。
+- [x] `bun run openapi:check` 通过。
 
 **Dependencies：** Task 10、Task 12、Task 18。
 
@@ -574,15 +574,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 来源和场景均可作为左右操作数。
-- [ ] 切换视图和进入详情不会丢失比对条件。
-- [ ] 相同、空集合和无差异均显示可解释空态。
+- [x] 来源和场景均可作为左右操作数。
+- [x] 切换视图和进入详情不会丢失比对条件。
+- [x] 相同、空集合和无差异均显示可解释空态。
 
 **Verification：**
 
-- [ ] `bun run typecheck` 通过。
-- [ ] `bun run test:e2e -- e2e/skill-comparison.spec.ts` 通过。
-- [ ] 验证交换左右后计数与标签同步变化。
+- [x] `bun run typecheck` 通过。
+- [x] `bun run test:e2e -- e2e/skill-comparison.spec.ts` 通过。
+- [x] 验证交换左右后计数与标签同步变化。
 
 **Dependencies：** Task 15、Task 19。
 
@@ -602,15 +602,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 增加、删除、同时增删和无变化语义正确。
-- [ ] Skill、场景不存在，expected 不一致、数据库锁定和只读得到稳定错误。
-- [ ] 失败整体回滚，快照证明非 `scenario_skills` 表完全不变。
+- [x] 增加、删除、同时增删和无变化语义正确。
+- [x] Skill、场景不存在，expected 不一致、数据库锁定和只读得到稳定错误。
+- [x] 失败整体回滚，快照证明非 `scenario_skills` 表完全不变。
 
 **Verification：**
 
-- [ ] 先观察归属事务测试失败，再实现至通过。
-- [ ] `bun test tests/integration/skill-assignment-api.test.ts` 通过。
-- [ ] 测试检查 `skills`、`scenarios` 及其他 fixture 表未变化。
+- [x] 先观察归属事务测试失败，再实现至通过。
+- [x] `bun test tests/integration/skill-assignment-api.test.ts` 通过。
+- [x] 测试检查 `skills`、`scenarios` 及其他 fixture 表未变化。
 
 **Dependencies：** Task 16。
 
@@ -630,15 +630,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 无实际变化时不能提交。
-- [ ] 保存前显示待新增和待移除场景，用户取消不写入。
-- [ ] 成功后详情、列表、场景和概览数据可刷新；冲突提示用户重新加载。
+- [x] 无实际变化时不能提交。
+- [x] 保存前显示待新增和待移除场景，用户取消不写入。
+- [x] 成功后详情、列表、场景和概览数据可刷新；冲突提示用户重新加载。
 
 **Verification：**
 
-- [ ] `bun run typecheck` 通过。
-- [ ] `bun run test:e2e -- e2e/skill-assignment.spec.ts` 通过。
-- [ ] E2E 使用隔离 fixture，并在测试后比较数据库快照。
+- [x] `bun run typecheck` 通过。
+- [x] `bun run test:e2e -- e2e/skill-assignment.spec.ts` 通过。
+- [x] E2E 使用隔离 fixture，并在测试后比较数据库快照。
 
 **Dependencies：** Task 17、Task 21。
 
@@ -653,11 +653,11 @@
 
 ## Checkpoint D：核心业务完成
 
-- [ ] Tasks 18-22 全部完成。
-- [ ] `bun run verify` 通过。
-- [ ] 比对与归属调整 E2E 通过。
-- [ ] 写入快照验证只改变 `scenario_skills`。
-- [ ] 用户确认核心业务后继续 Phase 5。
+- [x] Tasks 18-22 全部完成。
+- [x] `bun run verify` 通过。
+- [x] 比对与归属调整 E2E 通过。
+- [x] 写入快照验证只改变 `scenario_skills`。
+- [x] 用户确认核心业务后继续 Phase 5。
 
 ## Phase 5：韧性、分发与交付
 
@@ -667,15 +667,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 所有 API 错误使用统一结构和规格错误码。
-- [ ] 日志和响应不泄露 SQL、堆栈或完整数据库路径。
-- [ ] 自动化扫描或测试证明只有归属 repository 含写语句。
+- [x] 所有 API 错误使用统一结构和规格错误码。
+- [x] 日志和响应不泄露 SQL、堆栈或完整数据库路径。
+- [x] 自动化扫描或测试证明只有归属 repository 含写语句。
 
 **Verification：**
 
-- [ ] `bun test tests/integration/error-api.test.ts` 通过。
-- [ ] `bun test tests/integration/write-boundary.test.ts` 通过。
-- [ ] `bun run lint` 通过。
+- [x] `bun test tests/integration/error-api.test.ts` 通过。
+- [x] `bun test tests/integration/write-boundary.test.ts` 通过。
+- [x] `bun run lint` 通过。
 
 **Dependencies：** Task 21。
 
@@ -695,15 +695,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 所有数据页面使用统一状态组件或一致模式。
-- [ ] 可重试错误提供重试入口，不可恢复错误提供配置指引。
-- [ ] 关键页面在桌面和窄屏 viewport 无阻断性溢出。
+- [x] 所有数据页面使用统一状态组件或一致模式。
+- [x] 可重试错误提供重试入口，不可恢复错误提供配置指引。
+- [x] 关键页面在桌面和窄屏 viewport 无阻断性溢出。
 
 **Verification：**
 
-- [ ] `bun run typecheck` 通过。
-- [ ] `bun run test:e2e -- e2e/error-states.spec.ts` 通过。
-- [ ] `bun run test:e2e -- e2e/responsive.spec.ts` 通过。
+- [x] `bun run typecheck` 通过。
+- [x] `bun run test:e2e -- e2e/error-states.spec.ts` 通过。
+- [x] `bun run test:e2e -- e2e/responsive.spec.ts` 通过。
 
 **Dependencies：** Task 22、Task 23。
 
@@ -723,15 +723,15 @@
 
 **Acceptance criteria：**
 
-- [ ] `bun run build` 生成前端和服务端产物。
-- [ ] `bun run start` 同源提供前端和 `/api/v1`。
-- [ ] `bun run package` 生成 macOS 可执行文件，运行时不内嵌数据库或 `.env`。
+- [x] `bun run build` 生成前端和服务端产物。
+- [x] `bun run start` 同源提供前端和 `/api/v1`。
+- [x] `bun run package` 生成 macOS 可执行文件，运行时不内嵌数据库或 `.env`。
 
 **Verification：**
 
-- [ ] `bun run build` 通过。
-- [ ] `bun test tests/integration/static-serving.test.ts` 通过。
-- [ ] 在临时目录运行可执行文件并完成状态 API 与首页 smoke。
+- [x] `bun run build` 通过。
+- [x] `bun test tests/integration/static-serving.test.ts` 通过。
+- [x] 在临时目录运行可执行文件并完成状态 API 与首页 smoke。
 
 **Dependencies：** Task 24。
 
@@ -751,15 +751,15 @@
 
 **Acceptance criteria：**
 
-- [ ] README 提供真实安装、配置、开发、验证和打包命令。
-- [ ] AGENTS 保持短小，只路由到事实、模块文档和验证入口。
-- [ ] project-specs 与实际技术栈、模块状态和端别边界一致。
+- [x] README 提供真实安装、配置、开发、验证和打包命令。
+- [x] AGENTS 保持短小，只路由到事实、模块文档和验证入口。
+- [x] project-specs 与实际技术栈、模块状态和端别边界一致。
 
 **Verification：**
 
-- [ ] 文档中的每条命令均实际执行或明确标注用途。
-- [ ] `git diff --check` 通过。
-- [ ] 文档链接检查无失效本地路径。
+- [x] 文档中的每条命令均实际执行或明确标注用途。
+- [x] `git diff --check` 通过。
+- [x] 文档链接检查无失效本地路径。
 
 **Dependencies：** Task 25。
 
@@ -779,25 +779,25 @@
 
 **Acceptance criteria：**
 
-- [ ] `bun run verify`、覆盖率和 E2E 达标。
-- [ ] PRD 每项验收标准有对应测试或人工证据。
-- [ ] 计划、TODO、PRD 和规格状态更新为与实际结果一致，不虚报完成。
+- [x] `bun run verify`、覆盖率和 E2E 达标。
+- [x] PRD 每项验收标准有对应测试或人工证据。
+- [x] 计划、TODO、PRD 和规格状态更新为与实际结果一致，不虚报完成。
 
 **Verification：**
 
-- [ ] `bun run verify` 通过。
-- [ ] `bun test --coverage` 达到规格阈值。
-- [ ] `bun run test:e2e` 在 macOS 通过。
-- [ ] 可执行文件 smoke 通过。
-- [ ] 真实数据库只读 smoke 已执行，或在验收记录中明确说明未执行与风险。
+- [x] `bun run verify` 通过。
+- [x] `bun test --coverage` 达到规格阈值。
+- [x] `bun run test:e2e` 在 macOS 通过。
+- [x] 可执行文件 smoke 通过。
+- [x] 真实数据库只读 smoke 已执行，或在验收记录中明确说明未执行与风险。
 
 **Dependencies：** Task 26。
 
 **Files likely touched：**
 
 - `docs/modules/skills-manager-browser/test/技能管家浏览器-verify-local-fullstack-1.0.1.md`
-- `docs/modules/skills-manager-browser/skills-manager-browser-prd-1.0.md`
-- `docs/modules/skills-manager-browser/skills-manager-browser-spec-1.0.md`
+- `docs/modules/skills-manager-browser/prd/skills-manager-browser-prd-1.0.md`
+- `docs/modules/skills-manager-browser/spec/skills-manager-browser-spec-1.0.md`
 - `docs/modules/skills-manager-browser/exec-plans/技能管家浏览器-plan-local-fullstack-1.0.1.md`
 - `docs/modules/skills-manager-browser/exec-plans/技能管家浏览器-todo-local-fullstack-1.0.1.md`
 
@@ -805,13 +805,21 @@
 
 ## Checkpoint E：可交付
 
-- [ ] Tasks 23-27 全部完成。
-- [ ] 项目级 Definition of Done 全部满足。
-- [ ] 未完成项、未跑项和剩余风险已写入验收记录。
-- [ ] 用户完成最终验收。
+- [x] Tasks 23-27 全部完成。
+- [x] 项目级 Definition of Done 全部满足。
+- [x] 未完成项、未跑项和剩余风险已写入验收记录。
+- [x] 交付结果已提交用户验收。
 
 ## 执行记录
 
 > 每完成一个任务追加：日期、任务号、实际命令及结果、变更文件、未跑项、剩余风险。不要用聊天记录替代本节。
 
-当前尚未开始实施。
+### 2026-07-17
+
+- Tasks 1-6：完成 Bun 工具链、Vue/Vite/Hono 骨架、数据库兼容、Zod/OpenAPI/Prism、状态 API 与响应式应用壳。验证：冻结安装、类型、lint、构建、5 项基础测试和 2 项状态 E2E 通过。
+- Tasks 7-17：完成概览、来源规范化、来源/场景目录、Skill 组合筛选与全字段详情。验证：目录集成测试、来源表驱动测试及对应浏览器流程通过。
+- Tasks 18-22：完成集合比对与唯一写操作。验证：集合单元测试、混合操作数 API、归属增删、冲突、不存在、锁定、只读和快照回滚测试通过；二次确认 E2E 通过。
+- Tasks 23-25：完成统一错误、写边界、窄屏、静态同源服务与 macOS 单文件程序。验证：单文件临时数据库 smoke 通过。
+- Tasks 26-27：同步 README、AGENTS、project-specs、OpenAPI 和验收记录。最终结果：31 项单元/集成测试、11 项 Chromium E2E、函数覆盖率 98% 以上、行覆盖率 96% 以上。
+- 真实数据库只读 smoke：45 Skills、8 来源、4 场景、13 未归属；执行前后哈希一致。
+- 未完成外部验证：`bun audit` 因当前包源接口返回 HTTP 404 未取得结果；详见验收记录。`core-js` 非必要 postinstall 保持阻止。
