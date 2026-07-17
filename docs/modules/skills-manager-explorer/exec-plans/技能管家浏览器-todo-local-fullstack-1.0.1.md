@@ -118,8 +118,8 @@
 - `src/shared/contracts/openapi.ts`
 - `scripts/generate-openapi.ts`
 - `scripts/verify-openapi-drift.ts`
-- `docs/modules/skills-manager-browser/openapi/skills-manager-browser-local-openapi.yaml`
-- `docs/modules/skills-manager-browser/openapi/README.md`
+- `docs/modules/skills-manager-explorer/openapi/skills-manager-explorer-local-openapi.yaml`
+- `docs/modules/skills-manager-explorer/openapi/README.md`
 
 **Estimated scope：** M，5 个文件。
 
@@ -769,7 +769,7 @@
 - `AGENTS.md`
 - `docs/project-specs/overview.md`
 - `docs/project-specs/module-inventory.md`
-- `docs/modules/skills-manager-browser/openapi/README.md`
+- `docs/modules/skills-manager-explorer/openapi/README.md`
 
 **Estimated scope：** M，5 个文件。
 
@@ -795,11 +795,11 @@
 
 **Files likely touched：**
 
-- `docs/modules/skills-manager-browser/test/技能管家浏览器-verify-local-fullstack-1.0.1.md`
-- `docs/modules/skills-manager-browser/prd/skills-manager-browser-prd-1.0.md`
-- `docs/modules/skills-manager-browser/spec/skills-manager-browser-spec-1.0.md`
-- `docs/modules/skills-manager-browser/exec-plans/技能管家浏览器-plan-local-fullstack-1.0.1.md`
-- `docs/modules/skills-manager-browser/exec-plans/技能管家浏览器-todo-local-fullstack-1.0.1.md`
+- `docs/modules/skills-manager-explorer/test/技能管家浏览器-verify-local-fullstack-1.0.1.md`
+- `docs/modules/skills-manager-explorer/prd/skills-manager-explorer-prd-1.0.md`
+- `docs/modules/skills-manager-explorer/spec/skills-manager-explorer-spec-1.0.md`
+- `docs/modules/skills-manager-explorer/exec-plans/技能管家浏览器-plan-local-fullstack-1.0.1.md`
+- `docs/modules/skills-manager-explorer/exec-plans/技能管家浏览器-todo-local-fullstack-1.0.1.md`
 
 **Estimated scope：** M，5 个文件。
 

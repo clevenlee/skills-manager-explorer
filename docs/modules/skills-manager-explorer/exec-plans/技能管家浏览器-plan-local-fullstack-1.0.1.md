@@ -4,8 +4,8 @@
 
 | 项目         | 内容                                           |
 | ------------ | ---------------------------------------------- |
-| 对应 PRD     | `../prd/skills-manager-browser-prd-1.0.md`     |
-| 对应技术规格 | `../spec/skills-manager-browser-spec-1.0.md`   |
+| 对应 PRD     | `../prd/skills-manager-explorer-prd-1.0.md`    |
+| 对应技术规格 | `../spec/skills-manager-explorer-spec-1.0.md`  |
 | 配套 TODO    | `技能管家浏览器-todo-local-fullstack-1.0.1.md` |
 | 计划状态     | 已完成                                         |
 | 当前门禁     | VERIFY/DELIVER；全部检查点已通过               |

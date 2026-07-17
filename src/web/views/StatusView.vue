@@ -1,10 +1,12 @@
 <!--
   数据库状态页面，区分加载、正常、缺失、不兼容、不可用与只读能力并提供重试。
+  标题、副标题、刷新按钮、错误兜底文案经 useI18n() 国际化。
   作者：NDP Coding
   日期：2026-07-17 10:55:00
 -->
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 import { apiRequest } from "../api/api-client";
 import {
@@ -12,19 +14,21 @@ import {
   type StatusEnvelope,
 } from "@/shared/contracts/status";
 
+const { t } = useI18n();
 const status = ref<StatusEnvelope>();
 const error = ref("");
 const loading = ref(true);
 const database = computed(() => status.value?.data.database);
 const title = computed(() => {
-  if (!database.value) return "正在连接本地数据库";
+  if (!database.value) return t("status.page.connecting");
   if (database.value.state === "ready")
     return database.value.writable
-      ? "数据库已就绪"
-      : "数据库可浏览，但当前只读";
-  if (database.value.state === "missing") return "没有找到数据库文件";
-  if (database.value.state === "incompatible") return "数据库结构不兼容";
-  return "暂时无法读取数据库";
+      ? t("status.page.readyWritable")
+      : t("status.page.readyReadOnly");
+  if (database.value.state === "missing") return t("status.page.missing");
+  if (database.value.state === "incompatible")
+    return t("status.page.incompatible");
+  return t("status.page.unknown");
 });
 
 async function loadStatus(): Promise<void> {
@@ -34,7 +38,7 @@ async function loadStatus(): Promise<void> {
     status.value = await apiRequest("/api/v1/status", statusEnvelopeSchema);
   } catch (reason) {
     error.value =
-      reason instanceof Error ? reason.message : "无法连接本地服务。";
+      reason instanceof Error ? reason.message : t("status.errorFallback");
   } finally {
     loading.value = false;
   }
@@ -45,19 +49,19 @@ onMounted(loadStatus);
 
 <template>
   <section class="status-view" aria-labelledby="status-title">
-    <p class="eyebrow">LOCAL DATABASE</p>
-    <h1 id="status-title">数据库状态</h1>
+    <p class="eyebrow">{{ t("status.page.eyebrow") }}</p>
+    <h1 id="status-title">{{ t("status.page.title") }}</h1>
     <a-skeleton v-if="loading" active :paragraph="{ rows: 4 }" />
     <a-result
       v-else-if="error"
       status="error"
-      title="无法连接本地服务"
+      :title="t('status.errorTitle')"
       :sub-title="error"
     >
       <template #extra
-        ><a-button type="primary" @click="loadStatus"
-          >重新尝试</a-button
-        ></template
+        ><a-button type="primary" @click="loadStatus">{{
+          t("common.retry")
+        }}</a-button></template
       >
     </a-result>
     <article v-else class="status-card">
@@ -71,12 +75,14 @@ onMounted(loadStatus);
           v-if="database?.state === 'ready' && database.writable"
           class="state-copy"
         >
-          浏览与单个 Skill 场景归属调整均可使用。
+          {{ t("status.page.readyCopy") }}
         </p>
         <ul v-else-if="database?.issues.length" class="issues">
           <li v-for="issue in database.issues" :key="issue">{{ issue }}</li>
         </ul>
-        <a-button class="retry" @click="loadStatus">刷新状态</a-button>
+        <a-button class="retry" @click="loadStatus">{{
+          t("common.refreshStatus")
+        }}</a-button>
       </div>
     </article>
   </section>

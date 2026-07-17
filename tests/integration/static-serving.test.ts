@@ -23,7 +23,7 @@ describe("生产静态资源", () => {
       const response = await app.request(path);
       expect(response.status).toBe(200);
       expect(response.headers.get("content-type")).toContain("text/html");
-      expect(await response.text()).toContain("技能管家浏览器");
+      expect(await response.text()).toContain("Skills Manager Explorer");
     }
   });
   test("未知 API 不回退到前端", async () => {

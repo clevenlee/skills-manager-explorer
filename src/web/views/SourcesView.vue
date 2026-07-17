@@ -1,16 +1,19 @@
 <!--
   来源清单与详情页面，支持搜索、排序、分页、安全外链及过滤后的 Skill 下钻。
+  搜索占位、排序选项、空态、详情页文案经 useI18n() 国际化。
   作者：NDP Coding
   日期：2026-07-17 12:35:00
 -->
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 import type { SkillSummary, Source } from "@/shared/contracts/catalog";
 import { allCatalogApi, catalogApi } from "../api/catalog-api";
 import RequestState from "../components/RequestState.vue";
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const items = ref<Source[]>([]);
@@ -50,7 +53,10 @@ async function load() {
       total.value = response.meta.total;
     }
   } catch (reason) {
-    error.value = reason instanceof Error ? reason.message : "无法加载来源。";
+    error.value =
+      reason instanceof Error
+        ? reason.message
+        : t("sources.errorFallback", "无法加载来源。");
   } finally {
     loading.value = false;
   }
@@ -79,26 +85,35 @@ onMounted(load);
 <template>
   <section class="page">
     <template v-if="sourceId"
-      ><router-link class="back" to="/sources">← 返回来源</router-link>
-      <p class="eyebrow">SOURCE DETAIL</p>
-      <h1>{{ detail?.name || "来源详情" }}</h1>
-      <p class="lead">该来源包含 {{ total }} 个 Skill。</p></template
+      ><router-link class="back" to="/sources">{{
+        t("sources.backToSources")
+      }}</router-link>
+      <p class="eyebrow">{{ t("sources.eyebrowDetail") }}</p>
+      <h1>{{ detail?.name || t("sources.titleDetailFallback") }}</h1>
+      <p class="lead">
+        {{ t("sources.leadDetail", { count: total }) }}
+      </p></template
     >
     <template v-else
-      ><p class="eyebrow">SOURCE CATALOG</p>
-      <h1>来源</h1>
-      <p class="lead">把分散的仓库与本地目录，整理成可理解的能力来源。</p>
+      ><p class="eyebrow">{{ t("sources.eyebrowList") }}</p>
+      <h1>{{ t("sources.title") }}</h1>
+      <p class="lead">{{ t("sources.lead") }}</p>
       <div class="toolbar">
         <a-input-search
           v-model:value="q"
           allow-clear
-          placeholder="搜索来源名称或地址"
+          :placeholder="t('sources.searchPlaceholder')"
           @search="apply"
-        /><a-select v-model:value="sort" aria-label="来源排序" @change="apply"
-          ><a-select-option value="name">按名称</a-select-option
-          ><a-select-option value="skillCount"
-            >按 Skill 数量</a-select-option
-          ></a-select
+        /><a-select
+          v-model:value="sort"
+          :aria-label="t('sources.sortAria')"
+          @change="apply"
+          ><a-select-option value="name">{{
+            t("sources.sortOptions.name")
+          }}</a-select-option
+          ><a-select-option value="skillCount">{{
+            t("sources.sortOptions.skillCount")
+          }}</a-select-option></a-select
         >
       </div>
     </template>
@@ -106,7 +121,7 @@ onMounted(load);
       :loading="loading"
       :error="error"
       :empty="sourceId ? skills.length === 0 : items.length === 0"
-      empty-text="没有匹配的来源"
+      :empty-text="t('sources.emptyText')"
       @retry="load"
     >
       <div v-if="sourceId" class="skill-list">
@@ -120,11 +135,11 @@ onMounted(load);
           }"
           class="skill-row"
           ><strong>{{ skill.name }}</strong
-          ><span>{{ skill.description || "暂无描述" }}</span
+          ><span>{{ skill.description || t("common.noDescription") }}</span
           ><small>{{
             skill.scenarios.length
               ? skill.scenarios.map((s) => s.name).join(" · ")
-              : "未归属"
+              : t("common.unassigned")
           }}</small></router-link
         >
       </div>
@@ -137,7 +152,7 @@ onMounted(load);
               :href="source.externalUrl"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="在新窗口打开来源"
+              :aria-label="t('sources.externalLink')"
               >↗</a
             >
           </div>
@@ -149,9 +164,11 @@ onMounted(load);
           <p class="source-key">{{ source.key }}</p>
           <div class="counts">
             <span
-              ><strong>{{ source.skillCount }}</strong> Skills</span
+              ><strong>{{ source.skillCount }}</strong>
+              {{ t("nav.skills") }}</span
             ><span
-              ><strong>{{ source.orphanSkillCount }}</strong> 未归属</span
+              ><strong>{{ source.orphanSkillCount }}</strong>
+              {{ t("common.unassigned") }}</span
             >
           </div>
         </article>

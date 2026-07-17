@@ -5,15 +5,15 @@
 ## 1. 项目定位
 
 - 中文名：技能管家浏览器
-- 英文名（目录名）：`skills-manager-browser`
+- 英文名（目录名）：`skills-manager-explorer`
 
 - Bun 本地全栈应用：Vue 网页 + Hono 本地服务 + `bun:sqlite`。
 - `skills`、`scenarios` 只读；唯一写入范围是 `scenario_skills` 中单个 Skill 的场景归属。
 
 ## 3. 必读规则
 
-- 产品边界先读 `docs/modules/skills-manager-browser/prd/skills-manager-browser-prd-1.0.md`。
-- 技术、API 与数据边界先读 `docs/modules/skills-manager-browser/spec/skills-manager-browser-spec-1.0.md` 和生成 OpenAPI。
+- 产品边界先读 `docs/modules/skills-manager-explorer/prd/skills-manager-explorer-prd-1.0.md`。
+- 技术、API 与数据边界先读 `docs/modules/skills-manager-explorer/spec/skills-manager-explorer-spec-1.0.md` 和生成 OpenAPI。
 - 不使用 Node.js 运行时，不新增场景管理、Skill 管理、远程监听或任意 SQL。
 - 自动化写测试只能使用 `tests/fixtures/` 创建的隔离数据库。
 

@@ -1,10 +1,12 @@
 <!--
   Skill 集合比对工作台，支持来源与场景混合操作数、四种结果视图、交换和 URL 恢复。
+  标签、四种视图、占位符、错误兜底文案经 useI18n() 国际化。
   作者：NDP Coding
   日期：2026-07-17 13:05:00
 -->
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 import type {
@@ -17,6 +19,7 @@ import { allCatalogApi, catalogApi } from "../api/catalog-api";
 import RequestState from "../components/RequestState.vue";
 
 type ResultType = ComparisonInput["result"];
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const sources = ref<Source[]>([]);
@@ -37,14 +40,14 @@ const q = ref(String(route.query.q || ""));
 const page = ref(Number(route.query.page || 1));
 const options = computed(() => [
   {
-    label: "来源",
+    label: t("nav.sources"),
     options: sources.value.map((item) => ({
       label: item.name,
       value: `source:${item.id}`,
     })),
   },
   {
-    label: "场景",
+    label: t("nav.scenarios"),
     options: scenarios.value.map((item) => ({
       label: item.name,
       value: `scenario:${item.id}`,
@@ -52,10 +55,22 @@ const options = computed(() => [
   },
 ]);
 const tabs = computed(() => [
-  { label: `差异 ${counts.value.difference}`, value: "difference" },
-  { label: `共有 ${counts.value.common}`, value: "common" },
-  { label: `仅左 ${counts.value.leftOnly}`, value: "leftOnly" },
-  { label: `仅右 ${counts.value.rightOnly}`, value: "rightOnly" },
+  {
+    label: `${t("comparison.tabs.difference")} ${counts.value.difference}`,
+    value: "difference",
+  },
+  {
+    label: `${t("comparison.tabs.common")} ${counts.value.common}`,
+    value: "common",
+  },
+  {
+    label: `${t("comparison.tabs.leftOnly")} ${counts.value.leftOnly}`,
+    value: "leftOnly",
+  },
+  {
+    label: `${t("comparison.tabs.rightOnly")} ${counts.value.rightOnly}`,
+    value: "rightOnly",
+  },
 ]);
 function operand(value: string) {
   const separator = value.indexOf(":");
@@ -102,7 +117,8 @@ async function loadComparison() {
     rightTotal.value = response.data.rightTotal;
     total.value = response.meta.total;
   } catch (reason) {
-    error.value = reason instanceof Error ? reason.message : "无法完成比对。";
+    error.value =
+      reason instanceof Error ? reason.message : t("comparison.errorFallback");
   } finally {
     loading.value = false;
   }
@@ -119,7 +135,9 @@ async function initialize() {
     await loadComparison();
   } catch (reason) {
     error.value =
-      reason instanceof Error ? reason.message : "无法加载比对选项。";
+      reason instanceof Error
+        ? reason.message
+        : t("comparison.optionsErrorFallback");
     loading.value = false;
   }
 }
@@ -146,42 +164,50 @@ onMounted(initialize);
 
 <template>
   <section class="page">
-    <p class="eyebrow">SET COMPARISON</p>
-    <h1>集合比对</h1>
-    <p class="lead">任意选择两个来源或场景，看见共有能力与各自缺口。</p>
+    <p class="eyebrow">{{ t("comparison.eyebrow") }}</p>
+    <h1>{{ t("comparison.title") }}</h1>
+    <p class="lead">{{ t("comparison.lead") }}</p>
     <div class="operand-panel">
       <div>
-        <label>左侧集合</label
+        <label>{{ t("comparison.operandLabel.left") }}</label
         ><a-select
           v-model:value="left"
           :options="options"
           show-search
-          placeholder="选择来源或场景"
+          :placeholder="t('comparison.placeholder')"
           @change="changeOperands"
         />
       </div>
-      <a-button class="swap" aria-label="交换左右集合" @click="swap"
+      <a-button
+        class="swap"
+        :aria-label="t('comparison.swapAria')"
+        @click="swap"
         >⇄</a-button
       >
       <div>
-        <label>右侧集合</label
+        <label>{{ t("comparison.operandLabel.right") }}</label
         ><a-select
           v-model:value="right"
           :options="options"
           show-search
-          placeholder="选择来源或场景"
+          :placeholder="t('comparison.placeholder')"
           @change="changeOperands"
         />
       </div>
     </div>
     <request-state :loading="loading" :error="error" @retry="loadComparison">
-      <a-empty v-if="!left || !right" description="先选择左右两个集合" />
+      <a-empty
+        v-if="!left || !right"
+        :description="t('comparison.emptyOperands')"
+      />
       <template v-else
         ><div class="summary">
           <span
-            >左侧 <strong>{{ leftTotal }}</strong></span
+            >{{ t("comparison.summary.left") }}
+            <strong>{{ leftTotal }}</strong></span
           ><span
-            >右侧 <strong>{{ rightTotal }}</strong></span
+            >{{ t("comparison.summary.right") }}
+            <strong>{{ rightTotal }}</strong></span
           ><a-segmented
             :value="result"
             :options="tabs"
@@ -192,10 +218,13 @@ onMounted(initialize);
           v-model:value="q"
           class="search"
           allow-clear
-          placeholder="在当前结果中搜索"
+          :placeholder="t('comparison.searchPlaceholder')"
           @search="changeOperands"
         />
-        <a-empty v-if="items.length === 0" description="当前视图没有 Skill" />
+        <a-empty
+          v-if="items.length === 0"
+          :description="t('comparison.emptyResult')"
+        />
         <div v-else class="result-list">
           <router-link
             v-for="skill in items"
@@ -207,9 +236,11 @@ onMounted(initialize);
             }"
             ><div>
               <strong>{{ skill.name }}</strong>
-              <p>{{ skill.description || "暂无描述" }}</p>
+              <p>{{ skill.description || t("common.noDescription") }}</p>
             </div>
-            <span>{{ skill.source?.name || "未知来源" }} →</span></router-link
+            <span
+              >{{ skill.source?.name || t("common.unknownSource") }} →</span
+            ></router-link
           >
         </div>
         <a-pagination

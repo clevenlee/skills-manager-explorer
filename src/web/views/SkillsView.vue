@@ -1,10 +1,12 @@
 <!--
   Skill 清单页面，把搜索、来源、场景、孤立状态、排序和分页完整保存在 URL。
+  搜索占位、排序、视图、状态、错误兜底文案经 useI18n() 国际化。
   作者：NDP Coding
   日期：2026-07-17 12:50:00
 -->
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 import type {
@@ -15,6 +17,7 @@ import type {
 import { allCatalogApi, catalogApi } from "../api/catalog-api";
 import RequestState from "../components/RequestState.vue";
 
+const { t, locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const items = ref<SkillSummary[]>([]);
@@ -76,7 +79,7 @@ async function load() {
     scenarios.value = scenarioResponse;
   } catch (reason) {
     error.value =
-      reason instanceof Error ? reason.message : "无法加载 Skills。";
+      reason instanceof Error ? reason.message : t("skills.errorFallback");
   } finally {
     loading.value = false;
   }
@@ -107,7 +110,15 @@ async function syncRoute(): Promise<void> {
   await router.replace({ query: queryValues() });
 }
 function formatTime(value: number | null): string {
-  return value ? new Date(value).toLocaleString("zh-CN") : "—";
+  if (!value) return t("common.placeholder");
+  return new Intl.DateTimeFormat(locale.value, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(new Date(value));
 }
 async function clear() {
   q.value = "";
@@ -124,32 +135,32 @@ onMounted(load);
 
 <template>
   <section class="page">
-    <p class="eyebrow">SKILL CATALOG</p>
+    <p class="eyebrow">{{ t("skills.eyebrow") }}</p>
     <div class="title-row">
       <div>
-        <h1>Skills</h1>
-        <p class="lead">{{ total }} 个能力单元，来自你的本地数据库。</p>
+        <h1>{{ t("skills.title") }}</h1>
+        <p class="lead">{{ t("skills.lead", { count: total }) }}</p>
       </div>
       <a-button
         v-if="
           q || sourceIds.length || scenarioIds.length || orphan || multiScenario
         "
         @click="clear"
-        >清空条件</a-button
+        >{{ t("common.clear") }}</a-button
       >
     </div>
     <div class="filters">
       <a-input-search
         v-model:value="q"
         allow-clear
-        placeholder="搜索名称或描述"
+        :placeholder="t('skills.searchPlaceholder')"
         @search="apply"
       /><a-select
         v-model:value="sourceIds"
         mode="multiple"
         allow-clear
         max-tag-count="responsive"
-        placeholder="来源"
+        :placeholder="t('skills.filters.sources')"
         @change="apply"
         ><a-select-option
           v-for="source in sources"
@@ -162,7 +173,7 @@ onMounted(load);
         mode="multiple"
         allow-clear
         max-tag-count="responsive"
-        placeholder="场景"
+        :placeholder="t('skills.filters.scenarios')"
         @change="apply"
         ><a-select-option
           v-for="scenario in scenarios"
@@ -170,38 +181,69 @@ onMounted(load);
           :value="scenario.id"
           >{{ scenario.name }}</a-select-option
         ></a-select
-      ><a-select v-model:value="sort" aria-label="Skill 排序" @change="apply"
-        ><a-select-option value="name">按名称</a-select-option
-        ><a-select-option value="createdAt">按创建时间</a-select-option
-        ><a-select-option value="updatedAt">按更新时间</a-select-option
-        ><a-select-option value="status">按状态</a-select-option></a-select
-      ><a-select v-model:value="order" aria-label="排序方向" @change="apply"
-        ><a-select-option value="asc">升序</a-select-option
-        ><a-select-option value="desc">倒序</a-select-option></a-select
-      ><a-checkbox v-model:checked="orphan" @change="changeOrphan"
-        >仅未归属</a-checkbox
-      ><a-checkbox v-model:checked="multiScenario" @change="changeMultiScenario"
-        >仅重复归属</a-checkbox
+      ><a-select
+        v-model:value="sort"
+        :aria-label="t('skills.sortAria')"
+        @change="apply"
+        ><a-select-option value="name">{{
+          t("skills.sortOptions.name")
+        }}</a-select-option
+        ><a-select-option value="createdAt">{{
+          t("skills.sortOptions.createdAt")
+        }}</a-select-option
+        ><a-select-option value="updatedAt">{{
+          t("skills.sortOptions.updatedAt")
+        }}</a-select-option
+        ><a-select-option value="status">{{
+          t("skills.sortOptions.status")
+        }}</a-select-option></a-select
+      ><a-select
+        v-model:value="order"
+        :aria-label="t('skills.orderAria')"
+        @change="apply"
+        ><a-select-option value="asc">{{
+          t("skills.orderOptions.asc")
+        }}</a-select-option
+        ><a-select-option value="desc">{{
+          t("skills.orderOptions.desc")
+        }}</a-select-option></a-select
+      ><a-checkbox v-model:checked="orphan" @change="changeOrphan">{{
+        t("skills.checkboxes.orphanOnly")
+      }}</a-checkbox
+      ><a-checkbox
+        v-model:checked="multiScenario"
+        @change="changeMultiScenario"
+        >{{ t("skills.checkboxes.multiScenarioOnly") }}</a-checkbox
       >
     </div>
     <div class="list-controls">
       <a-radio-group
         v-model:value="viewMode"
-        aria-label="展示方式"
+        :aria-label="t('skills.view.aria')"
         @change="syncRoute"
       >
-        <a-radio-button value="grid">块状</a-radio-button>
-        <a-radio-button value="table">表格</a-radio-button>
+        <a-radio-button value="grid">{{
+          t("skills.view.grid")
+        }}</a-radio-button>
+        <a-radio-button value="table">{{
+          t("skills.view.table")
+        }}</a-radio-button>
       </a-radio-group>
       <label class="page-size-control"
-        >每页数量
+        >{{ t("skills.pageSize.label") }}
         <a-select
           v-model:value="pageSize"
-          aria-label="每页数量"
+          :aria-label="t('skills.pageSize.aria')"
           @change="changePageSize"
-          ><a-select-option :value="0">不分页</a-select-option
-          ><a-select-option :value="20">20 条/页</a-select-option
-          ><a-select-option :value="50">50 条/页</a-select-option></a-select
+          ><a-select-option :value="0">{{
+            t("skills.pageSize.all")
+          }}</a-select-option
+          ><a-select-option :value="20">{{
+            t("skills.pageSize.20")
+          }}</a-select-option
+          ><a-select-option :value="50">{{
+            t("skills.pageSize.50")
+          }}</a-select-option></a-select
         >
       </label>
     </div>
@@ -209,7 +251,7 @@ onMounted(load);
       :loading="loading"
       :error="error"
       :empty="items.length === 0"
-      empty-text="没有匹配的 Skill"
+      :empty-text="t('skills.emptyText')"
       @retry="load"
     >
       <div v-if="viewMode === 'grid'" class="skill-grid">
@@ -224,35 +266,38 @@ onMounted(load);
           class="skill-card"
           ><div class="skill-head">
             <a-tag :color="skill.enabled ? 'green' : 'default'">{{
-              skill.enabled ? "启用" : "停用"
+              skill.enabled
+                ? t("skills.status.enabled")
+                : t("skills.status.disabled")
             }}</a-tag
-            ><span>{{ skill.source?.name || "未知来源" }}</span>
+            ><span>{{ skill.source?.name || t("common.unknownSource") }}</span>
           </div>
           <h2>{{ skill.name }}</h2>
-          <p>{{ skill.description || "暂无描述" }}</p>
+          <p>{{ skill.description || t("common.noDescription") }}</p>
           <small class="skill-created-at"
-            >创建于 {{ formatTime(skill.createdAt) }}</small
+            >{{ t("common.createdAtPrefix") }}
+            {{ formatTime(skill.createdAt) }}</small
           >
           <div class="scenario-tags">
             <a-tag v-for="scenario in skill.scenarios" :key="scenario.id">{{
               scenario.name
             }}</a-tag
-            ><span v-if="skill.scenarios.length === 0" class="orphan"
-              >未归属任何场景</span
-            >
+            ><span v-if="skill.scenarios.length === 0" class="orphan">{{
+              t("skills.orphanBadge")
+            }}</span>
           </div></router-link
         >
       </div>
       <div v-else class="skill-table-wrap">
-        <table class="skill-table" aria-label="Skill 列表">
+        <table class="skill-table" :aria-label="t('skills.title')">
           <thead>
             <tr>
-              <th scope="col">Skill</th>
-              <th scope="col">来源</th>
-              <th scope="col">场景归属</th>
-              <th scope="col">状态</th>
-              <th scope="col">创建时间</th>
-              <th scope="col">更新时间</th>
+              <th scope="col">{{ t("skills.tableHeaders.skill") }}</th>
+              <th scope="col">{{ t("skills.tableHeaders.source") }}</th>
+              <th scope="col">{{ t("skills.tableHeaders.scenarios") }}</th>
+              <th scope="col">{{ t("skills.tableHeaders.status") }}</th>
+              <th scope="col">{{ t("skills.tableHeaders.createdAt") }}</th>
+              <th scope="col">{{ t("skills.tableHeaders.updatedAt") }}</th>
             </tr>
           </thead>
           <tbody>
@@ -267,9 +312,9 @@ onMounted(load);
                   class="skill-name"
                   >{{ skill.name }}</router-link
                 >
-                <p>{{ skill.description || "暂无描述" }}</p>
+                <p>{{ skill.description || t("common.noDescription") }}</p>
               </td>
-              <td>{{ skill.source?.name || "未知来源" }}</td>
+              <td>{{ skill.source?.name || t("common.unknownSource") }}</td>
               <td>
                 <div class="scenario-tags table-scenarios">
                   <a-tag
@@ -277,14 +322,16 @@ onMounted(load);
                     :key="scenario.id"
                     >{{ scenario.name }}</a-tag
                   >
-                  <span v-if="skill.scenarios.length === 0" class="orphan"
-                    >未归属任何场景</span
-                  >
+                  <span v-if="skill.scenarios.length === 0" class="orphan">{{
+                    t("skills.orphanBadge")
+                  }}</span>
                 </div>
               </td>
               <td>
                 <a-tag :color="skill.enabled ? 'green' : 'default'">{{
-                  skill.enabled ? "启用" : "停用"
+                  skill.enabled
+                    ? t("skills.status.enabled")
+                    : t("skills.status.disabled")
                 }}</a-tag>
               </td>
               <td>{{ formatTime(skill.createdAt) }}</td>

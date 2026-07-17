@@ -11,7 +11,7 @@ import { stringify } from "yaml";
 import { buildOpenApiDocument } from "@/shared/contracts/openapi";
 
 export const openApiOutputPath = resolve(
-  "docs/modules/skills-manager-browser/openapi/skills-manager-browser-local-openapi.yaml",
+  "docs/modules/skills-manager-explorer/openapi/skills-manager-explorer-local-openapi.yaml",
 );
 
 export function serializeOpenApi(): string {

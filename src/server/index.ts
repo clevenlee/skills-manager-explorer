@@ -11,4 +11,6 @@ const app = createApp(config.databasePath);
 
 Bun.serve({ hostname: config.host, port: config.port, fetch: app.fetch });
 
-console.info(`技能管家本地服务已启动：http://${config.host}:${config.port}`);
+console.info(
+  `Skills Manager Explorer local server listening on http://${config.host}:${config.port}`,
+);

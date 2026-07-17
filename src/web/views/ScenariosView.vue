@@ -1,16 +1,19 @@
 <!--
   场景清单与详情页面，只读展示业务场景、稳定顺序和其中的 Skill。
+  搜索占位、详情文案、空态经 useI18n() 国际化。
   作者：NDP Coding
   日期：2026-07-17 12:35:00
 -->
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 import type { Scenario, SkillSummary } from "@/shared/contracts/catalog";
 import { allCatalogApi, catalogApi } from "../api/catalog-api";
 import RequestState from "../components/RequestState.vue";
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const items = ref<Scenario[]>([]);
@@ -47,7 +50,10 @@ async function load() {
         })
       ).data;
   } catch (reason) {
-    error.value = reason instanceof Error ? reason.message : "无法加载场景。";
+    error.value =
+      reason instanceof Error
+        ? reason.message
+        : t("scenarios.errorFallback", "无法加载场景。");
   } finally {
     loading.value = false;
   }
@@ -71,29 +77,31 @@ onMounted(load);
 <template>
   <section class="page">
     <template v-if="scenarioId"
-      ><router-link class="back" to="/scenarios">← 返回场景</router-link>
-      <p class="eyebrow">SCENARIO DETAIL</p>
-      <h1>{{ detail?.name || "场景详情" }}</h1>
-      <p class="lead">{{ detail?.description || "暂无描述" }}</p></template
+      ><router-link class="back" to="/scenarios">{{
+        t("scenarios.backToScenarios")
+      }}</router-link>
+      <p class="eyebrow">{{ t("scenarios.eyebrowDetail") }}</p>
+      <h1>{{ detail?.name || t("scenarios.titleDetailFallback") }}</h1>
+      <p class="lead">
+        {{ detail?.description || t("common.noDescription") }}
+      </p></template
     >
     <template v-else
-      ><p class="eyebrow">WORK CONTEXTS</p>
-      <h1>场景</h1>
-      <p class="lead">
-        场景由 Skills Manager 维护；这里专注于查看覆盖，而不是新增或修改场景。
-      </p>
+      ><p class="eyebrow">{{ t("scenarios.eyebrowList") }}</p>
+      <h1>{{ t("scenarios.title") }}</h1>
+      <p class="lead">{{ t("scenarios.lead") }}</p>
       <a-input-search
         v-model:value="q"
         class="search"
         allow-clear
-        placeholder="搜索场景"
+        :placeholder="t('scenarios.searchPlaceholder')"
         @search="search"
     /></template>
     <request-state
       :loading="loading"
       :error="error"
       :empty="scenarioId ? skills.length === 0 : items.length === 0"
-      empty-text="没有匹配的场景"
+      :empty-text="t('scenarios.emptyText')"
       @retry="load"
     >
       <div v-if="scenarioId" class="skill-list">
@@ -107,7 +115,9 @@ onMounted(load);
           }"
           class="skill-row"
           ><strong>{{ skill.name }}</strong
-          ><span>{{ skill.description || "暂无描述" }}</span></router-link
+          ><span>{{
+            skill.description || t("common.noDescription")
+          }}</span></router-link
         >
       </div>
       <div v-else class="scenario-grid">
@@ -121,10 +131,11 @@ onMounted(load);
           }}</span>
           <div>
             <h2>{{ scenario.name }}</h2>
-            <p>{{ scenario.description || "暂无描述" }}</p>
+            <p>{{ scenario.description || t("common.noDescription") }}</p>
           </div>
           <strong
-            >{{ scenario.skillCount }}<small> Skills</small></strong
+            >{{ scenario.skillCount
+            }}<small>{{ t("scenarios.skillsCountSuffix") }}</small></strong
           ></router-link
         >
       </div>

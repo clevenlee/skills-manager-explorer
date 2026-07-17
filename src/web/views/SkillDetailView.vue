@@ -1,17 +1,20 @@
 <!--
   Skill 详情页面，完整展示可复制字段，并以二次确认安全调整单个 Skill 的场景归属。
+  字段标签、状态、确认弹窗、消息反馈经 useI18n() 国际化。
   作者：NDP Coding
   日期：2026-07-17 12:50:00
 -->
 <script setup lang="ts">
 import { Modal, message } from "ant-design-vue";
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 
 import type { Scenario, SkillDetail } from "@/shared/contracts/catalog";
 import { allCatalogApi, catalogApi } from "../api/catalog-api";
 import RequestState from "../components/RequestState.vue";
 
+const { t, locale } = useI18n();
 const route = useRoute();
 const skill = ref<SkillDetail>();
 const scenarios = ref<Scenario[]>([]);
@@ -44,32 +47,46 @@ const removed = computed(() =>
 const fields = computed(() =>
   skill.value
     ? [
-        ["ID", skill.value.id],
-        ["描述", skill.value.description],
-        ["来源类型", skill.value.sourceType],
-        ["原始来源", skill.value.sourceRef],
-        ["解析来源", skill.value.sourceRefResolved],
-        ["来源子路径", skill.value.sourceSubpath],
-        ["分支", skill.value.sourceBranch],
-        ["本地修订", skill.value.sourceRevision],
-        ["远端修订", skill.value.remoteRevision],
-        ["中心路径", skill.value.centralPath],
-        ["内容哈希", skill.value.contentHash],
-        ["状态", skill.value.status],
-        ["更新状态", skill.value.updateStatus],
-        ["创建时间", formatTime(skill.value.createdAt)],
-        ["更新时间", formatTime(skill.value.updatedAt)],
-        ["最后检查", formatTime(skill.value.lastCheckedAt)],
-        ["检查错误", skill.value.lastCheckError],
+        [t("skillDetail.fields.ID"), skill.value.id],
+        [t("skillDetail.fields.description"), skill.value.description],
+        [t("skillDetail.fields.sourceType"), skill.value.sourceType],
+        [t("skillDetail.fields.sourceRef"), skill.value.sourceRef],
+        [
+          t("skillDetail.fields.sourceRefResolved"),
+          skill.value.sourceRefResolved,
+        ],
+        [t("skillDetail.fields.sourceSubpath"), skill.value.sourceSubpath],
+        [t("skillDetail.fields.sourceBranch"), skill.value.sourceBranch],
+        [t("skillDetail.fields.sourceRevision"), skill.value.sourceRevision],
+        [t("skillDetail.fields.remoteRevision"), skill.value.remoteRevision],
+        [t("skillDetail.fields.centralPath"), skill.value.centralPath],
+        [t("skillDetail.fields.contentHash"), skill.value.contentHash],
+        [t("skillDetail.fields.status"), skill.value.status],
+        [t("skillDetail.fields.updateStatus"), skill.value.updateStatus],
+        [t("skillDetail.fields.createdAt"), formatTime(skill.value.createdAt)],
+        [t("skillDetail.fields.updatedAt"), formatTime(skill.value.updatedAt)],
+        [
+          t("skillDetail.fields.lastCheckedAt"),
+          formatTime(skill.value.lastCheckedAt),
+        ],
+        [t("skillDetail.fields.lastCheckError"), skill.value.lastCheckError],
       ]
     : [],
 );
 function formatTime(value: number | null) {
-  return value ? new Date(value).toLocaleString("zh-CN") : null;
+  if (!value) return null;
+  return new Intl.DateTimeFormat(locale.value, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(new Date(value));
 }
 async function copy(value: string) {
   await navigator.clipboard.writeText(value);
-  void message.success("已复制");
+  void message.success(t("common.copySuccess"));
 }
 async function load() {
   loading.value = true;
@@ -85,7 +102,9 @@ async function load() {
     selected.value = [...original.value];
   } catch (reason) {
     error.value =
-      reason instanceof Error ? reason.message : "无法加载 Skill 详情。";
+      reason instanceof Error
+        ? reason.message
+        : t("skillDetail.message.errorFallback");
   } finally {
     loading.value = false;
   }
@@ -93,10 +112,13 @@ async function load() {
 function confirmSave() {
   if (!changed.value) return;
   Modal.confirm({
-    title: "确认调整场景归属？",
-    content: `新增：${added.value.join("、") || "无"}；移除：${removed.value.join("、") || "无"}。`,
-    okText: "确认保存",
-    cancelText: "取消",
+    title: t("skillDetail.modal.title"),
+    content: t("skillDetail.modal.content", {
+      added: added.value.join("、") || t("skillDetail.modal.none"),
+      removed: removed.value.join("、") || t("skillDetail.modal.none"),
+    }),
+    okText: t("skillDetail.modal.save"),
+    cancelText: t("skillDetail.modal.cancel"),
     async onOk() {
       saving.value = true;
       try {
@@ -104,11 +126,13 @@ function confirmSave() {
           scenarioIds: selected.value,
           expectedScenarioIds: original.value,
         });
-        void message.success("场景归属已更新");
+        void message.success(t("skillDetail.message.saved"));
         await load();
       } catch (reason) {
         void message.error(
-          reason instanceof Error ? reason.message : "保存失败，请刷新后重试。",
+          reason instanceof Error
+            ? reason.message
+            : t("skillDetail.message.saveFailed"),
         );
       } finally {
         saving.value = false;
@@ -121,29 +145,31 @@ onMounted(load);
 
 <template>
   <section class="page">
-    <router-link class="back" :to="backTo">← 返回列表</router-link
+    <router-link class="back" :to="backTo">{{
+      t("common.backToList")
+    }}</router-link
     ><request-state :loading="loading" :error="error" @retry="load">
       <template v-if="skill"
-        ><p class="eyebrow">SKILL DETAIL</p>
+        ><p class="eyebrow">{{ t("skillDetail.eyebrow") }}</p>
         <div class="title-row">
           <div>
             <h1>{{ skill.name }}</h1>
-            <p>{{ skill.description || "暂无描述" }}</p>
+            <p>{{ skill.description || t("common.noDescription") }}</p>
           </div>
           <a-tag :color="skill.enabled ? 'green' : 'default'">{{
-            skill.enabled ? "已启用" : "已停用"
+            skill.enabled ? t("skillDetail.enabled") : t("skillDetail.disabled")
           }}</a-tag>
         </div>
         <section class="assignment">
           <div>
-            <h2>场景归属</h2>
-            <p>这是本应用唯一会写入数据库的操作。</p>
+            <h2>{{ t("skillDetail.assignment.title") }}</h2>
+            <p>{{ t("skillDetail.assignment.description") }}</p>
           </div>
           <a-select
             v-model:value="selected"
             mode="multiple"
             class="scenario-select"
-            placeholder="选择场景"
+            :placeholder="t('skillDetail.assignment.placeholder')"
             ><a-select-option
               v-for="scenario in scenarios"
               :key="scenario.id"
@@ -155,20 +181,20 @@ onMounted(load);
             :disabled="!changed"
             :loading="saving"
             @click="confirmSave"
-            >保存归属</a-button
+            >{{ t("skillDetail.assignment.save") }}</a-button
           >
         </section>
         <dl class="fields">
           <div v-for="field in fields" :key="field[0]">
             <dt>{{ field[0] }}</dt>
             <dd>
-              <span>{{ field[1] || "—" }}</span
+              <span>{{ field[1] || t("common.placeholder") }}</span
               ><a-button
                 v-if="field[1]"
                 type="link"
                 size="small"
                 @click="copy(String(field[1]))"
-                >复制</a-button
+                >{{ t("common.copy") }}</a-button
               >
             </dd>
           </div>

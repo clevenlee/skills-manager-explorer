@@ -2,13 +2,13 @@
 
 ## 1. 文档信息
 
-| 项目     | 内容                                |
-| -------- | ----------------------------------- |
-| 对应 PRD | `skills-manager-browser-prd-1.0.md` |
-| 规格版本 | 1.0                                 |
-| 规格状态 | 已实施并通过验收                    |
-| 当前门禁 | VERIFY/DELIVER；实施门禁已通过      |
-| 编写日期 | 2026-07-17                          |
+| 项目     | 内容                                 |
+| -------- | ------------------------------------ |
+| 对应 PRD | `skills-manager-explorer-prd-1.0.md` |
+| 规格版本 | 1.0                                  |
+| 规格状态 | 已实施并通过验收                     |
+| 当前门禁 | VERIFY/DELIVER；实施门禁已通过       |
+| 编写日期 | 2026-07-17                           |
 
 ## 2. 前置假设
 
@@ -57,6 +57,7 @@
 | 浏览器验收      | Playwright          | 初始化时锁定 | 核心用户流程和响应式检查                    |
 | 契约校验        | Redocly CLI         | 2.39.x       | OpenAPI lint                                |
 | 契约 Mock       | Prism CLI           | 5.15.x       | 基于 OpenAPI examples 的前端 Mock           |
+| 国际化          | `vue-i18n`          | 9.14.x       | 中英双语、组合式 API、locale 资源与持久化   |
 
 明确不采用：
 
@@ -179,7 +180,7 @@ contracts ← web/api ← web/views
 ### 8.1 契约源与生成物
 
 - `src/shared/contracts/` 中的 Zod Schema 是接口定义源。
-- 从契约源生成并提交 `docs/modules/skills-manager-browser/openapi/skills-manager-browser-local-openapi.yaml`。
+- 从契约源生成并提交 `docs/modules/skills-manager-explorer/openapi/skills-manager-explorer-local-openapi.yaml`。
 - OpenAPI YAML 是前端协作、Prism Mock 和契约评审入口，但属于生成物，禁止手工修改。
 - CI 和本地校验必须重新生成契约并检查工作区无差异。
 - OpenAPI examples 覆盖正常列表、空列表、详情、归属更新成功、数据库只读、数据库锁定和版本冲突。
@@ -353,12 +354,12 @@ contracts ← web/api ← web/views
 │   └── unit/
 ├── e2e/
 ├── docs/
-│   ├── modules/skills-manager-browser/
+│   ├── modules/skills-manager-explorer/
 │   │   ├── openapi/
 │   │   ├── prd/
-│   │   │   └── skills-manager-browser-prd-1.0.md
+│   │   │   └── skills-manager-explorer-prd-1.0.md
 │   │   └── spec/
-│   │       └── skills-manager-browser-spec-1.0.md
+│   │       └── skills-manager-explorer-spec-1.0.md
 │   └── project-specs/
 └── dist/
 ```
@@ -496,6 +497,17 @@ app.openapi(replaceSkillScenariosRoute, (context) => {
 3. 单文件可执行程序属于交付阶段任务，不阻塞早期纵向功能切片。
 4. Zod 是契约定义源，OpenAPI YAML 是生成并提交的评审与 Mock 产物。
 5. 实施验证确认 `vue-tsc` 3.3.7 与 TypeScript 7.0.2 的编译器导出不兼容，因此将 TypeScript 固定为 6.0.3；待 Vue 工具链正式兼容 TypeScript 7 后再独立升级。
+6. 1.0.2 计划批准：包名 / 模块目录 / 二进制同步重命名为 `skills-manager-explorer`；新增 `vue-i18n@9` 与中英双语；默认 `zh-CN`，`en-US` 可切换并持久化。详细边界与默认值见 1.0.2 plan `docs/modules/skills-manager-explorer/exec-plans/技能管家浏览器-plan-local-fullstack-1.0.2.md`。
+
+## 13.4 国际化与命名规范
+
+- 所有面向用户文案、错误提示、按钮、菜单、字段标签、空态 / 加载 / 错误态、确认弹窗、状态码中文展示统一抽取到 `src/web/i18n/locales/{zh-CN,en-US}.ts`；新增 key 时必须先在 `zh-CN.ts` 定义，再在 `en-US.ts` 用 `satisfies MessageSchema` 翻译。
+- 切换语言不触碰路由状态、URL 与滚动位置；`<html lang>` 与 `i18n.global.locale` 由 `useLocale.setLocale` 统一刷新。
+- 启动 locale 解析顺序：`localStorage.skillsManagerExplorer.locale` → `navigator.languages`（`zh-*` → `zh-CN`，`en-*` → `en-US`）→ `zh-CN` fallback。
+- 日期时间、数字、客户端兜底排序全部走 `useLocale` 的 `formatDateTime` / `formatNumber` / `compareStrings`；服务端排序保留 `ORDER BY name COLLATE NOCASE` 兜底。
+- i18n key 完整性由 `tests/unit/i18n-keys.test.ts` 在 `bun run verify` 中强制：缺失 en-US 翻译会导致构建失败。
+- OpenAPI `info["x-locale-resources"]` 登记 `default` / `supported` / `sources` / `storageKey`，供前端与文档消费方使用。
+- 仓库根目录路径与 `SKILLS_MANAGER_DB` 环境变量名 **不** 在 1.0.2 范围重命名。
 
 ## 17. Gate Decision
 

@@ -6,7 +6,7 @@
 import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
 
-const output = resolve("dist/skills-manager-browser");
+const output = resolve("dist/skills-manager-explorer");
 await mkdir(resolve("dist"), { recursive: true });
 const processResult = Bun.spawn(
   ["bun", "build", "--compile", "src/server/index.ts", "--outfile", output],

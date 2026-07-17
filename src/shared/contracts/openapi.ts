@@ -32,19 +32,32 @@ export function buildOpenApiDocument(): ReturnType<
   ]) {
     registry.openAPIRegistry.registerPath(route);
   }
-  return registry.getOpenAPI31Document({
+  const document = registry.getOpenAPI31Document({
     openapi: "3.1.0",
     info: {
-      title: "技能管家浏览器本地 API",
+      title: "Skills Manager Explorer API",
       version: "1.0.0",
       description:
-        "只在本机回环地址提供的 Skills Manager 数据浏览与场景归属接口。",
+        "Local Skills Manager Explorer API for browsing, comparing, and adjusting scenario assignments on a Skills Manager SQLite database. / Skills Manager Explorer 本地 API：在本机回环地址提供 Skills Manager 数据浏览、比对与场景归属调整接口。",
       license: {
         name: "Proprietary",
         url: "https://choosealicense.com/no-permission/",
       },
     },
-    servers: [{ url: "http://127.0.0.1:4173", description: "本地服务" }],
+    servers: [
+      { url: "http://127.0.0.1:4173", description: "Local service / 本地服务" },
+    ],
     security: [],
   });
+  // 登记双语言资源位置供前端 vue-i18n 与文档消费方使用；不在契约内校验。
+  (document as unknown as Record<string, unknown>)["x-locale-resources"] = {
+    default: "zh-CN",
+    supported: ["zh-CN", "en-US"],
+    sources: {
+      "zh-CN": "src/web/i18n/locales/zh-CN.ts",
+      "en-US": "src/web/i18n/locales/en-US.ts",
+    },
+    storageKey: "skillsManagerExplorer.locale",
+  };
+  return document;
 }

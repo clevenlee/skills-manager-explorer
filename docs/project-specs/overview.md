@@ -5,7 +5,7 @@
 ## 项目定位
 
 - 中文名：技能管家浏览器
-- 英文名（目录名）：`skills-manager-browser`
+- 英文名（目录名）：`skills-manager-explorer`
 
 ## 技术栈
 
@@ -17,7 +17,7 @@
 - 契约：Zod 为定义源，生成并提交 OpenAPI YAML，Prism 使用该契约提供 Mock。
 - 测试：`bun:test`、Playwright。
 
-> 精确依赖版本以首次 `package.json` 和 `bun.lock` 落地为准；技术规格见 `docs/modules/skills-manager-browser/spec/skills-manager-browser-spec-1.0.md`。
+> 精确依赖版本以首次 `package.json` 和 `bun.lock` 落地为准；技术规格见 `docs/modules/skills-manager-explorer/spec/skills-manager-explorer-spec-1.0.md`。
 
 ## 文档 owner
 

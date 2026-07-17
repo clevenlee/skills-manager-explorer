@@ -19,7 +19,7 @@ import { createSkillsDatabase } from "../fixtures/create-skills-db";
 const temporaryDirectories: string[] = [];
 
 function temporaryPath(name: string): string {
-  const directory = mkdtempSync(join(tmpdir(), "skills-manager-browser-"));
+  const directory = mkdtempSync(join(tmpdir(), "skills-manager-explorer-"));
   temporaryDirectories.push(directory);
   return join(directory, name);
 }

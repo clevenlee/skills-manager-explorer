@@ -1,10 +1,12 @@
 <!--
   概览页面，以可跳转指标呈现 Skill、来源、场景与孤立 Skill 总量。
+  卡片标签、副标题、错误兜底文案经 useI18n() 国际化。
   作者：NDP Coding
   日期：2026-07-17 12:20:00
 -->
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { z } from "zod";
 
 import type { overviewEnvelopeSchema } from "@/shared/contracts/catalog";
@@ -12,6 +14,7 @@ import { catalogApi } from "../api/catalog-api";
 import RequestState from "../components/RequestState.vue";
 
 type Overview = z.infer<typeof overviewEnvelopeSchema>["data"];
+const { t } = useI18n();
 const data = ref<Overview>();
 const loading = ref(true);
 const error = ref("");
@@ -21,7 +24,8 @@ async function load() {
   try {
     data.value = (await catalogApi.overview()).data;
   } catch (reason) {
-    error.value = reason instanceof Error ? reason.message : "无法加载概览。";
+    error.value =
+      reason instanceof Error ? reason.message : t("overview.errorFallback");
   } finally {
     loading.value = false;
   }
@@ -29,35 +33,35 @@ async function load() {
 onMounted(load);
 const cards = () => [
   {
-    label: "Skills",
+    label: t("overview.cards.skills.label"),
     value: data.value?.skills ?? 0,
     to: "/skills",
-    note: "已记录的能力单元",
+    note: t("overview.cards.skills.note"),
   },
   {
-    label: "来源",
+    label: t("overview.cards.sources.label"),
     value: data.value?.sources ?? 0,
     to: "/sources",
-    note: "归一化后的来源",
+    note: t("overview.cards.sources.note"),
   },
   {
-    label: "场景",
+    label: t("overview.cards.scenarios.label"),
     value: data.value?.scenarios ?? 0,
     to: "/scenarios",
-    note: "当前工作场景",
+    note: t("overview.cards.scenarios.note"),
   },
   {
-    label: "未归属",
+    label: t("overview.cards.orphan.label"),
     value: data.value?.orphanSkills ?? 0,
     to: "/skills?orphan=true",
-    note: "需要关注的孤立 Skill",
+    note: t("overview.cards.orphan.note"),
     accent: true,
   },
   {
-    label: "重复归属",
+    label: t("overview.cards.multiScenario.label"),
     value: data.value?.multiScenarioSkills ?? 0,
     to: "/skills?multiScenario=true",
-    note: "需要关注的多场景归属 Skill",
+    note: t("overview.cards.multiScenario.note"),
     accent: true,
   },
 ];
@@ -65,9 +69,9 @@ const cards = () => [
 
 <template>
   <section class="page">
-    <p class="eyebrow">YOUR SKILLS LANDSCAPE</p>
-    <h1>一眼看清<br />你的技能库</h1>
-    <p class="lead">从来源与场景出发，找到能力覆盖中的重叠、差异和空白。</p>
+    <p class="eyebrow">{{ t("overview.eyebrow") }}</p>
+    <h1>{{ t("overview.title") }}</h1>
+    <p class="lead">{{ t("overview.lead") }}</p>
     <request-state :loading="loading" :error="error" @retry="load">
       <div class="metric-grid">
         <router-link
@@ -103,6 +107,7 @@ h1 {
   font-weight: 600;
   letter-spacing: -0.055em;
   line-height: 1.02;
+  white-space: pre-line;
 }
 .lead {
   max-width: 600px;

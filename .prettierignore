@@ -5,3 +5,4 @@ playwright-report
 test-results
 bun.lock
 src/server/generated-static-assets.ts
+docs/modules/skills-manager-explorer/openapi/*-local-openapi.yaml

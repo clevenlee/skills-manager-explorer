@@ -1,5 +1,5 @@
 {
-  "name": "skills-manager-browser",
+  "name": "skills-manager-explorer",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -25,9 +25,9 @@
     "test:coverage": "bun test --coverage tests",
     "test:e2e": "bunx --bun playwright test",
     "openapi:generate": "bun scripts/generate-openapi.ts",
-    "openapi:lint": "bunx --bun redocly lint docs/modules/skills-manager-browser/openapi/skills-manager-browser-local-openapi.yaml",
+    "openapi:lint": "bunx --bun redocly lint docs/modules/skills-manager-explorer/openapi/skills-manager-explorer-local-openapi.yaml",
     "openapi:check": "bun scripts/verify-openapi-drift.ts",
-    "mock": "bunx --bun prism mock docs/modules/skills-manager-browser/openapi/skills-manager-browser-local-openapi.yaml --host 127.0.0.1 --port 4010",
+    "mock": "bunx --bun prism mock docs/modules/skills-manager-explorer/openapi/skills-manager-explorer-local-openapi.yaml --host 127.0.0.1 --port 4010",
     "verify": "bun run format:check && bun run lint && bun run typecheck && bun run test && bun run openapi:check && bun run openapi:lint && bun run build"
   },
   "dependencies": {
@@ -36,6 +36,7 @@
     "ant-design-vue": "4.2.6",
     "hono": "4.12.30",
     "vue": "3.5.40",
+    "vue-i18n": "^9",
     "vue-router": "5.2.0",
     "zod": "4.4.3"
   },

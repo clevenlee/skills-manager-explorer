@@ -14,7 +14,7 @@
 | `bun run test:e2e`                               | macOS Chromium 11 个流程通过                          |
 | `bun run openapi:check`                          | 通过，无契约漂移                                      |
 | `bun run openapi:lint`                           | 通过，无警告                                          |
-| `bun run package`                                | 通过，生成 `dist/skills-manager-browser`              |
+| `bun run package`                                | 通过，生成 `dist/skills-manager-explorer`             |
 | 单文件 smoke                                     | 临时数据库下状态 API 与前端历史路由均通过             |
 
 覆盖流程包括：数据库兼容与异常、概览、来源规范化、场景只读、Skill 组合筛选与详情、来源/场景混合比对、归属增删/无变化/冲突/不存在/锁定/只读/回滚、统一错误、写边界、静态资源、桌面与 390px 窄屏。
