@@ -197,6 +197,10 @@ export const skillsRoute = createRoute({
         .default("name"),
       sourceIds: z.string().optional(),
       scenarioIds: z.string().optional(),
+      workspaces: z
+        .string()
+        .optional()
+        .describe("逗号分隔的工作区名；Skill 在任一指定工作区已启用即纳入"),
       orphan: z.enum(["true", "false"]).optional(),
       multiScenario: z.enum(["true", "false"]).optional(),
     }),
@@ -237,3 +241,95 @@ export type Source = z.infer<typeof sourceSchema>;
 export type Scenario = z.infer<typeof scenarioSchema>;
 export type SkillSummary = z.infer<typeof skillSummarySchema>;
 export type SkillDetail = z.infer<typeof skillDetailSchema>;
+
+/**
+ * 工作区（= Skills Manager 的 workspace tool，例如 `cursor` / `claude` / `codex`）。
+ * 数据源：scenario_skill_tools.enabled、skill_targets、settings.disabled_tools 等的差集。
+ * 1.0.4 引入：左栏菜单、Skill 列表筛选、集合比对。
+ */
+export const workspaceSchema = z
+  .object({
+    name: z.string(),
+    enabledSkillCount: z.number().int().nonnegative(),
+    enabledScenarioCount: z.number().int().nonnegative(),
+  })
+  .strict()
+  .openapi("Workspace");
+export const workspacesEnvelopeSchema = z
+  .object({ data: z.array(workspaceSchema), meta: requestMetaSchema })
+  .strict()
+  .openapi("WorkspacesEnvelope");
+export const workspaceSkillsEnvelopeSchema = z
+  .object({
+    data: z.array(skillSummarySchema),
+    meta: paginationMetaSchema.merge(requestMetaSchema),
+  })
+  .strict()
+  .openapi("WorkspaceSkillsEnvelope");
+export const workspaceScenariosEnvelopeSchema = z
+  .object({ data: z.array(scenarioSchema), meta: requestMetaSchema })
+  .strict()
+  .openapi("WorkspaceScenariosEnvelope");
+
+const workspaceNameParamsSchema = z.object({
+  name: z
+    .string()
+    .min(1)
+    .max(200)
+    .openapi({
+      param: { name: "name", in: "path" },
+    }),
+});
+export const workspacesRoute = createRoute({
+  method: "get",
+  path: "/api/v1/workspaces",
+  operationId: "listWorkspaces",
+  tags: ["Workspaces"],
+  summary: "列出所有已启用的工作区（Skills Manager 已知工具）",
+  responses: {
+    200: {
+      description: "工作区列表",
+      content: { "application/json": { schema: workspacesEnvelopeSchema } },
+    },
+    422: errorResponse("数据库结构不兼容"),
+  },
+});
+export const workspaceSkillsRoute = createRoute({
+  method: "get",
+  path: "/api/v1/workspaces/{name}/skills",
+  operationId: "listWorkspaceSkills",
+  tags: ["Workspaces"],
+  summary: "列出在指定工作区**已启用**的 Skill",
+  request: {
+    params: workspaceNameParamsSchema,
+    query: paginationQuerySchema,
+  },
+  responses: {
+    200: {
+      description: "工作区已启用的 Skill 列表",
+      content: {
+        "application/json": { schema: workspaceSkillsEnvelopeSchema },
+      },
+    },
+    404: errorResponse("工作区不存在或无启用 Skill"),
+  },
+});
+export const workspaceScenariosRoute = createRoute({
+  method: "get",
+  path: "/api/v1/workspaces/{name}/scenarios",
+  operationId: "listWorkspaceScenarios",
+  tags: ["Workspaces"],
+  summary: "列出含有该工作区**已启用** Skill 的场景",
+  request: { params: workspaceNameParamsSchema },
+  responses: {
+    200: {
+      description: "工作区已启用 Skill 所属的场景",
+      content: {
+        "application/json": { schema: workspaceScenariosEnvelopeSchema },
+      },
+    },
+    404: errorResponse("工作区不存在或无启用场景"),
+  },
+});
+
+export type Workspace = z.infer<typeof workspaceSchema>;

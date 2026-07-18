@@ -15,6 +15,8 @@ import SkillDetailView from "../views/SkillDetailView.vue";
 import SkillsView from "../views/SkillsView.vue";
 import SourcesView from "../views/SourcesView.vue";
 import StatusView from "../views/StatusView.vue";
+import WorkspaceDetailView from "../views/WorkspaceDetailView.vue";
+import WorkspacesView from "../views/WorkspacesView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 
 export const router = createRouter({
@@ -71,6 +73,18 @@ export const router = createRouter({
           name: "compare",
           component: SkillComparisonView,
           meta: { titleKey: "comparison.title" },
+        },
+        {
+          path: "workspaces",
+          name: "workspaces",
+          component: WorkspacesView,
+          meta: { titleKey: "workspaces.title" },
+        },
+        {
+          path: "workspaces/:name",
+          name: "workspace-detail",
+          component: WorkspaceDetailView,
+          meta: { titleKey: "workspaces.title" },
         },
         {
           path: "status",

@@ -12,9 +12,11 @@ import type { z } from "zod";
 import type { overviewEnvelopeSchema } from "@/shared/contracts/catalog";
 import { catalogApi } from "../api/catalog-api";
 import RequestState from "../components/RequestState.vue";
+import { useLocale } from "../composables/useLocale";
 
 type Overview = z.infer<typeof overviewEnvelopeSchema>["data"];
 const { t } = useI18n();
+const { formatNumber } = useLocale();
 const data = ref<Overview>();
 const loading = ref(true);
 const error = ref("");
@@ -70,18 +72,19 @@ const cards = () => [
 <template>
   <section class="page">
     <p class="eyebrow">{{ t("overview.eyebrow") }}</p>
-    <h1>{{ t("overview.title") }}</h1>
+    <h1 data-testid="overview-heading">{{ t("overview.title") }}</h1>
     <p class="lead">{{ t("overview.lead") }}</p>
     <request-state :loading="loading" :error="error" @retry="load">
-      <div class="metric-grid">
+      <div class="metric-grid" data-testid="metric-grid">
         <router-link
           v-for="card in cards()"
           :key="card.label"
           :to="card.to"
           :class="['metric-card', { accent: card.accent }]"
+          :data-testid="`metric-${card.label}`"
         >
           <span>{{ card.label }}</span
-          ><strong>{{ card.value }}</strong
+          ><strong>{{ formatNumber(card.value) }}</strong
           ><small>{{ card.note }} →</small>
         </router-link>
       </div>

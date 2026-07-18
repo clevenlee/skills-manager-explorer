@@ -15,6 +15,9 @@ import {
   skillDetailEnvelopeSchema,
   skillsEnvelopeSchema,
   sourcesEnvelopeSchema,
+  workspaceScenariosEnvelopeSchema,
+  workspaceSkillsEnvelopeSchema,
+  workspacesEnvelopeSchema,
 } from "@/shared/contracts/catalog";
 import type { Scenario, Source } from "@/shared/contracts/catalog";
 import {
@@ -73,6 +76,18 @@ export const catalogApi = {
         headers: { "content-type": "application/json" },
         body: JSON.stringify(input),
       },
+    ),
+  // 1.0.4: 工作区 API
+  workspaces: () => apiRequest("/api/v1/workspaces", workspacesEnvelopeSchema),
+  workspaceSkills: (name: string) =>
+    apiRequest(
+      `/api/v1/workspaces/${encodeURIComponent(name)}/skills?page=1&pageSize=100`,
+      workspaceSkillsEnvelopeSchema,
+    ),
+  workspaceScenarios: (name: string) =>
+    apiRequest(
+      `/api/v1/workspaces/${encodeURIComponent(name)}/scenarios`,
+      workspaceScenariosEnvelopeSchema,
     ),
 };
 

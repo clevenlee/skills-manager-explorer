@@ -32,6 +32,8 @@ function pick(value: SupportedLocale): void {
       type="text"
       :aria-label="t('locale.switchLabel')"
       class="locale-switcher"
+      data-testid="locale-switcher"
+      :data-locale="current"
     >
       {{ current === "zh-CN" ? "中" : "EN" }}
     </a-button>

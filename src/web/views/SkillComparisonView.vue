@@ -13,17 +13,21 @@ import type {
   Scenario,
   SkillSummary,
   Source,
+  Workspace,
 } from "@/shared/contracts/catalog";
 import type { ComparisonInput } from "@/shared/contracts/comparison";
 import { allCatalogApi, catalogApi } from "../api/catalog-api";
+import { useLocale } from "../composables/useLocale";
 import RequestState from "../components/RequestState.vue";
 
 type ResultType = ComparisonInput["result"];
 const { t } = useI18n();
+const { formatNumber } = useLocale();
 const route = useRoute();
 const router = useRouter();
 const sources = ref<Source[]>([]);
 const scenarios = ref<Scenario[]>([]);
+const workspaces = ref<Workspace[]>([]);
 const items = ref<SkillSummary[]>([]);
 const counts = ref({ common: 0, leftOnly: 0, rightOnly: 0, difference: 0 });
 const leftTotal = ref(0);
@@ -53,22 +57,29 @@ const options = computed(() => [
       value: `scenario:${item.id}`,
     })),
   },
+  {
+    label: t("nav.workspaces"),
+    options: workspaces.value.map((item) => ({
+      label: item.name,
+      value: `workspace:${item.name}`,
+    })),
+  },
 ]);
 const tabs = computed(() => [
   {
-    label: `${t("comparison.tabs.difference")} ${counts.value.difference}`,
+    label: `${t("comparison.tabs.difference")} ${formatNumber(counts.value.difference)}`,
     value: "difference",
   },
   {
-    label: `${t("comparison.tabs.common")} ${counts.value.common}`,
+    label: `${t("comparison.tabs.common")} ${formatNumber(counts.value.common)}`,
     value: "common",
   },
   {
-    label: `${t("comparison.tabs.leftOnly")} ${counts.value.leftOnly}`,
+    label: `${t("comparison.tabs.leftOnly")} ${formatNumber(counts.value.leftOnly)}`,
     value: "leftOnly",
   },
   {
-    label: `${t("comparison.tabs.rightOnly")} ${counts.value.rightOnly}`,
+    label: `${t("comparison.tabs.rightOnly")} ${formatNumber(counts.value.rightOnly)}`,
     value: "rightOnly",
   },
 ]);
@@ -126,12 +137,16 @@ async function loadComparison() {
 async function initialize() {
   loading.value = true;
   try {
-    const [sourceResponse, scenarioResponse] = await Promise.all([
-      allCatalogApi.sources(),
-      allCatalogApi.scenarios(),
-    ]);
+    const [sourceResponse, scenarioResponse, workspacesRes] = await Promise.all(
+      [
+        allCatalogApi.sources(),
+        allCatalogApi.scenarios(),
+        catalogApi.workspaces(),
+      ],
+    );
     sources.value = sourceResponse;
     scenarios.value = scenarioResponse;
+    workspaces.value = workspacesRes.data;
     await loadComparison();
   } catch (reason) {
     error.value =
@@ -204,10 +219,10 @@ onMounted(initialize);
         ><div class="summary">
           <span
             >{{ t("comparison.summary.left") }}
-            <strong>{{ leftTotal }}</strong></span
+            <strong>{{ formatNumber(leftTotal) }}</strong></span
           ><span
             >{{ t("comparison.summary.right") }}
-            <strong>{{ rightTotal }}</strong></span
+            <strong>{{ formatNumber(rightTotal) }}</strong></span
           ><a-segmented
             :value="result"
             :options="tabs"

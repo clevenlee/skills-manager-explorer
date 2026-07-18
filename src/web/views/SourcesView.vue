@@ -12,9 +12,11 @@ import { useRoute, useRouter } from "vue-router";
 
 import type { SkillSummary, Source } from "@/shared/contracts/catalog";
 import { allCatalogApi, catalogApi } from "../api/catalog-api";
+import { useLocale } from "../composables/useLocale";
 import RequestState from "../components/RequestState.vue";
 
 const { t } = useI18n();
+const { formatNumber } = useLocale();
 const route = useRoute();
 const router = useRouter();
 const items = ref<Source[]>([]);
@@ -107,7 +109,7 @@ async function copyUrl(url: string): Promise<void> {
         >
       </div>
       <p class="lead">
-        {{ t("sources.leadDetail", { count: total }) }}
+        {{ t("sources.leadDetail", { count: formatNumber(total) }) }}
       </p>
       <section
         v-if="detail?.externalUrl"
@@ -201,10 +203,10 @@ async function copyUrl(url: string): Promise<void> {
           <p class="source-key">{{ source.key }}</p>
           <div class="counts">
             <span
-              ><strong>{{ source.skillCount }}</strong>
+              ><strong>{{ formatNumber(source.skillCount) }}</strong>
               {{ t("nav.skills") }}</span
             ><span
-              ><strong>{{ source.orphanSkillCount }}</strong>
+              ><strong>{{ formatNumber(source.orphanSkillCount) }}</strong>
               {{ t("common.unassigned") }}</span
             >
           </div>

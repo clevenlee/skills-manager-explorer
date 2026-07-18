@@ -10,6 +10,7 @@ import type {
 } from "@/shared/contracts/assignment";
 import type { Database } from "bun:sqlite";
 import { openWriteDatabase } from "../database/open-database";
+import { compareNames } from "@/shared/domain/locale-compare";
 import { DomainError } from "./domain-error";
 import {
   MetadataWriteError,
@@ -320,7 +321,7 @@ export function bulkAddSkillScenarios(
               name: scenarioById.get(id)?.name ?? id,
               sortOrder: scenarioById.get(id)?.sortOrder ?? 0,
             }))
-            .sort((a, b) => a.name.localeCompare(b.name, "zh-CN")),
+            .sort((a, b) => compareNames(a.name, b.name)),
         });
       }
       persistAddedMembershipMetadata(

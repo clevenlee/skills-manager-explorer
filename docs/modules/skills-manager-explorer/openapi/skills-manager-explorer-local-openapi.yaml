@@ -620,6 +620,7 @@ components:
           enum:
             - source
             - scenario
+            - workspace
         id:
           type: string
           minLength: 1
@@ -979,6 +980,13 @@ paths:
             type: string
           required: false
           name: scenarioIds
+          in: query
+        - schema:
+            type: string
+            description: 逗号分隔的工作区名；Skill 在任一指定工作区已启用即纳入
+          required: false
+          description: 逗号分隔的工作区名；Skill 在任一指定工作区已启用即纳入
+          name: workspaces
           in: query
         - schema:
             type: string

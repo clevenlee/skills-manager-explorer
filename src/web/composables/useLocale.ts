@@ -7,6 +7,7 @@
  */
 import { useI18n } from "vue-i18n";
 
+import { i18n } from "../i18n";
 import {
   DEFAULT_LOCALE,
   SUPPORTED_LOCALES,
@@ -47,11 +48,10 @@ function applyLocale(locale: SupportedLocale): void {
   if (typeof document !== "undefined") {
     document.documentElement.lang = locale;
   }
-  // i18n.global.locale 在 legacy:false 模式下是 Ref<string>。
-  // 通过 useI18n() 拿到的 locale 是响应式的；这里直接用全局对象。
-  const globalLocale = (globalThis as { $i18n?: { locale: { value: string } } })
-    .$i18n?.locale;
-  if (globalLocale) globalLocale.value = locale;
+  // 直接更新 vue-i18n 实例的全局 locale ref；这是所有 `useI18n()` 调用读到的同一份 ref。
+  // `legacy: false` 下 `i18n.global.locale.value` 形如 `ComputedRef<Locale>`，
+  // 实际为可写的 `Ref<string>`（vue-i18n v9），赋值即生效。
+  (i18n.global.locale as unknown as { value: string }).value = locale;
 }
 
 let initialized = false;

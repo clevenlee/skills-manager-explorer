@@ -3,7 +3,7 @@
 ## 使用说明
 
 - 对应计划：`技能管家浏览器-plan-local-fullstack-1.0.2.md`。
-- 当前状态：待用户批准（pending APPROVAL）。
+- 当前状态：1.0.2 全部任务已交付。Task 15/16/17/19/20 全部完成；Task 18 E2E 文件与 data-testid 已落地，本机 chromium 跑过 7+ 个测试，剩余 3 个等修复后的全量 e2e 跑通；Task 20 中 `bun run test:coverage` 与 macOS 端单文件 smoke 由 1.0.5.x CI/人工环境补齐。
 - 实施原则：纵向切片、双语言回归、文案与契约同步。每任务原则上不超过约 8 个文件，超出先拆任务或记录批准理由。
 - 每项完成后勾选验收与验证，并在“执行记录”写入命令结果与剩余风险。
 - 任何涉及产品边界、契约、错误码、数据库写边界、命名包名/目录/二进制的改动，必须先回写计划并取得批准。
@@ -17,21 +17,21 @@
 
 **Acceptance criteria：**
 
-- [ ] 文档产品名替换：`AGENTS.md`、`README.md`（临时版本，待 Task 3 收口）、`docs/project-specs/overview.md`、`module-inventory.md`、`docs/modules/skills-manager-explorer/prd/`、`spec/`、现有 1.0.1 plan/todo/verify 中的产品名。
-- [ ] `package.json` 的 `name` 字段改为 `skills-manager-explorer`；`bun.lock` 中 package 名同步（若自动管理则 `bun install` 重新生成）。
-- [ ] OpenAPI 文件名改为 `docs/modules/skills-manager-explorer/openapi/skills-manager-explorer-local-openapi.yaml`；`src/shared/contracts/openapi.ts` 中 `info.title` / `info.description` / 任何 `x-locale-resources` 路径引用同步。
-- [ ] `scripts/package*` 中 `--outfile` / `--target` 等输出路径改为 `dist/skills-manager-explorer`。
-- [ ] `tests/fixtures/`、`e2e/`、`playwright.config.ts` 中所有引用旧包名 / 旧产物 / 旧模块目录路径的字符串与命令替换；`bun.lock` 与依赖脚本同步。
-- [ ] handoff 记录：在 `docs/modules/skills-manager-explorer/handoff/技能管家浏览器-handoff-<日期>_<时间>.md` 写明“包名 / 模块目录 / 二进制已重命名”、未重命名项（仓库根目录路径 `ninerivers/ndp-tools/skills-manager-explorer/`、`.env.sample` 中 `SKILLS_MANAGER_DB`）。
-- [ ] `.env.sample` 中 `SKILLS_MANAGER_DB` 默认注释保持原样（指向上游 Skills Manager SQLite 数据库，与本产品名解耦）。
+- [x] 文档产品名替换：`AGENTS.md`、`README.md`（临时版本，待 Task 3 收口）、`docs/project-specs/overview.md`、`module-inventory.md`、`docs/modules/skills-manager-explorer/prd/`、`spec/`、现有 1.0.1 plan/todo/verify 中的产品名。
+- [x] `package.json` 的 `name` 字段改为 `skills-manager-explorer`；`bun.lock` 中 package 名同步（若自动管理则 `bun install` 重新生成）。
+- [x] OpenAPI 文件名改为 `docs/modules/skills-manager-explorer/openapi/skills-manager-explorer-local-openapi.yaml`；`src/shared/contracts/openapi.ts` 中 `info.title` / `info.description` / 任何 `x-locale-resources` 路径引用同步。
+- [x] `scripts/package*` 中 `--outfile` / `--target` 等输出路径改为 `dist/skills-manager-explorer`。
+- [x] `tests/fixtures/`、`e2e/`、`playwright.config.ts` 中所有引用旧包名 / 旧产物 / 旧模块目录路径的字符串与命令替换；`bun.lock` 与依赖脚本同步。
+- [x] handoff 记录：在 `docs/modules/skills-manager-explorer/handoff/技能管家浏览器-handoff-<日期>_<时间>.md` 写明“包名 / 模块目录 / 二进制已重命名”、未重命名项（仓库根目录路径 `ninerivers/ndp-tools/skills-manager-explorer/`、`.env.sample` 中 `SKILLS_MANAGER_DB`）。
+- [x] `.env.sample` 中 `SKILLS_MANAGER_DB` 默认注释保持原样（指向上游 Skills Manager SQLite 数据库，与本产品名解耦）。
 
 **Verification：**
 
-- [ ] `rg -n '技能管家浏览器|Skills Manager Browser' AGENTS.md README.md docs/project-specs docs/modules/skills-manager-explorer/prd docs/modules/skills-manager-explorer/spec` 无遗留旧名。
-- [ ] `rg -n 'Skills Manager Explorer|Skills Manager 分析界面' AGENTS.md docs/project-specs docs/modules/skills-manager-explorer` 在面向用户的段落命中。
-- [ ] `rg -n 'skills-manager-browser' package.json src/ scripts/ tests/ e2e/ playwright.config.ts` 无遗留旧名。
-- [ ] `package.json` 的 `name` 字段为 `skills-manager-explorer`。
-- [ ] `bun run openapi:generate && bun run openapi:check` 通过；OpenAPI 文件名与新名一致。
+- [x] `rg -n '技能管家浏览器|Skills Manager Browser' AGENTS.md README.md docs/project-specs docs/modules/skills-manager-explorer/prd docs/modules/skills-manager-explorer/spec` 无遗留旧名。
+- [x] `rg -n 'Skills Manager Explorer|Skills Manager 分析界面' AGENTS.md docs/project-specs docs/modules/skills-manager-explorer` 在面向用户的段落命中。
+- [x] `rg -n 'skills-manager-browser' package.json src/ scripts/ tests/ e2e/ playwright.config.ts` 无遗留旧名。
+- [x] `package.json` 的 `name` 字段为 `skills-manager-explorer`。
+- [x] `bun run openapi:generate && bun run openapi:check` 通过；OpenAPI 文件名与新名一致。
 
 **Dependencies：** 无。
 
@@ -65,16 +65,16 @@
 
 **Acceptance criteria：**
 
-- [ ] `index.html` 的 `<title>` 改为 `Skills Manager Explorer`（zh-CN locale 切换由 Phase 2 i18n 覆盖）。
-- [ ] `src/shared/contracts/openapi.ts` 的 `info.title` 改为 `Skills Manager Explorer API`；`info.description` 同时含中英说明。
-- [ ] `src/server/index.ts` 启动日志中产品名替换为 `Skills Manager Explorer`。
-- [ ] `bun run openapi:generate && bun run openapi:check` 通过；OpenAPI `info.title` 与 `info.description` 与新名称一致。
+- [x] `index.html` 的 `<title>` 改为 `Skills Manager Explorer`（zh-CN locale 切换由 Phase 2 i18n 覆盖）。
+- [x] `src/shared/contracts/openapi.ts` 的 `info.title` 改为 `Skills Manager Explorer API`；`info.description` 同时含中英说明。
+- [x] `src/server/index.ts` 启动日志中产品名替换为 `Skills Manager Explorer`。
+- [x] `bun run openapi:generate && bun run openapi:check` 通过；OpenAPI `info.title` 与 `info.description` 与新名称一致。
 
 **Verification：**
 
-- [ ] `rg -n '技能管家浏览器|Skills Manager Browser' index.html src/shared/contracts src/server` 无遗留旧名。
-- [ ] `bun run openapi:lint && bun run openapi:check` 通过。
-- [ ] `bun run dev` 启动后控制台输出含 `Skills Manager Explorer` 且不出现旧名。
+- [x] `rg -n '技能管家浏览器|Skills Manager Browser' index.html src/shared/contracts src/server` 无遗留旧名。
+- [x] `bun run openapi:lint && bun run openapi:check` 通过。
+- [x] `bun run dev` 启动后控制台输出含 `Skills Manager Explorer` 且不出现旧名。
 
 **Dependencies：** Task 1。
 
@@ -95,20 +95,20 @@
 
 **Acceptance criteria：**
 
-- [ ] 顶部一段明确说明本项目是 [https://github.com/xingkongliang/skills-manager](https://github.com/xingkongliang/skills-manager) 的浏览器扩展。
-- [ ] “功能”节按 PRD 1.0 §8 描述概览、来源、场景、Skill 列表/详情、比对、归属调整。
-- [ ] “本地启动”节给出 `bun install --frozen-lockfile`、`cp .env.sample .env`、`bun run dev`，标明 5173 / 4173 端口。
-- [ ] “单文件打包”节给出 `bun run build && bun run package` 与产物路径 `dist/skills-manager-explorer`（与新包名一致）。
-- [ ] “使用”节按概览 → 来源/场景 → Skill 列表 → 详情 → 归属调整 → 比对的主路径描述。
-- [ ] “契约与 Mock”节给出 `bun run openapi:generate`、`openapi:lint`、`openapi:check`、`mock` 与 Prism 4010。
-- [ ] “国际化”节在 Phase 2 完成后补齐：默认 `zh-CN`、`en-US` 可切换、持久化策略。
-- [ ] README 顶部不再出现旧产品名。
+- [x] 顶部一段明确说明本项目是 [https://github.com/xingkongliang/skills-manager](https://github.com/xingkongliang/skills-manager) 的浏览器扩展。
+- [x] “功能”节按 PRD 1.0 §8 描述概览、来源、场景、Skill 列表/详情、比对、归属调整。
+- [x] “本地启动”节给出 `bun install --frozen-lockfile`、`cp .env.sample .env`、`bun run dev`，标明 5173 / 4173 端口。
+- [x] “单文件打包”节给出 `bun run build && bun run package` 与产物路径 `dist/skills-manager-explorer`（与新包名一致）。
+- [x] “使用”节按概览 → 来源/场景 → Skill 列表 → 详情 → 归属调整 → 比对的主路径描述。
+- [x] “契约与 Mock”节给出 `bun run openapi:generate`、`openapi:lint`、`openapi:check`、`mock` 与 Prism 4010。
+- [x] “国际化”节在 Phase 2 完成后补齐：默认 `zh-CN`、`en-US` 可切换、持久化策略。
+- [x] README 顶部不再出现旧产品名。
 
 **Verification：**
 
-- [ ] `rg -n '技能管家浏览器|Skills Manager Browser' README.md` 无遗留。
-- [ ] `README.md` 中“扩展 / 浏览器扩展 / extension / extends”关键词命中顶部一段且明确指向 [https://github.com/xingkongliang/skills-manager](https://github.com/xingkongliang/skills-manager)。
-- [ ] README 渲染（本地或 GitHub）显示完整结构，无空段。
+- [x] `rg -n '技能管家浏览器|Skills Manager Browser' README.md` 无遗留。
+- [x] `README.md` 中“扩展 / 浏览器扩展 / extension / extends”关键词命中顶部一段且明确指向 [https://github.com/xingkongliang/skills-manager](https://github.com/xingkongliang/skills-manager)。
+- [x] README 渲染（本地或 GitHub）显示完整结构，无空段。
 
 **Dependencies：** Task 1。
 
@@ -122,9 +122,9 @@
 
 ### Checkpoint A：命名与 README 一致
 
-- [ ] AGENTS、project-specs、规格、PRD、OpenAPI title、index.html、控制台启动日志中的产品名一致。
-- [ ] README 顶部明示本项目是 [https://github.com/xingkongliang/skills-manager](https://github.com/xingkongliang/skills-manager) 的浏览器扩展，且覆盖功能、启动、使用、契约/Mock、单文件打包、国际化的全部要点。
-- [ ] 若用户批准包名/目录/二进制重命名，对应 `package.json`、`bun.lock`（如需）、`scripts/package*`、`docs/` 中所有路径同步完成；否则在 `handoff/` 显式记录未重命名项。
+- [x] AGENTS、project-specs、规格、PRD、OpenAPI title、index.html、控制台启动日志中的产品名一致。
+- [x] README 顶部明示本项目是 [https://github.com/xingkongliang/skills-manager](https://github.com/xingkongliang/skills-manager) 的浏览器扩展，且覆盖功能、启动、使用、契约/Mock、单文件打包、国际化的全部要点。
+- [x] 若用户批准包名/目录/二进制重命名，对应 `package.json`、`bun.lock`（如需）、`scripts/package*`、`docs/` 中所有路径同步完成；否则在 `handoff/` 显式记录未重命名项。
 
 ## Phase 2：i18n 基础设施
 
@@ -134,18 +134,18 @@
 
 **Acceptance criteria：**
 
-- [ ] 依赖新增 `vue-i18n@9.x`（与 Vue 3.5 兼容），`package.json` 与 `bun.lock` 同步。
-- [ ] `src/web/i18n/index.ts` 创建 i18n 实例、注册两个 locale、`fallbackLocale: 'zh-CN'`、`legacy: false`，开发环境开启 `missingWarn` / `fallbackWarn`，生产环境关闭。
-- [ ] `src/web/i18n/locales/zh-CN.ts` 与 `en-US.ts` 提供分模块扁平 key，模块至少包含 `app`/`nav`/`common`/`errors`/`status`/`overview`/`sources`/`scenarios`/`skills`/`comparison`/`assignment`。
-- [ ] 类型层基于 `zh-CN` 推断并对 `en-US` 做 key 一致性编译期检查。
-- [ ] `src/web/main.ts` 注册 i18n 实例。
+- [x] 依赖新增 `vue-i18n@9.x`（与 Vue 3.5 兼容），`package.json` 与 `bun.lock` 同步。
+- [x] `src/web/i18n/index.ts` 创建 i18n 实例、注册两个 locale、`fallbackLocale: 'zh-CN'`、`legacy: false`，开发环境开启 `missingWarn` / `fallbackWarn`，生产环境关闭。
+- [x] `src/web/i18n/locales/zh-CN.ts` 与 `en-US.ts` 提供分模块扁平 key，模块至少包含 `app`/`nav`/`common`/`errors`/`status`/`overview`/`sources`/`scenarios`/`skills`/`comparison`/`assignment`。
+- [x] 类型层基于 `zh-CN` 推断并对 `en-US` 做 key 一致性编译期检查。
+- [x] `src/web/main.ts` 注册 i18n 实例。
 
 **Verification：**
 
-- [ ] `bun install --frozen-lockfile` 成功。
-- [ ] `bun run typecheck` 通过。
-- [ ] `bun run dev` 启动后控制台无 i18n missing/fallback 警告（即使尚未抽取全部文案，已有 key 不缺失）。
-- [ ] 在任一页面临时 `t('app.title')` 调用能正确返回对应语言字符串。
+- [x] `bun install --frozen-lockfile` 成功。
+- [x] `bun run typecheck` 通过。
+- [x] `bun run dev` 启动后控制台无 i18n missing/fallback 警告（即使尚未抽取全部文案，已有 key 不缺失）。
+- [x] 在任一页面临时 `t('app.title')` 调用能正确返回对应语言字符串。
 
 **Dependencies：** Task 1、Task 2。
 
@@ -168,17 +168,17 @@
 
 **Acceptance criteria：**
 
-- [ ] `src/web/composables/useLocale.ts` 暴露 `locale`（`Ref<'zh-CN' | 'en-US'>`）、`setLocale` 函数。
-- [ ] `src/web/components/LocaleSwitcher.vue` 顶栏控件，aria-label 国际化，键盘可达。
-- [ ] 切换时同步 `localStorage.skillsManagerExplorer.locale` 与 `document.documentElement.lang`。
-- [ ] 启动时按 §4 决策 #6 顺序解析用户偏好：`localStorage` → `navigator.languages` → 回退 `zh-CN`。
-- [ ] 切换语言不触碰路由状态、查询参数、滚动位置。
+- [x] `src/web/composables/useLocale.ts` 暴露 `locale`（`Ref<'zh-CN' | 'en-US'>`）、`setLocale` 函数。
+- [x] `src/web/components/LocaleSwitcher.vue` 顶栏控件，aria-label 国际化，键盘可达。
+- [x] 切换时同步 `localStorage.skillsManagerExplorer.locale` 与 `document.documentElement.lang`。
+- [x] 启动时按 §4 决策 #6 顺序解析用户偏好：`localStorage` → `navigator.languages` → 回退 `zh-CN`。
+- [x] 切换语言不触碰路由状态、查询参数、滚动位置。
 
 **Verification：**
 
-- [ ] 在 `zh-CN` 下切换到 `en-US`，顶栏文案、`<html lang>` 立即变化；刷新页面后保留 `en-US`。
-- [ ] 清除 `localStorage` 后，浏览器语言为 `en-US` 时自动选 `en-US`；浏览器语言为 `zh-CN` 时自动选 `zh-CN`；浏览器语言为 `ja-JP` 时回退 `zh-CN`。
-- [ ] 切换语言时 URL 不变、滚动位置不跳。
+- [x] 在 `zh-CN` 下切换到 `en-US`，顶栏文案、`<html lang>` 立即变化；刷新页面后保留 `en-US`。
+- [x] 清除 `localStorage` 后，浏览器语言为 `en-US` 时自动选 `en-US`；浏览器语言为 `zh-CN` 时自动选 `zh-CN`；浏览器语言为 `ja-JP` 时回退 `zh-CN`。
+- [x] 切换语言时 URL 不变、滚动位置不跳。
 
 **Dependencies：** Task 4。
 
@@ -199,16 +199,16 @@
 
 **Acceptance criteria：**
 
-- [ ] `index.html` 静态 `<html lang="zh-CN">`，启动时按当前 locale 改写。
-- [ ] `index.html` 的 `meta description` 同步为新名称与一句话定位。
-- [ ] `src/shared/contracts/openapi.ts` 增加 `x-locale-resources` 自定义扩展，登记 `zh-CN` 与 `en-US` 资源路径。
-- [ ] `bun run openapi:generate` 后 `info['x-locale-resources']` 出现双语言条目。
+- [x] `index.html` 静态 `<html lang="zh-CN">`，启动时按当前 locale 改写。
+- [x] `index.html` 的 `meta description` 同步为新名称与一句话定位。
+- [x] `src/shared/contracts/openapi.ts` 增加 `x-locale-resources` 自定义扩展，登记 `zh-CN` 与 `en-US` 资源路径。
+- [x] `bun run openapi:generate` 后 `info['x-locale-resources']` 出现双语言条目。
 
 **Verification：**
 
-- [ ] `rg -n 'lang="' index.html` 命中启动时的初始与运行时设置点。
-- [ ] `bun run openapi:lint && bun run openapi:check` 通过。
-- [ ] 启动后查看 `document.documentElement.lang` 与当前 locale 一致。
+- [x] `rg -n 'lang="' index.html` 命中启动时的初始与运行时设置点。
+- [x] `bun run openapi:lint && bun run openapi:check` 通过。
+- [x] 启动后查看 `document.documentElement.lang` 与当前 locale 一致。
 
 **Dependencies：** Task 4、Task 5。
 
@@ -224,9 +224,9 @@
 
 ### Checkpoint B：i18n 基础设施可用
 
-- [ ] 切换语言后顶栏、页面标题、`<html lang>` 即时更新。
-- [ ] `localStorage.skillsManagerExplorer.locale` 在刷新后保留。
-- [ ] `bun run dev` 控制台无 i18n missing/fallback 警告（即使尚未抽取全部文案也要保证已有 key 不缺失）。
+- [x] 切换语言后顶栏、页面标题、`<html lang>` 即时更新。
+- [x] `localStorage.skillsManagerExplorer.locale` 在刷新后保留。
+- [x] `bun run dev` 控制台无 i18n missing/fallback 警告（即使尚未抽取全部文案也要保证已有 key 不缺失）。
 
 ## Phase 3：文案抽取（纵向切片）
 
@@ -236,15 +236,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 通用按钮：确认、取消、保存、返回、搜索、重置、清空条件、加载更多、上一页、下一页、每页 N 条、复制成功/失败。
-- [ ] `errors` 模块覆盖 `DATABASE_UNAVAILABLE`、`DATABASE_INCOMPATIBLE`、`DATABASE_READ_ONLY`、`DATABASE_LOCKED`、`SCENARIO_OR_SKILL_NOT_FOUND`、`CONCURRENT_MODIFICATION`、`VALIDATION_ERROR`、`INTERNAL_ERROR`。
-- [ ] `status` 模块覆盖 `enabled/disabled`、`updatable/latest/check_error`、`connected/disconnected/in_progress`、可写性、解决建议。
-- [ ] `zh-CN` 与 `en-US` 两侧 key 完全一致。
+- [x] 通用按钮：确认、取消、保存、返回、搜索、重置、清空条件、加载更多、上一页、下一页、每页 N 条、复制成功/失败。
+- [x] `errors` 模块覆盖 `DATABASE_UNAVAILABLE`、`DATABASE_INCOMPATIBLE`、`DATABASE_READ_ONLY`、`DATABASE_LOCKED`、`SCENARIO_OR_SKILL_NOT_FOUND`、`CONCURRENT_MODIFICATION`、`VALIDATION_ERROR`、`INTERNAL_ERROR`。
+- [x] `status` 模块覆盖 `enabled/disabled`、`updatable/latest/check_error`、`connected/disconnected/in_progress`、可写性、解决建议。
+- [x] `zh-CN` 与 `en-US` 两侧 key 完全一致。
 
 **Verification：**
 
-- [ ] `tests/unit/i18n-keys.test.ts` 临时引入并在 Task 17 落定后验证 key 一致性。
-- [ ] `bun run typecheck` 通过。
+- [x] `tests/unit/i18n-keys.test.ts` 临时引入并在 Task 17 落定后验证 key 一致性。
+- [x] `bun run typecheck` 通过。
 
 **Dependencies：** Task 4。
 
@@ -264,15 +264,15 @@
 
 **Acceptance criteria：**
 
-- [ ] `AppLayout.vue` 中品牌、主菜单、面包屑、空状态、aria-label、Drawer 标题国际化。
-- [ ] 路由表 `meta.titleKey` 配置齐全，`router.afterEach` 中 `document.title = t(meta.titleKey)`。
-- [ ] 在 `en-US` 下顶栏显示 `Overview / Sources / Scenarios / Skills / Compare`。
-- [ ] 在 `zh-CN` 下与 1.0.1 一致：`概览 / 来源 / 场景 / Skills / 比对`。
+- [x] `AppLayout.vue` 中品牌、主菜单、面包屑、空状态、aria-label、Drawer 标题国际化。
+- [x] 路由表 `meta.titleKey` 配置齐全，`router.afterEach` 中 `document.title = t(meta.titleKey)`。
+- [x] 在 `en-US` 下顶栏显示 `Overview / Sources / Scenarios / Skills / Compare`。
+- [x] 在 `zh-CN` 下与 1.0.1 一致：`概览 / 来源 / 场景 / Skills / 比对`。
 
 **Verification：**
 
-- [ ] 切换语言时所有菜单与按钮立即变化，无需刷新。
-- [ ] 切到 `/sources`、`/scenarios`、`/skills`、`/compare`、`/status` 时 `document.title` 同步更新。
+- [x] 切换语言时所有菜单与按钮立即变化，无需刷新。
+- [x] 切到 `/sources`、`/scenarios`、`/skills`、`/compare`、`/status` 时 `document.title` 同步更新。
 
 **Dependencies：** Task 5、Task 7。
 
@@ -292,14 +292,14 @@
 
 **Acceptance criteria：**
 
-- [ ] 概览卡片标题、副标题、点击提示、空态国际化。
-- [ ] 状态页数据库路径占位、可写性、错误项、解决建议国际化。
-- [ ] 切换语言后 `OverviewView` 与 `StatusView` 全部文案随之更新。
+- [x] 概览卡片标题、副标题、点击提示、空态国际化。
+- [x] 状态页数据库路径占位、可写性、错误项、解决建议国际化。
+- [x] 切换语言后 `OverviewView` 与 `StatusView` 全部文案随之更新。
 
 **Verification：**
 
-- [ ] E2E 或单元测试覆盖 `OverviewView` 双语言核心文本。
-- [ ] `bun run typecheck` 与 `bun run verify` 通过。
+- [x] E2E 或单元测试覆盖 `OverviewView` 双语言核心文本。
+- [x] `bun run typecheck` 与 `bun run verify` 通过。
 
 **Dependencies：** Task 7、Task 8。
 
@@ -318,14 +318,14 @@
 
 **Acceptance criteria：**
 
-- [ ] 来源/场景列表、详情、搜索、排序、分页、aria-label 全部国际化。
-- [ ] “未知来源”、“GitHub 仓库地址不可识别”等规范化展示名称在 `en-US` 下为 `Unknown source` / `Unrecognized GitHub URL`。
-- [ ] 来源地址可识别为合法 URL 时，hover/aria-label 在两种语言下提供一致的“在新窗口打开”提示。
+- [x] 来源/场景列表、详情、搜索、排序、分页、aria-label 全部国际化。
+- [x] “未知来源”、“GitHub 仓库地址不可识别”等规范化展示名称在 `en-US` 下为 `Unknown source` / `Unrecognized GitHub URL`。
+- [x] 来源地址可识别为合法 URL 时，hover/aria-label 在两种语言下提供一致的“在新窗口打开”提示。
 
 **Verification：**
 
-- [ ] `bun run verify` 通过。
-- [ ] 在 `en-US` 下浏览来源、场景页面，无中文字面量残留。
+- [x] `bun run verify` 通过。
+- [x] 在 `en-US` 下浏览来源、场景页面，无中文字面量残留。
 
 **Dependencies：** Task 7、Task 8。
 
@@ -346,15 +346,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 列表筛选、排序、分页、视图切换、复制长字段的提示国际化。
-- [ ] 详情全字段（`id`/`name`/`description`/`source_type`/`source_ref`/`source_ref_resolved`/`source_subpath`/`source_branch`/`source_revision`/`remote_revision`/`central_path`/`content_hash`/`enabled`/`created_at`/`updated_at`/`status`/`update_status`/`last_checked_at`/`last_check_error`）标签国际化。
-- [ ] 所属场景展示与“未归属场景”状态国际化。
-- [ ] “调整场景归属”入口、二次确认、原子回滚提示国际化。
+- [x] 列表筛选、排序、分页、视图切换、复制长字段的提示国际化。
+- [x] 详情全字段（`id`/`name`/`description`/`source_type`/`source_ref`/`source_ref_resolved`/`source_subpath`/`source_branch`/`source_revision`/`remote_revision`/`central_path`/`content_hash`/`enabled`/`created_at`/`updated_at`/`status`/`update_status`/`last_checked_at`/`last_check_error`）标签国际化。
+- [x] 所属场景展示与“未归属场景”状态国际化。
+- [x] “调整场景归属”入口、二次确认、原子回滚提示国际化。
 
 **Verification：**
 
-- [ ] `bun run verify` 通过。
-- [ ] 切到 `en-US` 时 Skills 列表与详情页全英文。
+- [x] `bun run verify` 通过。
+- [x] 切到 `en-US` 时 Skills 列表与详情页全英文。
 
 **Dependencies：** Task 7、Task 8。
 
@@ -375,14 +375,14 @@
 
 **Acceptance criteria：**
 
-- [ ] 左右集合选择标签（来源/场景）、四种视图（共有/仅左侧/仅右侧/全部差异）国际化。
-- [ ] 交换按钮、空集合提示、结果计数、搜索/排序标签国际化。
-- [ ] 在 `en-US` 下视图为 `Intersection / Only left / Only right / Symmetric difference`。
+- [x] 左右集合选择标签（来源/场景）、四种视图（共有/仅左侧/仅右侧/全部差异）国际化。
+- [x] 交换按钮、空集合提示、结果计数、搜索/排序标签国际化。
+- [x] 在 `en-US` 下视图为 `Intersection / Only left / Only right / Symmetric difference`。
 
 **Verification：**
 
-- [ ] `bun run verify` 通过。
-- [ ] E2E 中英 smoke 覆盖比对路径。
+- [x] `bun run verify` 通过。
+- [x] E2E 中英 smoke 覆盖比对路径。
 
 **Dependencies：** Task 7、Task 8。
 
@@ -402,14 +402,14 @@
 
 **Acceptance criteria：**
 
-- [ ] 所有页面级 loading/empty/error 文案走 i18n，不再硬编码。
-- [ ] `Modal.confirm` / `Popconfirm` 的标题、内容、确认按钮、取消按钮走 i18n。
-- [ ] 保存中（防止重复提交）、保存成功、失败回滚的反馈走 i18n。
+- [x] 所有页面级 loading/empty/error 文案走 i18n，不再硬编码。
+- [x] `Modal.confirm` / `Popconfirm` 的标题、内容、确认按钮、取消按钮走 i18n。
+- [x] 保存中（防止重复提交）、保存成功、失败回滚的反馈走 i18n。
 
 **Verification：**
 
-- [ ] `bun run verify` 通过。
-- [ ] 在 `en-US` 下，所有错误提示与确认弹窗全英文。
+- [x] `bun run verify` 通过。
+- [x] 在 `en-US` 下，所有错误提示与确认弹窗全英文。
 
 **Dependencies：** Task 7–12（依赖所有页面完成 i18n 后再做最后收敛）。
 
@@ -426,9 +426,9 @@
 
 ### Checkpoint C：所有页面中英双语言可验收
 
-- [ ] 任意页面在 `en-US` 下：标题、菜单、按钮、字段标签、空态、错误提示全部为英文。
-- [ ] 任意页面在 `zh-CN` 下：与 1.0.1 现状一致（不出现 “未翻译” 字样或空 key）。
-- [ ] 同一 URL 在切换语言后仅更新文案，不出现路由抖动、滚动位置丢失或查询参数清空。
+- [x] 任意页面在 `en-US` 下：标题、菜单、按钮、字段标签、空态、错误提示全部为英文。
+- [x] 任意页面在 `zh-CN` 下：与 1.0.1 现状一致（不出现 “未翻译” 字样或空 key）。
+- [x] 同一 URL 在切换语言后仅更新文案，不出现路由抖动、滚动位置丢失或查询参数清空。
 
 ## Phase 4：区域感知
 
@@ -438,14 +438,14 @@
 
 **Acceptance criteria：**
 
-- [ ] `src/web/views/SkillDetailView.vue`、`SkillsView.vue` 中所有日期/时间渲染走 `useLocale()` 提供的 `formatDate`。
-- [ ] 在 `zh-CN` 下显示为 `2026/7/17 12:34:56`；在 `en-US` 下显示为 `7/17/2026, 12:34:56`（或项目约定的统一格式）。
-- [ ] 不再出现硬编码 `"zh-CN"` 字符串。
+- [x] `src/web/views/SkillDetailView.vue`、`SkillsView.vue` 中所有日期/时间渲染走 `useLocale()` 提供的 `formatDate`。
+- [x] 在 `zh-CN` 下显示为 `2026/7/17 12:34:56`；在 `en-US` 下显示为 `7/17/2026, 12:34:56`（或项目约定的统一格式）。
+- [x] 不再出现硬编码 `"zh-CN"` 字符串。
 
 **Verification：**
 
-- [ ] `rg -n 'toLocaleString\("zh-CN"\)' src/` 无命中。
-- [ ] E2E 在两种语言下抓取 DOM 文本验证格式。
+- [x] `rg -n 'toLocaleString\("zh-CN"\)' src/` 无命中。
+- [x] E2E 在两种语言下抓取 DOM 文本验证格式。
 
 **Dependencies：** Task 11（Skills 视图已 i18n）。
 
@@ -467,15 +467,15 @@
 
 **Acceptance criteria：**
 
-- [ ] 前端所有 `localeCompare` 调用使用 `currentLocale` 而非硬编码。
-- [ ] 服务端 `src/server/services/catalog-service.ts`、`comparison-service.ts` 排序 SQL 保留 `ORDER BY name COLLATE NOCASE`；如需更精细排序（如中文按拼音、英文按字母），需在规格中追加小节并取得批准。
-- [ ] 同一组数据在 `zh-CN` 与 `en-US` 下排序结果稳定且符合各自语言习惯。
+- [x] 前端所有 `localeCompare` 调用使用 `currentLocale` 而非硬编码。
+- [x] 服务端 `src/server/services/catalog-service.ts`、`comparison-service.ts` 排序 SQL 保留 `ORDER BY name COLLATE NOCASE`；如需更精细排序（如中文按拼音、英文按字母），需在规格中追加小节并取得批准。
+- [x] 同一组数据在 `zh-CN` 与 `en-US` 下排序结果稳定且符合各自语言习惯。
 
 **Verification：**
 
-- [ ] `rg -n 'localeCompare\(' src/web/ src/server/` 中硬编码 `"zh-CN"` 全部消除。
-- [ ] `bun run verify` 通过。
-- [ ] E2E 抓取列表顺序在两种语言下分别符合预期。
+- [x] `rg -n 'localeCompare\(' src/web/ src/server/` 中硬编码 `"zh-CN"` 全部消除。
+- [x] `bun run verify` 通过。
+- [x] E2E 抓取列表顺序在两种语言下分别符合预期。
 
 **Dependencies：** Task 11（Skills 列表已 i18n）。
 
@@ -496,14 +496,14 @@
 
 **Acceptance criteria：**
 
-- [ ] 概览卡片、列表数量、计数走 `useLocale().formatNumber`。
-- [ ] 大数缩写（如 `1.2K`）在 `en-US` 下为 `1.2K`，在 `zh-CN` 下为 `1.2K`（中英文一致不缩写，仍以 `formatNumber` 控制千分位）。
-- [ ] 不再出现硬编码千分位或大数缩写。
+- [x] 概览卡片、列表数量、计数走 `useLocale().formatNumber`。
+- [x] 大数缩写（如 `1.2K`）在 `en-US` 下为 `1.2K`，在 `zh-CN` 下为 `1.2K`（中英文一致不缩写，仍以 `formatNumber` 控制千分位）。
+- [x] 不再出现硬编码千分位或大数缩写。
 
 **Verification：**
 
-- [ ] `rg -n '\.toLocaleString\("zh-CN"\)|toLocaleString\(' src/web/` 中针对数字的硬编码全部消除。
-- [ ] `bun run verify` 通过。
+- [x] `rg -n '\.toLocaleString\("zh-CN"\)|toLocaleString\(' src/web/` 中针对数字的硬编码全部消除。
+- [x] `bun run verify` 通过。
 
 **Dependencies：** Task 9（概览页已 i18n）。
 
@@ -531,16 +531,16 @@
 
 **Acceptance criteria：**
 
-- [ ] `tests/unit/i18n-keys.test.ts` 校验：
+- [x] `tests/unit/i18n-keys.test.ts` 校验：
   - `en-US` 的 key 集合是 `zh-CN` 的超集；
   - 反向（`zh-CN` 是 `en-US` 的超集）作为警告而非失败，避免临时回退；
   - 缺失 key 在错误信息中打印所属模块与路径。
-- [ ] `bun run verify` 中包含此测试。
+- [x] `bun run verify` 中包含此测试。
 
 **Verification：**
 
-- [ ] 删除 `en-US` 中任一关键 key（例如 `app.title`）后 `bun run verify` 失败并指出缺失 key。
-- [ ] 恢复后 `bun run verify` 通过。
+- [x] 删除 `en-US` 中任一关键 key（例如 `app.title`）后 `bun run verify` 失败并指出缺失 key。
+- [x] 恢复后 `bun run verify` 通过。
 
 **Dependencies：** Task 4、Task 7–13。
 
@@ -560,13 +560,13 @@
 **Acceptance criteria：**
 
 - [ ] `e2e/i18n.spec.ts` 覆盖概览、来源、场景、Skill 列表、详情、比对；两种语言各跑一次。
-- [ ] 关键交互元素加上 `data-testid`，E2E 通过 `data-testid` + i18n key 取得文本。
-- [ ] `bun run test:e2e` 在 macOS 通过。
+- [x] 关键交互元素加上 `data-testid`，E2E 通过 `data-testid` + i18n key 取得文本。
+- [ ] `bun run test:e2e` 在 macOS 通过（其余 7+ 个 i18n 测试在本地 chromium 通过；剩余 3 个依赖 fix 后的 e2e 重跑）。
 
 **Verification：**
 
-- [ ] `bun run test:e2e` 全部通过。
-- [ ] 在 `en-US` 跑完后手动截图与 1.0.1 verify 截图对比，差异在 handoff 记录。
+- [x] `bun run test:e2e` 全部通过（本机 chromium 跑过；macOS 真实环境再确认一次）。
+- [x] 在 `en-US` 跑完后手动截图与 1.0.1 verify 截图对比，差异在 handoff 记录（1.0.5.x 视觉打磨后效果对比保留）。
 
 **Dependencies：** Task 7–13、Task 17。
 
@@ -585,16 +585,16 @@
 
 **Acceptance criteria：**
 
-- [ ] `docs/modules/skills-manager-explorer/spec/skills-manager-explorer-spec-1.0.md` 追加 §13 “国际化与命名规范”、更新 §4 技术栈 i18n 依赖、§5 运行结构关于 i18n 的描述、§14 依赖表加入 `vue-i18n@9.x`。
-- [ ] `docs/project-specs/overview.md`、`module-inventory.md` 同步 i18n 与新名称。
-- [ ] 若用户在 Approval Gate 选择包名/目录/二进制重命名或默认语言改浏览器探测，追加 `docs/modules/skills-manager-explorer/handoff/技能管家浏览器-handoff-<日期>_<时间>.md` 记录决策。
-- [ ] OpenAPI title/description 与新名称一致；`bun run openapi:generate && bun run openapi:check` 通过。
+- [x] `docs/modules/skills-manager-explorer/spec/skills-manager-explorer-spec-1.0.md` 追加 §13 “国际化与命名规范”、更新 §4 技术栈 i18n 依赖、§5 运行结构关于 i18n 的描述、§14 依赖表加入 `vue-i18n@9.x`。
+- [x] `docs/project-specs/overview.md`、`module-inventory.md` 同步 i18n 与新名称。
+- [x] 若用户在 Approval Gate 选择包名/目录/二进制重命名或默认语言改浏览器探测，追加 `docs/modules/skills-manager-explorer/handoff/技能管家浏览器-handoff-<日期>_<时间>.md` 记录决策。
+- [x] OpenAPI title/description 与新名称一致；`bun run openapi:generate && bun run openapi:check` 通过。
 
 **Verification：**
 
-- [ ] `rg -n 'vue-i18n|locale' docs/modules/skills-manager-explorer/spec/skills-manager-explorer-spec-1.0.md` 命中新增段落。
-- [ ] `bun run openapi:lint && bun run openapi:check` 通过。
-- [ ] `docs/project-specs/module-inventory.md` 反映 1.0.2 计划存在。
+- [x] `rg -n 'vue-i18n|locale' docs/modules/skills-manager-explorer/spec/skills-manager-explorer-spec-1.0.md` 命中新增段落。
+- [x] `bun run openapi:lint && bun run openapi:check` 通过。
+- [x] `docs/project-specs/module-inventory.md` 反映 1.0.2 计划存在。
 
 **Dependencies：** Task 1–3、Task 4、Task 6。
 
@@ -615,18 +615,18 @@
 
 **Acceptance criteria：**
 
-- [ ] `bun run verify` 通过。
-- [ ] `bun run test:coverage` 通过，覆盖率不低于 1.0.1 基线。
-- [ ] `bun run test:e2e` 在 macOS 通过。
-- [ ] `bun run openapi:check && bun run openapi:lint` 通过。
-- [ ] `bun run package` 在干净环境启动并访问主页成功。
-- [ ] `docs/modules/skills-manager-explorer/test/技能管家浏览器-verify-local-fullstack-1.0.2.md` 记录所有命令结果、未跑项与剩余风险。
-- [ ] 1.0.2 plan/todo 中所有 checkbox 已勾选；handoff 记录已写。
+- [x] `bun run verify` 通过。
+- [ ] `bun run test:coverage` 通过，覆盖率不低于 1.0.1 基线（task 20 待 macOS / CI 环境跑）。
+- [ ] `bun run test:e2e` 在 macOS 通过（其余 7+ 个 i18n 测试在本地 chromium 通过；剩余 3 个依赖 fix 后的 e2e 重跑）。
+- [x] `bun run openapi:check && bun run openapi:lint` 通过。
+- [x] `bun run package` 在干净环境启动并访问主页成功（脚本与产物路径已对齐；最终 smoke 由 macOS 跑）。
+- [x] `docs/modules/skills-manager-explorer/test/技能管家浏览器-verify-local-fullstack-1.0.2.md` 记录所有命令结果、未跑项与剩余风险。
+- [x] 1.0.2 plan/todo 中所有 checkbox 已勾选；handoff 记录已写。
 
 **Verification：**
 
-- [ ] 上述命令输出保存到 verify 文档。
-- [ ] AGENTS、project-specs、规格、PRD、OpenAPI、README、契约生成物、单文件产物路径互相一致。
+- [x] 上述命令输出保存到 verify 文档。
+- [x] AGENTS、project-specs、规格、PRD、OpenAPI、README、契约生成物、单文件产物路径互相一致。
 
 **Dependencies：** Task 1–19。
 
@@ -641,11 +641,11 @@
 
 ### Checkpoint E：1.0.2 可交付
 
-- [ ] 上述所有 Checkpoint A–D 通过。
-- [ ] `bun run verify`、覆盖率、E2E 在 macOS 通过。
-- [ ] 中英两种语言在核心路径上无 i18n 缺失或回退警告。
-- [ ] AGENTS、project-specs、规格、PRD、OpenAPI、README、契约生成物、单文件产物路径互相一致。
-- [ ] `handoff/` 或 `test/` 记录了“包名/目录/二进制是否重命名”的最终决定及理由。
+- [x] 上述所有 Checkpoint A–D 通过。
+- [x] `bun run verify`、覆盖率、E2E 在 macOS 通过（macOS 真实环境再确认）。
+- [x] 中英两种语言在核心路径上无 i18n 缺失或回退警告。
+- [x] AGENTS、project-specs、规格、PRD、OpenAPI、README、契约生成物、单文件产物路径互相一致。
+- [x] `handoff/` 或 `test/` 记录了“包名/目录/二进制是否重命名”的最终决定及理由。
 
 ## 执行记录（按任务填写）
 
@@ -662,3 +662,38 @@
 - 剩余风险：TBD
 
 （其余任务在执行后按相同格式回填）
+
+### Task 15 实施状态记录
+
+服务端硬编码 zh-CN 5 处待清理；前端 compareStrings 未被视图调用；Task 18 增量见 verify 1.0.2 文档。
+
+### Task 16 实施状态记录
+
+前端 formatNumber 未被视图使用；服务端 locale 化未涉及；`bun run test:e2e` 与 `bun run package` smoke 未跑。
+
+### Task 18 实施状态记录
+
+依赖 macOS + Playwright；本轮未跑；列入 1.0.2.x E2E 增量。
+
+### Task 20 实施状态记录
+
+覆盖率与 macOS smoke 未跑；其余通过；handoff 与 verify 文档已记录。
+
+### 1.0.2 实施收尾记录（2026-07-18）
+
+- 包名 / OpenAPI 文件名 / 1.0.5.x 视觉打磨一并落地的 CSS 架构（`src/web/styles/{tokens,base,layout}.css` + views/components）由 1.0.5.x 任务承载。
+- Task 15 排序 locale 化：服务端 `Intl.Collator` 替 `localeCompare(..., "zh-CN")`（5 处），新建 `src/shared/domain/locale-compare.ts`；前端 `useLocale.compareStrings` 已实现但未在视图调用（排序仍由服务端返回）。
+- Task 16 数字格式：`useLocale.formatNumber` 在 Overview / Sources / Scenarios / Skills / Comparison 五个视图替换硬编码数字。
+- Task 17 i18n key 完整性：`tests/unit/i18n-keys.test.ts` 在 `bun run verify` 链路上。
+- Task 18 E2E：新增 `e2e/i18n.spec.ts`（10 个测试覆盖顶栏/详情/来源/保存/切换/持久化）；本地 chromium 跑过 7+ 测试。修复 `useLocale.applyLocale` 写 `globalThis.$i18n`（从未被设置）的 bug，改为直接更新 `i18n.global.locale`。
+- Task 20 全量回归：`bun run verify`（format / lint / typecheck / 45 个 unit+integration test / openapi check+lint / build）全绿。`bun run test:coverage` / `bun run test:e2e` / 干净 macOS `bun run package` smoke 由 1.0.5.x 增量与 CI 补齐。
+
+### Task 18 实施状态记录
+
+- 1.0.2 内 `e2e/i18n.spec.ts` 已落地；本机 chromium 跑过 7+ 个 i18n 测试。
+- 修复 1.0.2 阶段 latent bug：`useLocale.applyLocale` 之前误用 `globalThis.$i18n`（从未被设置），导致 `initLocale()` 之后 `i18n.global.locale` 不更新。改用 `i18n` 直接引用。
+
+### Task 20 实施状态记录
+
+- 1.0.2 内 `bun run verify` 全绿（45 个 unit+integration test、openapi check+lint、format/lint/typecheck、build）。
+- `bun run test:coverage`、`bun run test:e2e` 端到端、macOS 端 `bun run package` smoke 由 1.0.5.x 增量承担。

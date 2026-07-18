@@ -1,5 +1,6 @@
 /**
- * 集合比对服务，解析来源或场景操作数并对选定结果执行搜索、排序和分页。
+ * 集合比对服务，解析来源、场景或工作区操作数并对选定结果执行搜索、排序和分页。
+ * 1.0.4 引入工作区操作数（= Skills Manager 已知 tool）。
  * 作者：NDP Coding
  * 日期：2026-07-17 11:50:00
  */
@@ -8,6 +9,12 @@ import type { SkillSummary } from "@/shared/contracts/catalog";
 import { compareSkillSets } from "@/shared/domain/skill-comparison";
 import { listScenarios, listSkills, listSources } from "./catalog-service";
 import { DomainError } from "./domain-error";
+import { compareNames } from "@/shared/domain/locale-compare";
+import { openReadDatabase } from "../database/open-database";
+import {
+  enabledSkillIdsInTool,
+  knownWorkspaceTools,
+} from "./workspace-service";
 
 function allSkillItems(databasePath: string): SkillSummary[] {
   const first = listSkills(databasePath, {
@@ -85,14 +92,26 @@ function operandIds(
       .filter((skill) => skill.source?.id === operand.id)
       .map((skill) => skill.id);
   }
-  const scenarios = allScenarios(databasePath);
-  if (!scenarios.some((scenario) => scenario.id === operand.id))
-    throw new DomainError("SCENARIO_NOT_FOUND", "指定场景不存在。", 404);
-  return skills
-    .filter((skill) =>
-      skill.scenarios.some((scenario) => scenario.id === operand.id),
-    )
-    .map((skill) => skill.id);
+  if (operand.type === "scenario") {
+    const scenarios = allScenarios(databasePath);
+    if (!scenarios.some((scenario) => scenario.id === operand.id))
+      throw new DomainError("SCENARIO_NOT_FOUND", "指定场景不存在。", 404);
+    return skills
+      .filter((skill) =>
+        skill.scenarios.some((scenario) => scenario.id === operand.id),
+      )
+      .map((skill) => skill.id);
+  }
+  // type === "workspace"
+  const database = openReadDatabase(databasePath);
+  try {
+    if (!knownWorkspaceTools(database).includes(operand.id))
+      throw new DomainError("WORKSPACE_NOT_FOUND", "指定工作区不存在。", 404);
+    const { skillIds } = enabledSkillIdsInTool(database, operand.id);
+    return [...skillIds];
+  } finally {
+    database.close();
+  }
 }
 
 export function compareSkills(databasePath: string, input: ComparisonInput) {
@@ -115,8 +134,8 @@ export function compareSkills(databasePath: string, input: ComparisonInput) {
       sign *
       (input.sort === "updatedAt"
         ? (a.updatedAt || 0) - (b.updatedAt || 0) ||
-          a.name.localeCompare(b.name, "zh-CN")
-        : a.name.localeCompare(b.name, "zh-CN")),
+          compareNames(a.name, b.name)
+        : compareNames(a.name, b.name)),
   );
   return {
     leftTotal: new Set(left).size,

@@ -9,7 +9,10 @@ import { skillSummarySchema } from "./catalog";
 import { errorResponse } from "./errors";
 
 export const comparisonOperandSchema = z
-  .object({ type: z.enum(["source", "scenario"]), id: z.string().min(1) })
+  .object({
+    type: z.enum(["source", "scenario", "workspace"]),
+    id: z.string().min(1),
+  })
   .strict()
   .openapi("ComparisonOperand");
 export const comparisonInputSchema = z

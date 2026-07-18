@@ -10,20 +10,25 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
+import type { Workspace } from "@/shared/contracts/catalog";
+
 import type {
   Scenario,
   SkillSummary,
   Source,
 } from "@/shared/contracts/catalog";
 import { allCatalogApi, catalogApi } from "../api/catalog-api";
+import { useLocale } from "../composables/useLocale";
 import RequestState from "../components/RequestState.vue";
 
 const { t, locale } = useI18n();
+const { formatNumber } = useLocale();
 const route = useRoute();
 const router = useRouter();
 const items = ref<SkillSummary[]>([]);
 const sources = ref<Source[]>([]);
 const scenarios = ref<Scenario[]>([]);
+const allWorkspaces = ref<Workspace[]>([]);
 const total = ref(0);
 const loading = ref(true);
 const error = ref("");
@@ -36,6 +41,12 @@ const sourceIds = ref(
 const scenarioIds = ref(
   String(route.query.scenarioIds || "")
     .split(",")
+    .filter(Boolean),
+);
+const workspaces = ref(
+  String(route.query.workspaces || "")
+    .split(",")
+    .map((s) => s.trim())
     .filter(Boolean),
 );
 const orphan = ref(route.query.orphan === "true");
@@ -74,6 +85,7 @@ function queryValues() {
     q: q.value || undefined,
     sourceIds: sourceIds.value.join(",") || undefined,
     scenarioIds: scenarioIds.value.join(",") || undefined,
+    workspaces: workspaces.value.join(",") || undefined,
     orphan: orphan.value ? "true" : undefined,
     multiScenario: multiScenario.value ? "true" : undefined,
     sort: sort.value === "name" ? undefined : sort.value,
@@ -87,15 +99,18 @@ async function load() {
   loading.value = true;
   error.value = "";
   try {
-    const [response, sourceResponse, scenarioResponse] = await Promise.all([
-      catalogApi.skills(queryValues()),
-      allCatalogApi.sources(),
-      allCatalogApi.scenarios(),
-    ]);
+    const [response, sourceResponse, scenarioResponse, workspacesRes] =
+      await Promise.all([
+        catalogApi.skills(queryValues()),
+        allCatalogApi.sources(),
+        allCatalogApi.scenarios(),
+        catalogApi.workspaces(),
+      ]);
     items.value = response.data;
     total.value = response.meta.total;
     sources.value = sourceResponse;
     scenarios.value = scenarioResponse;
+    allWorkspaces.value = workspacesRes.data;
     // 清理已不在列表中的选择
     const ids = new Set(response.data.map((s) => s.id));
     for (const id of [...selected.value])
@@ -147,6 +162,7 @@ async function clear() {
   q.value = "";
   sourceIds.value = [];
   scenarioIds.value = [];
+  workspaces.value = [];
   orphan.value = false;
   multiScenario.value = false;
   sort.value = "name";
@@ -269,11 +285,18 @@ watch(scenarioIds, () => void load());
     <div class="title-row">
       <div>
         <h1>{{ t("skills.title") }}</h1>
-        <p class="lead">{{ t("skills.lead", { count: total }) }}</p>
+        <p class="lead">
+          {{ t("skills.lead", { count: formatNumber(total) }) }}
+        </p>
       </div>
       <a-button
         v-if="
-          q || sourceIds.length || scenarioIds.length || orphan || multiScenario
+          q ||
+          sourceIds.length ||
+          scenarioIds.length ||
+          workspaces.length ||
+          orphan ||
+          multiScenario
         "
         @click="clear"
         >{{ t("common.clear") }}</a-button
@@ -310,6 +333,20 @@ watch(scenarioIds, () => void load());
           :key="scenario.id"
           :value="scenario.id"
           >{{ scenario.name }}</a-select-option
+        ></a-select
+      ><a-select
+        v-model:value="workspaces"
+        mode="multiple"
+        allow-clear
+        max-tag-count="responsive"
+        :placeholder="t('workspaces.title')"
+        data-testid="skills-workspace-filter"
+        @change="apply"
+        ><a-select-option
+          v-for="ws in allWorkspaces"
+          :key="ws.name"
+          :value="ws.name"
+          >{{ ws.name }}</a-select-option
         ></a-select
       ><a-select
         v-model:value="sort"

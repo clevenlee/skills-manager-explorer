@@ -8,6 +8,7 @@
 import {
   ApartmentOutlined,
   AppstoreOutlined,
+  ClusterOutlined,
   DashboardOutlined,
   FolderOpenOutlined,
   MenuFoldOutlined,
@@ -34,6 +35,7 @@ const navItems = computed(() => [
   { key: "/sources", label: t("nav.sources"), icon: h(FolderOpenOutlined) },
   { key: "/scenarios", label: t("nav.scenarios"), icon: h(ApartmentOutlined) },
   { key: "/skills", label: t("nav.skills"), icon: h(AppstoreOutlined) },
+  { key: "/workspaces", label: t("nav.workspaces"), icon: h(ClusterOutlined) },
   { key: "/compare", label: t("nav.compare"), icon: h(SwapOutlined) },
 ]);
 
@@ -51,6 +53,7 @@ async function navigate(key: string): Promise<void> {
     <nav
       :class="['sidebar', { collapsed: sidebarCollapsed }]"
       :aria-label="t('nav.primary')"
+      data-testid="sidebar"
     >
       <router-link class="brand" to="/" :aria-label="t('nav.home')">
         <img class="brand-icon" :src="skillsManagerIconUrl" alt="" />
@@ -66,6 +69,7 @@ async function navigate(key: string): Promise<void> {
         :items="navItems"
         :selected-keys="selectedKeys"
         :inline-collapsed="sidebarCollapsed"
+        data-testid="nav-menu"
         @click="navigate(String($event.key))"
       />
       <div class="sidebar-footer">

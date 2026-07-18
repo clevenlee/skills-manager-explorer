@@ -11,9 +11,11 @@ import { useRoute, useRouter } from "vue-router";
 
 import type { Scenario, SkillSummary } from "@/shared/contracts/catalog";
 import { allCatalogApi, catalogApi } from "../api/catalog-api";
+import { useLocale } from "../composables/useLocale";
 import RequestState from "../components/RequestState.vue";
 
 const { t } = useI18n();
+const { formatNumber } = useLocale();
 const route = useRoute();
 const router = useRouter();
 const items = ref<Scenario[]>([]);
@@ -134,7 +136,7 @@ onMounted(load);
             <p>{{ scenario.description || t("common.noDescription") }}</p>
           </div>
           <strong
-            >{{ scenario.skillCount
+            >{{ formatNumber(scenario.skillCount)
             }}<small>{{ t("scenarios.skillsCountSuffix") }}</small></strong
           ></router-link
         >

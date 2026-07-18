@@ -14,6 +14,8 @@ import type {
 import { openReadDatabase } from "../database/open-database";
 import { DomainError } from "./domain-error";
 import { normalizeSource } from "./normalize-source";
+import { compareNames } from "@/shared/domain/locale-compare";
+import { enabledSkillIdsInTool } from "./workspace-service";
 
 type RawSkill = {
   id: string;
@@ -207,8 +209,8 @@ export function listSources(
       (a, b) =>
         sign *
         (query.sort === "skillCount"
-          ? a.skillCount - b.skillCount || a.name.localeCompare(b.name, "zh-CN")
-          : a.name.localeCompare(b.name, "zh-CN")),
+          ? a.skillCount - b.skillCount || compareNames(a.name, b.name)
+          : compareNames(a.name, b.name)),
     );
     return paginate(items, query.page, query.pageSize);
   } finally {
@@ -251,12 +253,10 @@ export function listScenarios(
       (a, b) =>
         sign *
         (query.sort === "name"
-          ? a.name.localeCompare(b.name, "zh-CN")
+          ? compareNames(a.name, b.name)
           : query.sort === "skillCount"
-            ? a.skillCount - b.skillCount ||
-              a.name.localeCompare(b.name, "zh-CN")
-            : a.sortOrder - b.sortOrder ||
-              a.name.localeCompare(b.name, "zh-CN")),
+            ? a.skillCount - b.skillCount || compareNames(a.name, b.name)
+            : a.sortOrder - b.sortOrder || compareNames(a.name, b.name)),
     );
     return paginate(items, query.page, query.pageSize);
   } finally {
@@ -274,6 +274,7 @@ export function listSkills(
     order: "asc" | "desc";
     sourceIds?: string;
     scenarioIds?: string;
+    workspaces?: string;
     orphan?: "true" | "false";
     multiScenario?: "true" | "false";
   },
@@ -283,6 +284,21 @@ export function listSkills(
     const links = scenarioMap(database);
     const sourceIds = new Set(query.sourceIds?.split(",").filter(Boolean));
     const scenarioIds = new Set(query.scenarioIds?.split(",").filter(Boolean));
+    const workspaceIds = new Set(
+      query.workspaces
+        ?.split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+    );
+    // 1.0.4: 工作区筛选预计算 enabled skill 集合
+    let workspaceEnabled: Set<string> | null = null;
+    if (workspaceIds.size > 0) {
+      workspaceEnabled = new Set<string>();
+      for (const tool of workspaceIds) {
+        const { skillIds } = enabledSkillIdsInTool(database, tool);
+        for (const id of skillIds) workspaceEnabled.add(id);
+      }
+    }
     const needle = query.q?.toLocaleLowerCase();
     const items = allSkills(database)
       .map((row) => toSummary(row, links))
@@ -297,6 +313,8 @@ export function listSkills(
         const scenarioMatches =
           scenarioIds.size === 0 ||
           skill.scenarios.some((scenario) => scenarioIds.has(scenario.id));
+        const workspaceMatches =
+          workspaceEnabled === null || workspaceEnabled.has(skill.id);
         const orphanMatches =
           query.orphan !== "true" || skill.scenarios.length === 0;
         const multiScenarioMatches =
@@ -305,6 +323,7 @@ export function listSkills(
           textMatches &&
           sourceMatches &&
           scenarioMatches &&
+          workspaceMatches &&
           orphanMatches &&
           multiScenarioMatches,
         );
@@ -319,11 +338,11 @@ export function listSkills(
               : (a.createdAt ?? 0)) -
               (query.sort === "updatedAt"
                 ? (b.updatedAt ?? 0)
-                : (b.createdAt ?? 0)) || a.name.localeCompare(b.name, "zh-CN")
+                : (b.createdAt ?? 0)) || compareNames(a.name, b.name)
           : query.sort === "status"
-            ? (a.status || "").localeCompare(b.status || "", "zh-CN") ||
-              a.name.localeCompare(b.name, "zh-CN")
-            : a.name.localeCompare(b.name, "zh-CN")),
+            ? compareNames(a.status || "", b.status || "") ||
+              compareNames(a.name, b.name)
+            : compareNames(a.name, b.name)),
     );
     return paginate(items, query.page, query.pageSize);
   } finally {

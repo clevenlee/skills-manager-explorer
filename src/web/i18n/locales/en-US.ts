@@ -18,6 +18,7 @@ export const enUS = {
     sources: "Sources",
     scenarios: "Scenarios",
     skills: "Skills",
+    workspaces: "Workspaces",
     compare: "Compare",
     status: "Database status",
     home: "Skills Manager Explorer home",
@@ -306,6 +307,23 @@ export const enUS = {
     emptyResult: "No skills in this view",
     errorFallback: "Failed to run comparison.",
     optionsErrorFallback: "Failed to load comparison options.",
+  },
+  workspaces: {
+    eyebrow: "WORKSPACES",
+    title: "Workspaces",
+    lead: "All workspaces known to Skills Manager. Click one to see its enabled skills and scenarios.",
+    empty: "No workspaces are configured yet.",
+    errorFallback: "Failed to load workspaces.",
+    backToList: "← Back to workspaces",
+    tabs: {
+      skills: "Enabled skills",
+      scenarios: "Scenarios",
+    },
+    enabledSkillCount: "{count} skills",
+    enabledScenarioCount: "{count} scenarios",
+    enabled: "Enabled",
+    emptySkills: "No skills are enabled in this workspace.",
+    emptyScenarios: "No scenarios in this workspace.",
   },
 } satisfies MessageSchema;
 

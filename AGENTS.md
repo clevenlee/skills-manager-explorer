@@ -46,6 +46,17 @@
 - 契约：`bun run openapi:check && bun run openapi:lint`
 - 提交前自查：AGENTS/文档 owner、必读规则是否一致；未跑项和剩余风险写入交付说明。
 
+### 6.1 E2E / Playwright 执行边界
+
+- 默认不得执行 E2E、Playwright 或 `bun run test:e2e`；常规功能开发、缺陷修复、重构和交付验证均只运行与改动相称的单元测试、集成测试、静态检查和构建。
+- 只有满足下列任一条件时，才允许执行 E2E / Playwright：
+  1. 正在进行重大版本升级或影响核心用户流程的重大升级；
+  2. 已批准的 plan 中明确列出 E2E / Playwright 测试计划；
+  3. 人类在当前任务中明确要求执行。
+- 即使 plan 已明确列出 E2E / Playwright，也不得自动执行。必须先询问人类选择：立即由当前智能体执行、由人类安排其他智能体执行，或另选时机执行；得到选择前保持未执行状态。
+- 人类在当前任务中已经明确要求执行时，无需重复询问。
+- `bun run verify` 不代表授权追加 E2E / Playwright。交付说明应如实标记 E2E / Playwright 是否执行以及未执行原因。
+
 ## 7. 改动前必须确认
 
 - 是否需要同步 `docs/project-specs/overview.md`、`docs/project-specs/module-inventory.md` 或对应模块文档。

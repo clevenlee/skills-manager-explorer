@@ -15,6 +15,7 @@ export const zhCN = {
     sources: "来源",
     scenarios: "场景",
     skills: "Skills",
+    workspaces: "工作区",
     compare: "比对",
     status: "数据库状态",
     home: "技能管家首页",
@@ -198,7 +199,7 @@ export const zhCN = {
       updatedAt: "更新时间",
     },
     emptyText: "没有匹配的 Skill",
-    orphanBadge: "未归属任何场景",
+    orphanBadge: "无归属场景",
     errorFallback: "无法加载 Skills。",
     selection: {
       selectedCount: "已选 {count} 项",
@@ -297,6 +298,23 @@ export const zhCN = {
     emptyResult: "当前视图没有 Skill",
     errorFallback: "无法完成比对。",
     optionsErrorFallback: "无法加载比对选项。",
+  },
+  workspaces: {
+    eyebrow: "WORKSPACES",
+    title: "工作区",
+    lead: "Skills Manager 已知的所有工作区；点击进入已启用 Skill 与所属场景。",
+    empty: "当前没有已配置的工作区。",
+    errorFallback: "无法加载工作区。",
+    backToList: "← 返回工作区",
+    tabs: {
+      skills: "已启用 Skill",
+      scenarios: "所属场景",
+    },
+    enabledSkillCount: "{count} 个 Skill",
+    enabledScenarioCount: "{count} 个场景",
+    enabled: "已启用",
+    emptySkills: "该工作区暂无已启用 Skill。",
+    emptyScenarios: "该工作区暂无可用场景。",
   },
 };
 
