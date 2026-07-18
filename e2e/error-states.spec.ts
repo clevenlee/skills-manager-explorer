@@ -23,7 +23,7 @@ test("请求失败后可重试恢复", async ({ page }) => {
     await route.continue();
   });
   await page.goto("/");
-  await expect(page.getByText("加载失败", { exact: true })).toBeVisible();
+  await expect(page.getByText("出错了", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "重新尝试" }).click();
   await expect(page.getByRole("link", { name: /Skills/ })).toBeVisible();
 });

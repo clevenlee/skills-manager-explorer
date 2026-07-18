@@ -47,15 +47,15 @@ async function navigate(key: string): Promise<void> {
   <div class="app-frame">
     <nav
       :class="['sidebar', { collapsed: sidebarCollapsed }]"
-      :aria-label="t('nav.overview')"
+      :aria-label="t('nav.primary')"
     >
       <router-link class="brand" to="/" :aria-label="t('nav.home')">
         <img class="brand-icon" :src="skillsManagerIconUrl" alt="" />
       </router-link>
       <div class="sidebar-top">
         <span v-show="!sidebarCollapsed" class="brand-name"
-          ><strong>Skills Manager</strong
-          ><small>{{ t("app.title") }}</small></span
+          ><strong>Skills<br/>Manager<br/>Explorer</strong
+          ><small>{{ t("app.description") }}</small></span
         >
         <a-button
           class="collapse-button"
@@ -268,7 +268,7 @@ async function navigate(key: string): Promise<void> {
     top: 0;
     z-index: 9;
     display: grid;
-    grid-template-columns: 42px 1fr 42px;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
     align-items: center;
     height: 58px;
     padding: 0 10px;
@@ -280,6 +280,9 @@ async function navigate(key: string): Promise<void> {
     justify-self: center;
     font-weight: 700;
     text-decoration: none;
+  }
+  .mobile-actions {
+    justify-self: end;
   }
   .mobile-status {
     justify-self: center;

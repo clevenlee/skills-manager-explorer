@@ -5,7 +5,9 @@
  */
 import {
   assignmentEnvelopeSchema,
+  bulkAddSkillScenariosEnvelopeSchema,
   type AssignmentInput,
+  type BulkAddSkillScenariosInput,
 } from "@/shared/contracts/assignment";
 import {
   overviewEnvelopeSchema,
@@ -58,6 +60,16 @@ export const catalogApi = {
       assignmentEnvelopeSchema,
       {
         method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(input),
+      },
+    ),
+  bulkAddScenarios: (input: BulkAddSkillScenariosInput) =>
+    apiRequest(
+      "/api/v1/skills/bulk-add-scenarios",
+      bulkAddSkillScenariosEnvelopeSchema,
+      {
+        method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(input),
       },

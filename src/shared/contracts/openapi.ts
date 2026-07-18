@@ -5,7 +5,7 @@
  */
 import { OpenAPIHono } from "@hono/zod-openapi";
 
-import { assignmentRoute } from "./assignment";
+import { assignmentRoute, bulkAddSkillScenariosRoute } from "./assignment";
 import {
   overviewRoute,
   scenariosRoute,
@@ -29,6 +29,7 @@ export function buildOpenApiDocument(): ReturnType<
     skillDetailRoute,
     comparisonRoute,
     assignmentRoute,
+    bulkAddSkillScenariosRoute,
   ]) {
     registry.openAPIRegistry.registerPath(route);
   }

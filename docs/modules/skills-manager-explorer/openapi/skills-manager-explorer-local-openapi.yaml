@@ -679,6 +679,88 @@ components:
         - scenarioIds
         - expectedScenarioIds
       additionalProperties: false
+    BulkAddSkillScenariosEnvelope:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: "#/components/schemas/BulkAddSkillScenariosResult"
+            skipped:
+              type: array
+              items:
+                type: object
+                properties:
+                  skillId:
+                    type: string
+                  name:
+                    type: string
+                required:
+                  - skillId
+                  - name
+                additionalProperties: false
+              description: 已包含全部目标场景、因此无新增的 Skill 列表
+          required:
+            - results
+            - skipped
+          additionalProperties: false
+        meta:
+          type: object
+          properties:
+            requestId:
+              type: string
+          required:
+            - requestId
+          additionalProperties: false
+      required:
+        - data
+        - meta
+      additionalProperties: false
+    BulkAddSkillScenariosResult:
+      type: object
+      properties:
+        skillId:
+          type: string
+        name:
+          type: string
+        addedScenarioIds:
+          type: array
+          items:
+            type: string
+        scenarios:
+          type: array
+          items:
+            $ref: "#/components/schemas/SkillScenario"
+      required:
+        - skillId
+        - name
+        - addedScenarioIds
+        - scenarios
+      additionalProperties: false
+    BulkAddSkillScenariosInput:
+      type: object
+      properties:
+        skillIds:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          minItems: 1
+          maxItems: 100
+        scenarioIds:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          minItems: 1
+          maxItems: 50
+      required:
+        - skillIds
+        - scenarioIds
+      additionalProperties: false
   parameters: {}
 paths:
   /api/v1/status:
@@ -1025,6 +1107,43 @@ paths:
                 $ref: "#/components/schemas/ErrorEnvelope"
         "409":
           description: 归属冲突或数据库锁定
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+        "503":
+          description: 数据库只读
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+  /api/v1/skills/bulk-add-scenarios:
+    post:
+      operationId: bulkAddSkillScenarios
+      tags:
+        - Skills
+      summary: 批量把若干场景加到若干 Skill（不替换、不删除）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkAddSkillScenariosInput"
+      responses:
+        "200":
+          description: 逐 Skill 的添加结果与已跳过列表
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BulkAddSkillScenariosEnvelope"
+        "400":
+          description: 请求不合法
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+        "404":
+          description: Skill 或场景不存在
           content:
             application/json:
               schema:

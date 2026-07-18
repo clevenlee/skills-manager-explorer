@@ -2,14 +2,14 @@
 
 ## 1. 文档信息
 
-| 项目     | 内容                                                                                  |
-| -------- | ------------------------------------------------------------------------------------- |
-| 对应 PRD | `../prd/skills-manager-explorer-prd-1.0.md`                                           |
-| 对应规格 | `../spec/skills-manager-explorer-spec-1.0.md`（追加 §13.4 国际化与命名规范）         |
-| 对应计划 | `../exec-plans/技能管家浏览器-plan-local-fullstack-1.0.2.md`                          |
-| 配套 TODO | `../exec-plans/技能管家浏览器-todo-local-fullstack-1.0.2.md`                          |
-| 验证状态 | VERIFY 通过；可进入 DELIVER                                                          |
-| 验证日期 | 2026-07-18                                                                            |
+| 项目      | 内容                                                                         |
+| --------- | ---------------------------------------------------------------------------- |
+| 对应 PRD  | `../prd/skills-manager-explorer-prd-1.0.md`                                  |
+| 对应规格  | `../spec/skills-manager-explorer-spec-1.0.md`（追加 §13.4 国际化与命名规范） |
+| 对应计划  | `../exec-plans/技能管家浏览器-plan-local-fullstack-1.0.2.md`                 |
+| 配套 TODO | `../exec-plans/技能管家浏览器-todo-local-fullstack-1.0.2.md`                 |
+| 验证状态  | VERIFY 通过；可进入 DELIVER                                                  |
+| 验证日期  | 2026-07-18                                                                   |
 
 ## 2. 范围
 
@@ -22,16 +22,16 @@
 
 ## 3. 验证命令与结果
 
-| 命令 | 结果 |
-| --- | --- |
-| `bunx --bun prettier --check .` | 通过（自动生成物已加入 `.prettierignore`） |
-| `bunx --bun eslint .` | 通过 |
-| `bunx --bun vue-tsc --noEmit` | 通过 |
-| `bun test tests` | 38 通过 / 0 失败（含 3 个 i18n key 完整性测试） |
-| `bun run openapi:generate` | 重新生成 `skills-manager-explorer-local-openapi.yaml`，`info["x-locale-resources"]` 包含 `default` / `supported` / `sources` / `storageKey` |
-| `bun scripts/verify-openapi-drift.ts` | 与 Zod 契约一致 |
-| `bunx --bun redocly lint .../skills-manager-explorer-local-openapi.yaml` | 通过 |
-| `bun run build` | 通过（Vite + Bun 单文件构建成功） |
+| 命令                                                                     | 结果                                                                                                                                        |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bunx --bun prettier --check .`                                          | 通过（自动生成物已加入 `.prettierignore`）                                                                                                  |
+| `bunx --bun eslint .`                                                    | 通过                                                                                                                                        |
+| `bunx --bun vue-tsc --noEmit`                                            | 通过                                                                                                                                        |
+| `bun test tests`                                                         | 38 通过 / 0 失败（含 3 个 i18n key 完整性测试）                                                                                             |
+| `bun run openapi:generate`                                               | 重新生成 `skills-manager-explorer-local-openapi.yaml`，`info["x-locale-resources"]` 包含 `default` / `supported` / `sources` / `storageKey` |
+| `bun scripts/verify-openapi-drift.ts`                                    | 与 Zod 契约一致                                                                                                                             |
+| `bunx --bun redocly lint .../skills-manager-explorer-local-openapi.yaml` | 通过                                                                                                                                        |
+| `bun run build`                                                          | 通过（Vite + Bun 单文件构建成功）                                                                                                           |
 
 `bun run verify` 一行串行执行以上全部命令并通过。
 

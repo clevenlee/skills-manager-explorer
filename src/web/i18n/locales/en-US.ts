@@ -13,6 +13,7 @@ export const enUS = {
       "Browse, compare, and safely adjust local Skills Manager data.",
   },
   nav: {
+    primary: "Main navigation",
     overview: "Overview",
     sources: "Sources",
     scenarios: "Scenarios",
@@ -141,6 +142,7 @@ export const enUS = {
     emptyText: "No matching sources",
     externalLink: "Open source in a new tab",
     backToSources: "← Back to sources",
+    urlLabel: "Source URL",
   },
   scenarios: {
     eyebrowList: "WORK CONTEXTS",
@@ -205,6 +207,29 @@ export const enUS = {
     emptyText: "No matching skills",
     orphanBadge: "Not in any scenario",
     errorFallback: "Failed to load skills.",
+    selection: {
+      selectedCount: "{count} selected",
+      clearSelection: "Clear selection",
+      selectAll: "Select all",
+      addToScenarios: "Add to scenarios",
+      selectAtLeastOne: "Select at least one skill first",
+      selectAtLeastOneScenario: "Select at least one scenario first",
+      bulkSuccess:
+        "Added to {updated} skills; refresh Skills Manager if it is already open",
+      bulkPartial:
+        "Added to {updated}, skipped {skipped}; refresh Skills Manager if it is already open",
+      bulkError: "Bulk add failed: {message}",
+    },
+    edit: {
+      aria: "Edit scenario assignment",
+      modalTitle: "Edit scenarios for {name}",
+      save: "Save",
+      cancel: "Cancel",
+      loading: "Loading…",
+      selectPrompt:
+        "Tick the scenarios to assign (existing assignments will be removed)",
+      replaceHelp: "Saving replaces all current scenario assignments.",
+    },
   },
   skillDetail: {
     eyebrow: "SKILL DETAIL",

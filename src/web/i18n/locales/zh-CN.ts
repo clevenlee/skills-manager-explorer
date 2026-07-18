@@ -10,6 +10,7 @@ export const zhCN = {
     description: "浏览、比较并安全调整本地 Skills Manager 数据。",
   },
   nav: {
+    primary: "主导航",
     overview: "概览",
     sources: "来源",
     scenarios: "场景",
@@ -134,6 +135,7 @@ export const zhCN = {
     emptyText: "没有匹配的来源",
     externalLink: "在新窗口打开来源",
     backToSources: "← 返回来源",
+    urlLabel: "来源网址",
   },
   scenarios: {
     eyebrowList: "WORK CONTEXTS",
@@ -198,6 +200,28 @@ export const zhCN = {
     emptyText: "没有匹配的 Skill",
     orphanBadge: "未归属任何场景",
     errorFallback: "无法加载 Skills。",
+    selection: {
+      selectedCount: "已选 {count} 项",
+      clearSelection: "清空选择",
+      selectAll: "全选",
+      addToScenarios: "添加到场景",
+      selectAtLeastOne: "请先选择至少一个 Skill",
+      selectAtLeastOneScenario: "请先选择至少一个场景",
+      bulkSuccess:
+        "已添加到 {updated} 个 Skill；Skills Manager 已打开时请刷新界面",
+      bulkPartial:
+        "已添加 {updated} 个，跳过 {skipped} 个；Skills Manager 已打开时请刷新界面",
+      bulkError: "批量添加失败：{message}",
+    },
+    edit: {
+      aria: "编辑场景归属",
+      modalTitle: "编辑 {name} 的场景归属",
+      save: "保存修改",
+      cancel: "取消",
+      loading: "加载中…",
+      selectPrompt: "勾选要归属的场景（不会删除已有归属）",
+      replaceHelp: "保存会替换当前全部场景归属。",
+    },
   },
   skillDetail: {
     eyebrow: "SKILL DETAIL",

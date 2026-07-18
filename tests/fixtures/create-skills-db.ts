@@ -27,6 +27,36 @@ export function createSkillsDatabase(databasePath: string, seed = true): void {
       skill_id TEXT NOT NULL REFERENCES skills(id), added_at INTEGER NOT NULL,
       sort_order INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (scenario_id, skill_id)
     );
+    CREATE TABLE scenario_skill_tools (
+      scenario_id TEXT NOT NULL REFERENCES scenarios(id) ON DELETE CASCADE,
+      skill_id TEXT NOT NULL REFERENCES skills(id) ON DELETE CASCADE,
+      tool TEXT NOT NULL, enabled INTEGER NOT NULL DEFAULT 1,
+      updated_at INTEGER NOT NULL,
+      PRIMARY KEY (scenario_id, skill_id, tool)
+    );
+    CREATE TABLE active_scenario (
+      key TEXT PRIMARY KEY DEFAULT 'current',
+      scenario_id TEXT REFERENCES scenarios(id) ON DELETE SET NULL
+    );
+    CREATE TABLE settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+    CREATE TABLE skill_targets (
+      id TEXT PRIMARY KEY,
+      skill_id TEXT NOT NULL REFERENCES skills(id) ON DELETE CASCADE,
+      tool TEXT NOT NULL, target_path TEXT NOT NULL, mode TEXT NOT NULL,
+      status TEXT DEFAULT 'ok', synced_at INTEGER, last_error TEXT,
+      source_hash TEXT, UNIQUE(skill_id, tool)
+    );
+    CREATE TABLE projects (
+      id TEXT PRIMARY KEY, name TEXT NOT NULL, path TEXT NOT NULL UNIQUE,
+      workspace_type TEXT NOT NULL DEFAULT 'project', linked_agent_key TEXT,
+      linked_agent_name TEXT, disabled_path TEXT, sort_order INTEGER DEFAULT 0,
+      created_at INTEGER, updated_at INTEGER
+    );
+    CREATE TABLE audit_log (
+      id INTEGER PRIMARY KEY AUTOINCREMENT, ts INTEGER NOT NULL,
+      action TEXT NOT NULL, skill_id TEXT, skill_name TEXT, tool TEXT,
+      success INTEGER NOT NULL, detail TEXT
+    );
   `);
 
   if (seed) {
@@ -130,6 +160,14 @@ export function createSkillsDatabase(databasePath: string, seed = true): void {
       INSERT INTO scenario_skills VALUES ('scenario-review', 'skill-sec', ${now}, 20);
       INSERT INTO scenario_skills VALUES ('scenario-plan', 'skill-api', ${now}, 10);
       INSERT INTO scenario_skills VALUES ('scenario-plan', 'skill-doc', ${now}, 20);
+      INSERT INTO scenario_skill_tools VALUES ('scenario-review', 'skill-test', 'claude_code', 1, ${now});
+      INSERT INTO scenario_skill_tools VALUES ('scenario-review', 'skill-test', 'codex', 1, ${now});
+      INSERT INTO active_scenario VALUES ('current', 'scenario-review');
+      INSERT INTO settings VALUES ('disabled_tools', '["cursor"]');
+      INSERT INTO settings VALUES ('custom_tools', '[{"key":"team_agent","display_name":"Team Agent","skills_dir":"/tmp/team-agent"}]');
+      INSERT INTO skill_targets VALUES ('target-test', 'skill-test', 'codex', '/tmp/codex/skill-test', 'symlink', 'ok', ${now}, NULL, 'hash-skill-test');
+      INSERT INTO projects VALUES ('project-one', '示例项目', '/tmp/project-one', 'project', NULL, NULL, NULL, 0, ${now}, ${now});
+      INSERT INTO audit_log (ts, action, skill_id, skill_name, tool, success) VALUES (${Math.floor(now / 1000)}, 'enable', 'skill-test', '测试驱动开发', 'codex', 1);
     `);
   }
   database.close();

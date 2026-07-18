@@ -5,6 +5,7 @@
   日期：2026-07-17 12:35:00
 -->
 <script setup lang="ts">
+import { message } from "ant-design-vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -80,6 +81,10 @@ async function changePage(next: number) {
 }
 watch(sourceId, load);
 onMounted(load);
+async function copyUrl(url: string): Promise<void> {
+  await navigator.clipboard.writeText(url);
+  void message.success(t("common.copySuccess"));
+}
 </script>
 
 <template>
@@ -89,10 +94,42 @@ onMounted(load);
         t("sources.backToSources")
       }}</router-link>
       <p class="eyebrow">{{ t("sources.eyebrowDetail") }}</p>
-      <h1>{{ detail?.name || t("sources.titleDetailFallback") }}</h1>
+      <div class="title-row">
+        <h1>{{ detail?.name || t("sources.titleDetailFallback") }}</h1>
+        <a
+          v-if="detail?.externalUrl"
+          class="external-link"
+          :href="detail.externalUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          :aria-label="t('sources.externalLink')"
+          >↗</a
+        >
+      </div>
       <p class="lead">
         {{ t("sources.leadDetail", { count: total }) }}
-      </p></template
+      </p>
+      <section
+        v-if="detail?.externalUrl"
+        class="source-url"
+        :aria-label="t('sources.urlLabel')"
+      >
+        <span class="url-label">{{ t("sources.urlLabel") }}</span>
+        <a
+          class="url-value"
+          :href="detail.externalUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          >{{ detail.externalUrl }}</a
+        >
+        <a-button
+          type="text"
+          size="small"
+          :aria-label="t('common.copy')"
+          @click="copyUrl(detail.externalUrl!)"
+          >{{ t("common.copy") }}</a-button
+        >
+      </section></template
     >
     <template v-else
       ><p class="eyebrow">{{ t("sources.eyebrowList") }}</p>
@@ -212,6 +249,64 @@ h1 {
   margin: 18px 0 38px;
   color: #657871;
   font-size: 17px;
+}
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.title-row h1 {
+  margin: 0;
+}
+.external-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgb(25 52 45 / 14%);
+  border-radius: 50%;
+  background: #fffdf7;
+  color: #244f42;
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+.external-link:hover {
+  border-color: #2f765b;
+  color: #1f5747;
+  background: #eaf2ed;
+}
+.source-url {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  margin: -18px 0 32px;
+  padding: 10px 14px;
+  border: 1px solid rgb(25 52 45 / 12%);
+  border-radius: 10px;
+  background: rgb(255 253 247 / 60%);
+}
+.url-label {
+  color: #58736a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.url-value {
+  overflow: hidden;
+  color: #19342d;
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.url-value:hover {
+  color: #2f765b;
+  text-decoration: underline;
 }
 .toolbar {
   display: grid;

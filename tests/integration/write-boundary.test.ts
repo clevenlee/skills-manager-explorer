@@ -30,9 +30,11 @@ describe("数据库写边界", () => {
     expect(writers).toEqual(["services/assignment-service.ts"]);
     const source = readFileSync(join(root, writers[0]!), "utf8");
     expect(source).toContain("INSERT INTO scenario_skills");
+    expect(source).toContain("INSERT OR REPLACE INTO scenario_skill_tools");
+    expect(source).toContain("enabled, updated_at) VALUES (?, ?, ?, 0, ?)");
     expect(source).toContain("DELETE FROM scenario_skills");
     expect(source).not.toMatch(
-      /(?:INSERT INTO|UPDATE|DELETE FROM)\s+(?:skills|scenarios)\b/i,
+      /(?:INSERT(?:\s+OR\s+REPLACE)?\s+INTO|UPDATE|DELETE FROM)\s+(?:skills|scenarios|active_scenario|settings|skill_targets|projects|audit_log)\b/i,
     );
   });
 });

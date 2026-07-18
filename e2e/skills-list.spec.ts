@@ -24,9 +24,57 @@ test("支持表格视图、重复归属筛选和分页数量选择", async ({ pa
 
   await page.getByText("表格", { exact: true }).click();
   await expect(page.getByRole("radio", { name: "表格" })).toBeChecked();
-  await expect(page.getByRole("table", { name: "Skill 列表" })).toBeVisible();
+  await expect(page.getByRole("table", { name: "Skills" })).toBeVisible();
 
   await page.locator(".page-size-control .ant-select").click();
   await page.getByText("20 条/页", { exact: true }).click();
   await expect(page).toHaveURL(/pageSize=20/);
+});
+
+test("批量添加场景使用平铺多选并刷新列表归属", async ({ page }) => {
+  await page.goto("/skills");
+  await page.getByRole("checkbox", { name: "API 设计" }).check();
+  await page.getByRole("checkbox", { name: "独立技能" }).check();
+  await page.getByRole("button", { name: "添加到场景" }).click();
+
+  const dialog = page.getByRole("dialog", { name: "添加到场景" });
+  await expect(dialog.getByRole("combobox")).toHaveCount(0);
+  await expect(
+    dialog.getByRole("checkbox", { name: "编码开发" }),
+  ).toBeVisible();
+  await dialog.getByRole("checkbox", { name: "空场景" }).check();
+  await dialog.getByRole("button", { name: /保\s*存/ }).click();
+
+  await expect(page.getByText("已添加到 2 个 Skill")).toBeVisible();
+  await expect(
+    page.locator(".skill-card", { hasText: "API 设计" }),
+  ).toContainText("空场景");
+  await expect(
+    page.locator(".skill-card", { hasText: "独立技能" }),
+  ).toContainText("空场景");
+
+  const apiCleanup = await page.request.put(
+    "/api/v1/skills/skill-api/scenarios",
+    {
+      data: {
+        expectedScenarioIds: [
+          "scenario-dev",
+          "scenario-empty",
+          "scenario-plan",
+        ],
+        scenarioIds: ["scenario-dev", "scenario-plan"],
+      },
+    },
+  );
+  expect(apiCleanup.ok()).toBeTruthy();
+  const orphanCleanup = await page.request.put(
+    "/api/v1/skills/skill-orphan/scenarios",
+    {
+      data: {
+        expectedScenarioIds: ["scenario-empty"],
+        scenarioIds: [],
+      },
+    },
+  );
+  expect(orphanCleanup.ok()).toBeTruthy();
 });

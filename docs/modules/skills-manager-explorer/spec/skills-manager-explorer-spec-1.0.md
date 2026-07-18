@@ -19,7 +19,7 @@
 3. 1.0 首先保证 macOS 可用，代码和构建方式不得主动阻断 Windows、Linux 后续支持。
 4. 浏览器与本地服务通过 REST JSON API 通信，API 统一使用 `/api/v1` 前缀。
 5. Skills Manager 拥有 SQLite 表结构；本项目不执行迁移、不创建业务表、不改变日志模式。
-6. `scenario_skills` 是唯一允许写入的表；所有其他表只读。
+6. `scenario_skills` 是归属写入表；批量“添加到场景”还可在 `scenario_skill_tools` 中为新增归属写入显式禁用保护值。所有其他数据库表只读。Skills Manager 1.28.3 及以上存在完整同步元数据快照时，归属写入还必须同步对应的 `skills/.skills-manager/scenario-skills/` 关联文件，避免 GUI 启动重建时覆盖数据库变更或默认启用工作区。
 7. 前端为桌面浏览器优先，同时保证窄屏下功能可用，不开发原生移动端。
 8. 1.0 不引入 Pinia；查询条件保留在页面或组合式函数中，只有出现真实跨页面全局状态时才评估引入。
 9. 依赖以本规格确定的主版本为基线，首次初始化时在 `package.json` 和 `bun.lock` 中锁定精确版本。
@@ -167,7 +167,9 @@ contracts ← web/api ← web/views
 7. 任一步失败时整体回滚。
 8. 返回更新后的场景归属和变更摘要。
 
-新增关联使用毫秒级 `added_at`，`sort_order` 使用数据库默认值。不得修改现有关联的 `added_at` 或 `sort_order`。
+新增关联使用毫秒级 `added_at`。单条替换沿用数据库默认 `sort_order`；批量添加从目标场景当前最大 `sort_order` 后顺序追加。不得修改现有关联的 `added_at` 或 `sort_order`。
+
+批量添加归属时，所有新增关联必须处于同一个即时事务中；新关联的 `sort_order` 从目标场景当前最大值后顺序追加。若数据库旁存在 `skills/.skills-manager/schema.json`、`skills/` 与 `scenarios/` 组成的完整元数据快照，则在事务提交前为新增关联原子创建 `scenario-skills/<scenarioId>/<skillId>.json`。文件写入失败时删除本次已创建文件并回滚全部数据库关联；不得覆盖 GUI 同时创建的既有元数据文件。
 
 ### 7.4 测试数据边界
 
@@ -235,22 +237,24 @@ contracts ← web/api ← web/views
 | GET  | `/api/v1/skills/{skillId}`           | `getSkill`              | Skill 全字段详情和场景归属                 |
 | POST | `/api/v1/skill-comparisons`          | `compareSkills`         | 两个来源或场景集合的比较                   |
 | PUT  | `/api/v1/skills/{skillId}/scenarios` | `replaceSkillScenarios` | 原子替换单个 Skill 场景归属                |
+| POST | `/api/v1/skills/bulk-add-scenarios`  | `bulkAddSkillScenarios` | 批量把若干场景**加**入若干 Skill（不替换） |
 
 来源详情页和场景详情页由来源或场景列表数据加已过滤的 Skill 列表组成，不新增重复详情端点。
 
 ### 8.4 错误码
 
-| HTTP 状态 | 错误码                         | 条件                             |
-| --------- | ------------------------------ | -------------------------------- |
-| 400       | `VALIDATION_ERROR`             | 查询、路径或请求体不合法         |
-| 404       | `SKILL_NOT_FOUND`              | Skill 不存在                     |
-| 404       | `SCENARIO_NOT_FOUND`           | 提交的场景不存在                 |
-| 409       | `ASSIGNMENT_CONFLICT`          | 归属自页面加载后已被其他进程修改 |
-| 409       | `DATABASE_LOCKED`              | 数据库正在被其他进程占用         |
-| 422       | `DATABASE_SCHEMA_INCOMPATIBLE` | 必需表或字段不兼容               |
-| 503       | `DATABASE_UNAVAILABLE`         | 数据库缺失、不可读或连接失败     |
-| 503       | `DATABASE_READ_ONLY`           | 用户尝试写入只读数据库           |
-| 500       | `INTERNAL_ERROR`               | 未预期错误，不返回堆栈和 SQL     |
+| HTTP 状态 | 错误码                         | 条件                                                |
+| --------- | ------------------------------ | --------------------------------------------------- |
+| 400       | `VALIDATION_ERROR`             | 查询、路径或请求体不合法                            |
+| 404       | `SKILL_NOT_FOUND`              | Skill 不存在                                        |
+| 404       | `SCENARIO_NOT_FOUND`           | 提交的场景不存在                                    |
+| 409       | `ASSIGNMENT_CONFLICT`          | 归属自页面加载后已被其他进程修改                    |
+| 409       | `DATABASE_LOCKED`              | 数据库正在被其他进程占用                            |
+| 422       | `DATABASE_SCHEMA_INCOMPATIBLE` | 必需表或字段不兼容                                  |
+| 503       | `DATABASE_UNAVAILABLE`         | 数据库缺失、不可读或连接失败                        |
+| 503       | `DATABASE_READ_ONLY`           | 用户尝试写入只读数据库                              |
+| 503       | `METADATA_WRITE_FAILED`        | Skills Manager 关联元数据无法落盘，数据库事务已回滚 |
+| 500       | `INTERNAL_ERROR`               | 未预期错误，不返回堆栈和 SQL                        |
 
 ## 9. Frontend Contract
 
@@ -498,6 +502,8 @@ app.openapi(replaceSkillScenariosRoute, (context) => {
 4. Zod 是契约定义源，OpenAPI YAML 是生成并提交的评审与 Mock 产物。
 5. 实施验证确认 `vue-tsc` 3.3.7 与 TypeScript 7.0.2 的编译器导出不兼容，因此将 TypeScript 固定为 6.0.3；待 Vue 工具链正式兼容 TypeScript 7 后再独立升级。
 6. 1.0.2 计划批准：包名 / 模块目录 / 二进制同步重命名为 `skills-manager-explorer`；新增 `vue-i18n@9` 与中英双语；默认 `zh-CN`，`en-US` 可切换并持久化。详细边界与默认值见 1.0.2 plan `docs/modules/skills-manager-explorer/exec-plans/技能管家浏览器-plan-local-fullstack-1.0.2.md`。
+7. 1.0.3 增量批准：Skills 列表多选 + “添加到场景”按钮（POST `/api/v1/skills/bulk-add-scenarios`，仅添加不替换）；每行场景归属列加“编辑”入口（弹窗内仍调用现有 `replaceSkillScenarios`）；场景归属列表列宽固定 80px。
+8. Skills Manager 1.28.3 将场景归属同步元数据作为启动重建来源。批量添加必须同时持久化关联表与对应元数据文件，并为新增归属保存已知工作区工具的显式禁用值，阻止 GUI 将缺失开关默认启用；严禁修改当前场景、同步目标、项目、设置、审计记录或工作区文件。详见 `adrs/0001-persist-scenario-membership-metadata.md`。
 
 ## 13.4 国际化与命名规范
 
