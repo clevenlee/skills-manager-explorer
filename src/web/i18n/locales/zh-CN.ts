@@ -16,6 +16,7 @@ export const zhCN = {
     scenarios: "场景",
     skills: "Skills",
     workspaces: "工作区",
+    analysis: "分析",
     compare: "比对",
     status: "数据库状态",
     home: "技能管家首页",
@@ -304,6 +305,8 @@ export const zhCN = {
     title: "工作区",
     lead: "Skills Manager 已知的所有工作区；点击进入已启用 Skill 与所属场景。",
     empty: "当前没有已配置的工作区。",
+    emptyEnabled: "当前没有已启用的工作区。",
+    emptyDisabled: "当前没有未启用的工作区。",
     errorFallback: "无法加载工作区。",
     backToList: "← 返回工作区",
     tabs: {
@@ -313,8 +316,31 @@ export const zhCN = {
     enabledSkillCount: "{count} 个 Skill",
     enabledScenarioCount: "{count} 个场景",
     enabled: "已启用",
+    disabled: "未启用",
+    filter: {
+      label: "工作区状态",
+      enabled: "仅已启用",
+      disabled: "仅未启用",
+      all: "全部工作区",
+    },
     emptySkills: "该工作区暂无已启用 Skill。",
     emptyScenarios: "该工作区暂无可用场景。",
+  },
+  analysis: {
+    eyebrow: "ANALYSIS",
+    title: "分析",
+    lead: "针对 Skill / 场景 / 工作区 关系的诊断性查询。",
+    openCta: "查看详情",
+    backToList: "← 返回分析入口",
+    errorFallback: "无法加载分析结果。",
+    workspaceMismatch: {
+      eyebrow: "WORKSPACE · SKILL MISMATCH",
+      title: "工作区 Skill 错配",
+      description:
+        "Skill 已被设置到场景、场景也被工作区应用，但 Skill 本身并未在该工作区启用。这通常意味着某个工作区在部署场景时漏带该 Skill。",
+      empty: "没有发现错配的 Skill。",
+      skillCount: "{count} 个 Skill",
+    },
   },
 };
 

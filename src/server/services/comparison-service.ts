@@ -1,5 +1,5 @@
 /**
- * 集合比对服务，解析来源、场景或工作区操作数并对选定结果执行搜索、排序和分页。
+ * 集合比对服务，解析来源、场景或工作区操作数并对选定结果执行搜索、排序和可选分页。
  * 1.0.4 引入工作区操作数（= Skills Manager 已知 tool）。
  * 作者：NDP Coding
  * 日期：2026-07-17 11:50:00
@@ -146,10 +146,13 @@ export function compareSkills(databasePath: string, input: ComparisonInput) {
       rightOnly: comparison.rightOnly.length,
       difference: comparison.difference.length,
     },
-    items: items.slice(
-      (input.page - 1) * input.pageSize,
-      input.page * input.pageSize,
-    ),
+    items:
+      input.pageSize === 0
+        ? items
+        : items.slice(
+            (input.page - 1) * input.pageSize,
+            input.page * input.pageSize,
+          ),
     total: items.length,
   };
 }

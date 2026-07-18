@@ -1,0 +1,71 @@
+/**
+ * WorkspaceSkillMismatchView 样式：按工作区分组的卡片块。
+ * 作者：NDP Coding
+ * 日期：2026-07-18 09:30:00
+ */
+.page {
+  max-width: var(--layout-max-width);
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 30px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink-soft);
+  font: inherit;
+  cursor: pointer;
+}
+
+.back:hover {
+  color: var(--color-accent-strong);
+}
+
+.page .eyebrow {
+  margin: 0 0 10px;
+  color: var(--color-ink-soft);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.page h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--fs-3xl);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.lead {
+  margin: 18px 0 32px;
+  color: var(--color-ink-muted);
+  line-height: var(--lh-prose);
+}
+
+.workspace-group {
+  margin-bottom: var(--space-7);
+}
+
+.workspace-group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.workspace-group-name {
+  font-family: var(--font-mono);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.workspace-group-count {
+  color: var(--color-ink-muted);
+  font-size: var(--fs-sm);
+}

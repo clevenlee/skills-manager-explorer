@@ -48,6 +48,26 @@ describe("POST /api/v1/skill-comparisons", () => {
       body.data.items.map((item: { id: string }) => item.id).sort(),
     ).toEqual(["skill-api", "skill-sec"]);
   });
+  test("pageSize=0 返回完整比对结果且不分页", async () => {
+    const response = await createApp(databasePath).request(
+      "/api/v1/skill-comparisons",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          left: { type: "scenario", id: "scenario-dev" },
+          right: { type: "scenario", id: "scenario-plan" },
+          result: "difference",
+          pageSize: 0,
+        }),
+      },
+    );
+    const body = (await response.json()) as any;
+
+    expect(response.status).toBe(200);
+    expect(body.meta).toMatchObject({ page: 1, pageSize: 0 });
+    expect(body.data.items).toHaveLength(body.meta.total);
+  });
   test("不存在操作数返回稳定错误", async () => {
     const response = await createApp(databasePath).request(
       "/api/v1/skill-comparisons",

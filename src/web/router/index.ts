@@ -8,6 +8,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import { i18n } from "../i18n";
 import AppLayout from "../layouts/AppLayout.vue";
+import AnalysisView from "../views/AnalysisView.vue";
 import OverviewView from "../views/OverviewView.vue";
 import ScenariosView from "../views/ScenariosView.vue";
 import SkillComparisonView from "../views/SkillComparisonView.vue";
@@ -16,6 +17,7 @@ import SkillsView from "../views/SkillsView.vue";
 import SourcesView from "../views/SourcesView.vue";
 import StatusView from "../views/StatusView.vue";
 import WorkspaceDetailView from "../views/WorkspaceDetailView.vue";
+import WorkspaceSkillMismatchView from "../views/WorkspaceSkillMismatchView.vue";
 import WorkspacesView from "../views/WorkspacesView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 
@@ -85,6 +87,18 @@ export const router = createRouter({
           name: "workspace-detail",
           component: WorkspaceDetailView,
           meta: { titleKey: "workspaces.title" },
+        },
+        {
+          path: "analysis",
+          name: "analysis",
+          component: AnalysisView,
+          meta: { titleKey: "analysis.title" },
+        },
+        {
+          path: "analysis/workspace-skill-mismatches",
+          name: "analysis-workspace-skill-mismatches",
+          component: WorkspaceSkillMismatchView,
+          meta: { titleKey: "analysis.workspaceMismatch.title" },
         },
         {
           path: "status",

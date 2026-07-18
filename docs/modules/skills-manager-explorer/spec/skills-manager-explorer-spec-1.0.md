@@ -227,19 +227,24 @@ contracts ← web/api ← web/views
 
 ### 8.3 端点
 
-| 方法 | 路径                                 | `operationId`           | 用途                                       |
-| ---- | ------------------------------------ | ----------------------- | ------------------------------------------ |
-| GET  | `/api/v1/status`                     | `getApplicationStatus`  | 数据库连接、兼容性和可写能力               |
-| GET  | `/api/v1/overview`                   | `getOverview`           | 概览指标                                   |
-| GET  | `/api/v1/sources`                    | `listSources`           | 来源聚合列表                               |
-| GET  | `/api/v1/scenarios`                  | `listScenarios`         | 场景列表                                   |
-| GET  | `/api/v1/skills`                     | `listSkills`            | Skill 搜索、筛选、排序、重复归属筛选和分页 |
-| GET  | `/api/v1/skills/{skillId}`           | `getSkill`              | Skill 全字段详情和场景归属                 |
-| POST | `/api/v1/skill-comparisons`          | `compareSkills`         | 两个来源或场景集合的比较                   |
-| PUT  | `/api/v1/skills/{skillId}/scenarios` | `replaceSkillScenarios` | 原子替换单个 Skill 场景归属                |
-| POST | `/api/v1/skills/bulk-add-scenarios`  | `bulkAddSkillScenarios` | 批量把若干场景**加**入若干 Skill（不替换） |
+| 方法 | 路径                                  | `operationId`            | 用途                                       |
+| ---- | ------------------------------------- | ------------------------ | ------------------------------------------ |
+| GET  | `/api/v1/status`                      | `getApplicationStatus`   | 数据库连接、兼容性和可写能力               |
+| GET  | `/api/v1/overview`                    | `getOverview`            | 概览指标                                   |
+| GET  | `/api/v1/sources`                     | `listSources`            | 来源聚合列表                               |
+| GET  | `/api/v1/scenarios`                   | `listScenarios`          | 场景列表                                   |
+| GET  | `/api/v1/skills`                      | `listSkills`             | Skill 搜索、筛选、排序、重复归属筛选和分页 |
+| GET  | `/api/v1/skills/{skillId}`            | `getSkill`               | Skill 全字段详情和场景归属                 |
+| POST | `/api/v1/skill-comparisons`           | `compareSkills`          | 两个来源或场景集合的比较                   |
+| PUT  | `/api/v1/skills/{skillId}/scenarios`  | `replaceSkillScenarios`  | 原子替换单个 Skill 场景归属                |
+| POST | `/api/v1/skills/bulk-add-scenarios`   | `bulkAddSkillScenarios`  | 批量把若干场景**加**入若干 Skill（不替换） |
+| GET  | `/api/v1/workspaces`                  | `listWorkspaces`         | 工作区列表、真实启用状态及启用计数         |
+| GET  | `/api/v1/workspaces/{name}/skills`    | `listWorkspaceSkills`    | 指定工作区的已启用 Skill                   |
+| GET  | `/api/v1/workspaces/{name}/scenarios` | `listWorkspaceScenarios` | 指定工作区已启用 Skill 所属场景            |
 
 来源详情页和场景详情页由来源或场景列表数据加已过滤的 Skill 列表组成，不新增重复详情端点。
+
+工作区的 `enabled` 以 `settings.disabled_tools` 为全局状态源：名称在该列表中时为 `false`，否则为 `true`。`scenario_skill_tools`、`skill_targets` 及其他工具设置只用于发现工作区和统计启用内容，不得覆盖全局禁用状态。
 
 ### 8.4 错误码
 
@@ -267,6 +272,8 @@ contracts ← web/api ← web/views
 | `/sources/:sourceId`     | 来源详情；`sourceId` 使用 URL-safe 编码 |
 | `/scenarios`             | 场景清单                                |
 | `/scenarios/:scenarioId` | 场景详情                                |
+| `/workspaces`            | 工作区列表；默认只显示已启用工作区      |
+| `/workspaces/:name`      | 工作区已启用 Skill 与所属场景           |
 | `/skills`                | Skill 清单                              |
 | `/skills/:skillId`       | Skill 详情和场景归属调整                |
 | `/compare`               | 来源与场景比对                          |
@@ -504,6 +511,8 @@ app.openapi(replaceSkillScenariosRoute, (context) => {
 6. 1.0.2 计划批准：包名 / 模块目录 / 二进制同步重命名为 `skills-manager-explorer`；新增 `vue-i18n@9` 与中英双语；默认 `zh-CN`，`en-US` 可切换并持久化。详细边界与默认值见 1.0.2 plan `docs/modules/skills-manager-explorer/exec-plans/技能管家浏览器-plan-local-fullstack-1.0.2.md`。
 7. 1.0.3 增量批准：Skills 列表多选 + “添加到场景”按钮（POST `/api/v1/skills/bulk-add-scenarios`，仅添加不替换）；每行场景归属列加“编辑”入口（弹窗内仍调用现有 `replaceSkillScenarios`）；场景归属列表列宽固定 80px。
 8. Skills Manager 1.28.3 将场景归属同步元数据作为启动重建来源。批量添加必须同时持久化关联表与对应元数据文件，并为新增归属保存已知工作区工具的显式禁用值，阻止 GUI 将缺失开关默认启用；严禁修改当前场景、同步目标、项目、设置、审计记录或工作区文件。详见 `adrs/0001-persist-scenario-membership-metadata.md`。
+9. 1.0.4 工作区状态以 `settings.disabled_tools` 为准；左侧导航中“工作区”位于“Skill”之前，工作区列表提供“仅已启用 / 仅未启用 / 全部”筛选并默认选择“仅已启用”。
+10. 集合比对的工作区操作数只展示已启用工作区，比对结果使用 `pageSize=0` 一次完整返回且页面不渲染分页器；Skill 列表搜索框固定为紧凑宽度，桌面工具栏保持单行，空间不足时横向滚动而不换行。
 
 ## 13.4 国际化与命名规范
 

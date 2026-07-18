@@ -10,6 +10,7 @@ import {
   AppstoreOutlined,
   ClusterOutlined,
   DashboardOutlined,
+  ExperimentOutlined,
   FolderOpenOutlined,
   MenuFoldOutlined,
   MenuOutlined,
@@ -34,8 +35,9 @@ const navItems = computed(() => [
   { key: "/", label: t("nav.overview"), icon: h(DashboardOutlined) },
   { key: "/sources", label: t("nav.sources"), icon: h(FolderOpenOutlined) },
   { key: "/scenarios", label: t("nav.scenarios"), icon: h(ApartmentOutlined) },
-  { key: "/skills", label: t("nav.skills"), icon: h(AppstoreOutlined) },
   { key: "/workspaces", label: t("nav.workspaces"), icon: h(ClusterOutlined) },
+  { key: "/skills", label: t("nav.skills"), icon: h(AppstoreOutlined) },
+  { key: "/analysis", label: t("nav.analysis"), icon: h(ExperimentOutlined) },
   { key: "/compare", label: t("nav.compare"), icon: h(SwapOutlined) },
 ]);
 

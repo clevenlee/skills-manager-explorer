@@ -12,6 +12,7 @@ import { useRoute, useRouter } from "vue-router";
 import type { Scenario, SkillSummary } from "@/shared/contracts/catalog";
 import { catalogApi } from "../api/catalog-api";
 import RequestState from "../components/RequestState.vue";
+import SkillListView from "../components/SkillListView.vue";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -93,22 +94,13 @@ onMounted(load);
         >
           {{ t("workspaces.emptySkills") }}
         </p>
-        <div v-else class="skill-list">
-          <router-link
-            v-for="skill in skills"
-            :key="skill.id"
-            :to="{
-              name: 'skill-detail',
-              params: { skillId: skill.id },
-              query: { from: route.fullPath },
-            }"
-            class="skill-row"
-          >
-            <strong>{{ skill.name }}</strong>
-            <span>{{ skill.description || t("common.noDescription") }}</span>
-            <small>{{ skill.source?.name || t("common.unknownSource") }}</small>
-          </router-link>
-        </div>
+        <SkillListView
+          v-else
+          :items="skills"
+          :from="route.fullPath"
+          :empty-text="t('workspaces.emptySkills')"
+          testid="workspace-skills"
+        />
       </div>
 
       <div v-else data-testid="workspace-scenarios">

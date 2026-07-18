@@ -1,5 +1,5 @@
 /**
- * Skill 集合比对契约，允许来源或场景作为任一操作数并分页查看结果。
+ * Skill 集合比对契约，允许来源、场景或已启用工作区作为任一操作数并完整返回结果。
  * 作者：NDP Coding
  * 日期：2026-07-17 11:25:00
  */
@@ -26,7 +26,7 @@ export const comparisonInputSchema = z
     sort: z.enum(["name", "updatedAt"]).default("name"),
     order: z.enum(["asc", "desc"]).default("asc"),
     page: z.number().int().min(1).default(1),
-    pageSize: z.number().int().min(1).max(100).default(20),
+    pageSize: z.number().int().min(0).max(100).default(0),
   })
   .strict()
   .openapi("SkillComparisonInput");
@@ -72,7 +72,7 @@ export const comparisonRoute = createRoute({
   },
   responses: {
     200: {
-      description: "比对计数与当前结果页",
+      description: "比对计数与结果集合",
       content: { "application/json": { schema: comparisonEnvelopeSchema } },
     },
     400: errorResponse("请求或操作数不合法"),

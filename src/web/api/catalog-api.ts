@@ -19,6 +19,7 @@ import {
   workspaceSkillsEnvelopeSchema,
   workspacesEnvelopeSchema,
 } from "@/shared/contracts/catalog";
+import { workspaceSkillMismatchsEnvelopeSchema } from "@/shared/contracts/analysis";
 import type { Scenario, Source } from "@/shared/contracts/catalog";
 import {
   comparisonEnvelopeSchema,
@@ -88,6 +89,12 @@ export const catalogApi = {
     apiRequest(
       `/api/v1/workspaces/${encodeURIComponent(name)}/scenarios`,
       workspaceScenariosEnvelopeSchema,
+    ),
+  // 1.0.6: 分析 API
+  workspaceSkillMismatches: () =>
+    apiRequest(
+      "/api/v1/analyses/workspace-skill-mismatches",
+      workspaceSkillMismatchsEnvelopeSchema,
     ),
 };
 

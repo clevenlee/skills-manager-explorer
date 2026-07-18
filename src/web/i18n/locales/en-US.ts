@@ -19,6 +19,7 @@ export const enUS = {
     scenarios: "Scenarios",
     skills: "Skills",
     workspaces: "Workspaces",
+    analysis: "Analysis",
     compare: "Compare",
     status: "Database status",
     home: "Skills Manager Explorer home",
@@ -313,6 +314,8 @@ export const enUS = {
     title: "Workspaces",
     lead: "All workspaces known to Skills Manager. Click one to see its enabled skills and scenarios.",
     empty: "No workspaces are configured yet.",
+    emptyEnabled: "No enabled workspaces.",
+    emptyDisabled: "No disabled workspaces.",
     errorFallback: "Failed to load workspaces.",
     backToList: "← Back to workspaces",
     tabs: {
@@ -322,8 +325,31 @@ export const enUS = {
     enabledSkillCount: "{count} skills",
     enabledScenarioCount: "{count} scenarios",
     enabled: "Enabled",
+    disabled: "Disabled",
+    filter: {
+      label: "Workspace status",
+      enabled: "Enabled only",
+      disabled: "Disabled only",
+      all: "All workspaces",
+    },
     emptySkills: "No skills are enabled in this workspace.",
     emptyScenarios: "No scenarios in this workspace.",
+  },
+  analysis: {
+    eyebrow: "ANALYSIS",
+    title: "Analysis",
+    lead: "Diagnostic queries over Skill / scenario / workspace relationships.",
+    openCta: "Open",
+    backToList: "← Back to analysis",
+    errorFallback: "Failed to load analysis results.",
+    workspaceMismatch: {
+      eyebrow: "WORKSPACE · SKILL MISMATCH",
+      title: "Workspace / skill mismatch",
+      description:
+        "Skills that are assigned to a scenario, and that scenario is applied to a workspace, but the skill itself is not enabled in that workspace. This usually means the workspace missed the skill when deploying the scenario.",
+      empty: "No mismatched skills found.",
+      skillCount: "{count} skills",
+    },
   },
 } satisfies MessageSchema;
 

@@ -14,6 +14,7 @@ import type { SkillSummary, Source } from "@/shared/contracts/catalog";
 import { allCatalogApi, catalogApi } from "../api/catalog-api";
 import { useLocale } from "../composables/useLocale";
 import RequestState from "../components/RequestState.vue";
+import SkillListView from "../components/SkillListView.vue";
 
 const { t } = useI18n();
 const { formatNumber } = useLocale();
@@ -163,24 +164,13 @@ async function copyUrl(url: string): Promise<void> {
       :empty-text="t('sources.emptyText')"
       @retry="load"
     >
-      <div v-if="sourceId" class="skill-list">
-        <router-link
-          v-for="skill in skills"
-          :key="skill.id"
-          :to="{
-            name: 'skill-detail',
-            params: { skillId: skill.id },
-            query: { from: route.fullPath },
-          }"
-          class="skill-row"
-          ><strong>{{ skill.name }}</strong
-          ><span>{{ skill.description || t("common.noDescription") }}</span
-          ><small>{{
-            skill.scenarios.length
-              ? skill.scenarios.map((s) => s.name).join(" · ")
-              : t("common.unassigned")
-          }}</small></router-link
-        >
+      <div v-if="sourceId">
+        <SkillListView
+          :items="skills"
+          :from="route.fullPath"
+          :empty-text="t('sources.emptyText')"
+          testid="source-skills"
+        />
       </div>
       <div v-else class="source-grid">
         <article v-for="source in items" :key="source.id" class="source-card">

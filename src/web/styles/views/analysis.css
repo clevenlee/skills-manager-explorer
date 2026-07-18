@@ -1,7 +1,7 @@
 /**
- * WorkspacesView 列表样式：工作区卡片网格 + 启用计数。
+ * AnalysisView 入口页：与 WorkspacesView / 来源卡同款的卡片网格。
  * 作者：NDP Coding
- * 日期：2026-07-18 10:00:00
+ * 日期：2026-07-18 09:30:00
  */
 .page {
   max-width: var(--layout-max-width);
@@ -30,27 +30,13 @@
   font-size: var(--fs-lg);
 }
 
-.workspace-toolbar {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  margin: 0 0 var(--space-5);
-  color: var(--color-ink-muted);
-  font-size: var(--fs-sm);
-  font-weight: 600;
-}
-
-.workspace-status-filter {
-  width: 168px;
-}
-
-.workspace-grid {
+.analysis-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--space-4);
 }
 
-.workspace-card {
+.analysis-card {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -62,53 +48,59 @@
   color: var(--color-ink);
   text-align: left;
   cursor: pointer;
+  font: inherit;
   transition:
     transform var(--duration-base) var(--ease-emphasized),
     border-color var(--duration-base) var(--ease-emphasized),
     box-shadow var(--duration-base) var(--ease-emphasized);
 }
 
-.workspace-card:hover {
+.analysis-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: var(--gradient-card-highlight);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.analysis-card:hover {
   transform: translateY(-2px);
   border-color: var(--color-border-strong);
   box-shadow: var(--shadow-md);
 }
 
-.workspace-card:focus-visible {
+.analysis-card:focus-visible {
   outline: none;
   box-shadow: var(--shadow-focus);
 }
 
-.workspace-name {
-  font-family: var(--font-mono);
-  font-size: var(--fs-md);
-  font-weight: 700;
-}
-
-.workspace-tag {
-  align-self: flex-start;
-  padding: 2px 10px;
-  border-radius: var(--radius-pill);
-  background: var(--color-accent-bg);
-  color: var(--color-accent-strong);
+.analysis-card-eyebrow {
+  color: var(--color-ink-soft);
   font-size: var(--fs-xs);
   font-weight: 700;
-  letter-spacing: var(--tracking-meta);
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
 }
 
-.workspace-tag.disabled {
-  background: var(--color-bg-tint);
-  color: var(--color-ink-muted);
+.analysis-card-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
-.workspace-counts {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.analysis-card-description {
   margin: 0;
-  padding: 0;
-  list-style: none;
   color: var(--color-ink-muted);
-  font-size: var(--fs-base);
+  line-height: var(--lh-prose);
+}
+
+.analysis-card-cta {
+  margin-top: auto;
+  color: var(--color-accent-strong);
+  font-size: var(--fs-sm);
+  font-weight: 600;
 }

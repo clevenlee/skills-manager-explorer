@@ -29,6 +29,13 @@ const items = ref<SkillSummary[]>([]);
 const sources = ref<Source[]>([]);
 const scenarios = ref<Scenario[]>([]);
 const allWorkspaces = ref<Workspace[]>([]);
+// 仅展示有启用资源的工作区（enabledSkillCount > 0 或 enabledScenarioCount > 0）。
+// 用户在前端下拉里看到的应当是"实际在用"的工作区，而不是知识库里所有被配置的工具。
+const enabledWorkspaces = computed(() =>
+  allWorkspaces.value.filter(
+    (ws) => ws.enabledSkillCount > 0 || ws.enabledScenarioCount > 0,
+  ),
+);
 const total = ref(0);
 const loading = ref(true);
 const error = ref("");
@@ -305,11 +312,13 @@ watch(scenarioIds, () => void load());
     <div class="filters">
       <a-input-search
         v-model:value="q"
+        class="skill-search"
         allow-clear
         :placeholder="t('skills.searchPlaceholder')"
         @search="apply"
       /><a-select
         v-model:value="sourceIds"
+        class="filter-multi"
         mode="multiple"
         allow-clear
         max-tag-count="responsive"
@@ -323,6 +332,7 @@ watch(scenarioIds, () => void load());
         ></a-select
       ><a-select
         v-model:value="scenarioIds"
+        class="filter-multi"
         mode="multiple"
         allow-clear
         max-tag-count="responsive"
@@ -336,6 +346,7 @@ watch(scenarioIds, () => void load());
         ></a-select
       ><a-select
         v-model:value="workspaces"
+        class="filter-multi"
         mode="multiple"
         allow-clear
         max-tag-count="responsive"
@@ -343,13 +354,14 @@ watch(scenarioIds, () => void load());
         data-testid="skills-workspace-filter"
         @change="apply"
         ><a-select-option
-          v-for="ws in allWorkspaces"
+          v-for="ws in enabledWorkspaces"
           :key="ws.name"
           :value="ws.name"
           >{{ ws.name }}</a-select-option
         ></a-select
       ><a-select
         v-model:value="sort"
+        class="filter-sort"
         :aria-label="t('skills.sortAria')"
         @change="apply"
         ><a-select-option value="name">{{
@@ -366,6 +378,7 @@ watch(scenarioIds, () => void load());
         }}</a-select-option></a-select
       ><a-select
         v-model:value="order"
+        class="filter-order"
         :aria-label="t('skills.orderAria')"
         @change="apply"
         ><a-select-option value="asc">{{

@@ -605,9 +605,9 @@ components:
           default: 1
         pageSize:
           type: integer
-          minimum: 1
+          minimum: 0
           maximum: 100
-          default: 20
+          default: 0
       required:
         - left
         - right
@@ -1058,7 +1058,7 @@ paths:
               $ref: "#/components/schemas/SkillComparisonInput"
       responses:
         "200":
-          description: 比对计数与当前结果页
+          description: 比对计数与结果集合
           content:
             application/json:
               schema:

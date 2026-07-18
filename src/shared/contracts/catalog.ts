@@ -250,6 +250,7 @@ export type SkillDetail = z.infer<typeof skillDetailSchema>;
 export const workspaceSchema = z
   .object({
     name: z.string(),
+    enabled: z.boolean(),
     enabledSkillCount: z.number().int().nonnegative(),
     enabledScenarioCount: z.number().int().nonnegative(),
   })
@@ -285,7 +286,7 @@ export const workspacesRoute = createRoute({
   path: "/api/v1/workspaces",
   operationId: "listWorkspaces",
   tags: ["Workspaces"],
-  summary: "列出所有已启用的工作区（Skills Manager 已知工具）",
+  summary: "列出所有已知工作区及其启用状态",
   responses: {
     200: {
       description: "工作区列表",

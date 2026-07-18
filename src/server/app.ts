@@ -7,6 +7,7 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { requestId } from "hono/request-id";
 import { secureHeaders } from "hono/secure-headers";
 
+import { registerAnalysisRoute } from "./routes/analysis-route";
 import { registerAssignmentRoute } from "./routes/assignment-route";
 import { registerCatalogRoutes } from "./routes/catalog-routes";
 import { registerComparisonRoute } from "./routes/comparison-route";
@@ -45,6 +46,7 @@ export function createApp(databasePath: string): OpenAPIHono<AppBindings> {
   registerCatalogRoutes(app, databasePath);
   registerComparisonRoute(app, databasePath);
   registerAssignmentRoute(app, databasePath);
+  registerAnalysisRoute(app, databasePath);
   registerStaticRoutes(app);
 
   app.notFound((context) =>

@@ -13,6 +13,7 @@ import type { Scenario, SkillSummary } from "@/shared/contracts/catalog";
 import { allCatalogApi, catalogApi } from "../api/catalog-api";
 import { useLocale } from "../composables/useLocale";
 import RequestState from "../components/RequestState.vue";
+import SkillListView from "../components/SkillListView.vue";
 
 const { t } = useI18n();
 const { formatNumber } = useLocale();
@@ -106,21 +107,13 @@ onMounted(load);
       :empty-text="t('scenarios.emptyText')"
       @retry="load"
     >
-      <div v-if="scenarioId" class="skill-list">
-        <router-link
-          v-for="skill in skills"
-          :key="skill.id"
-          :to="{
-            name: 'skill-detail',
-            params: { skillId: skill.id },
-            query: { from: route.fullPath },
-          }"
-          class="skill-row"
-          ><strong>{{ skill.name }}</strong
-          ><span>{{
-            skill.description || t("common.noDescription")
-          }}</span></router-link
-        >
+      <div v-if="scenarioId">
+        <SkillListView
+          :items="skills"
+          :from="route.fullPath"
+          :empty-text="t('scenarios.emptyText')"
+          testid="scenario-skills"
+        />
       </div>
       <div v-else class="scenario-grid">
         <router-link

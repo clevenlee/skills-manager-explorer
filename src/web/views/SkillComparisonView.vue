@@ -19,6 +19,7 @@ import type { ComparisonInput } from "@/shared/contracts/comparison";
 import { allCatalogApi, catalogApi } from "../api/catalog-api";
 import { useLocale } from "../composables/useLocale";
 import RequestState from "../components/RequestState.vue";
+import { filterWorkspacesByStatus } from "../domain/workspace-filter";
 
 type ResultType = ComparisonInput["result"];
 const { t } = useI18n();
@@ -32,7 +33,6 @@ const items = ref<SkillSummary[]>([]);
 const counts = ref({ common: 0, leftOnly: 0, rightOnly: 0, difference: 0 });
 const leftTotal = ref(0);
 const rightTotal = ref(0);
-const total = ref(0);
 const loading = ref(true);
 const error = ref("");
 const left = ref(String(route.query.left || ""));
@@ -41,7 +41,6 @@ const result = ref<ResultType>(
   (route.query.result as ResultType) || "difference",
 );
 const q = ref(String(route.query.q || ""));
-const page = ref(Number(route.query.page || 1));
 const options = computed(() => [
   {
     label: t("nav.sources"),
@@ -83,10 +82,10 @@ const tabs = computed(() => [
     value: "rightOnly",
   },
 ]);
-function operand(value: string) {
+function operand(value: string): ComparisonInput["left"] {
   const separator = value.indexOf(":");
   return {
-    type: value.slice(0, separator) as "source" | "scenario",
+    type: value.slice(0, separator) as ComparisonInput["left"]["type"],
     id: value.slice(separator + 1),
   };
 }
@@ -96,7 +95,6 @@ function queryValues() {
     right: right.value || undefined,
     result: result.value === "difference" ? undefined : result.value,
     q: q.value || undefined,
-    page: page.value === 1 ? undefined : String(page.value),
   };
 }
 async function syncUrl() {
@@ -119,14 +117,13 @@ async function loadComparison() {
       q: q.value || undefined,
       sort: "name",
       order: "asc",
-      page: page.value,
-      pageSize: 12,
+      page: 1,
+      pageSize: 0,
     });
     items.value = response.data.items;
     counts.value = response.data.counts;
     leftTotal.value = response.data.leftTotal;
     rightTotal.value = response.data.rightTotal;
-    total.value = response.meta.total;
   } catch (reason) {
     error.value =
       reason instanceof Error ? reason.message : t("comparison.errorFallback");
@@ -146,7 +143,7 @@ async function initialize() {
     );
     sources.value = sourceResponse;
     scenarios.value = scenarioResponse;
-    workspaces.value = workspacesRes.data;
+    workspaces.value = filterWorkspacesByStatus(workspacesRes.data, "enabled");
     await loadComparison();
   } catch (reason) {
     error.value =
@@ -157,21 +154,14 @@ async function initialize() {
   }
 }
 async function changeOperands() {
-  page.value = 1;
   await loadComparison();
 }
 async function changeResult(value: string | number) {
   result.value = value as ResultType;
-  page.value = 1;
   await loadComparison();
 }
 async function swap() {
   [left.value, right.value] = [right.value, left.value];
-  page.value = 1;
-  await loadComparison();
-}
-async function changePage(next: number) {
-  page.value = next;
   await loadComparison();
 }
 onMounted(initialize);
@@ -258,14 +248,6 @@ onMounted(initialize);
             ></router-link
           >
         </div>
-        <a-pagination
-          v-if="total > 12"
-          :current="page"
-          :page-size="12"
-          :total="total"
-          :show-size-changer="false"
-          @change="changePage"
-        />
       </template>
     </request-state>
   </section>

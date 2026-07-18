@@ -44,6 +44,21 @@ function stringsFromJson(value: string | undefined): string[] {
   return [];
 }
 
+function disabledWorkspaceTools(database: Database): Set<string> {
+  if (!hasTable(database, "settings")) return new Set<string>();
+  const value = database
+    .query<{ value: string }, []>(
+      "SELECT value FROM settings WHERE key = 'disabled_tools'",
+    )
+    .get()?.value;
+  return new Set(stringsFromJson(value));
+}
+
+/** 对外暴露：1.0.6.x 分析用，先取禁用集再过滤。 */
+export function getDisabledWorkspaceTools(database: Database): Set<string> {
+  return disabledWorkspaceTools(database);
+}
+
 /**
  * 找出当前 Skills Manager 已知的工作区工具名集合。
  * 复用 assignment-service 中的同款逻辑，但单测可独立调用。
@@ -103,9 +118,11 @@ export function knownWorkspaceTools(database: Database): string[] {
 export function enabledSkillIdsInTool(
   database: Database,
   tool: string,
+  disabledTools = disabledWorkspaceTools(database),
 ): { skillIds: Set<string>; scenarioIds: Set<string> } {
   const skillIds = new Set<string>();
   const scenarioIds = new Set<string>();
+  if (disabledTools.has(tool)) return { skillIds, scenarioIds };
   if (hasTable(database, "scenario_skill_tools")) {
     for (const row of database
       .query<{ skill_id: string; scenario_id: string }, [string]>(
@@ -129,6 +146,7 @@ export function enabledSkillIdsInTool(
 
 export interface WorkspaceListing {
   name: string;
+  enabled: boolean;
   enabledSkillCount: number;
   enabledScenarioCount: number;
 }
@@ -137,10 +155,17 @@ export interface WorkspaceListing {
 export function listWorkspaces(databasePath: string): WorkspaceListing[] {
   const database = openReadDatabase(databasePath);
   try {
+    const disabledTools = disabledWorkspaceTools(database);
     return knownWorkspaceTools(database).map((name) => {
-      const { skillIds, scenarioIds } = enabledSkillIdsInTool(database, name);
+      const enabled = !disabledTools.has(name);
+      const { skillIds, scenarioIds } = enabledSkillIdsInTool(
+        database,
+        name,
+        disabledTools,
+      );
       return {
         name,
+        enabled,
         enabledSkillCount: skillIds.size,
         enabledScenarioCount: scenarioIds.size,
       };
