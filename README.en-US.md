@@ -46,8 +46,8 @@ Edit `.env`, replace `SKILLS_MANAGER_DB` with the absolute path to your Skills M
 bun run dev
 ```
 
-- Web UI: http://127.0.0.1:5173
-- Local API: http://127.0.0.1:4173/api/v1/status
+- Web UI: http://127.0.0.1:15173
+- Local API: http://127.0.0.1:14173/api/v1/status
 
 The service binds only to loopback. `.env` and the database file are ignored by Git.
 

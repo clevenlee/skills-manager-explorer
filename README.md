@@ -46,8 +46,8 @@ cp .env.sample .env
 bun run dev
 ```
 
-- 网页：http://127.0.0.1:5173
-- 本地 API：http://127.0.0.1:4173/api/v1/status
+- 网页：http://127.0.0.1:15173
+- 本地 API：http://127.0.0.1:14173/api/v1/status
 
 服务只允许监听本机回环地址。`.env` 与数据库文件已被 Git 忽略。
 

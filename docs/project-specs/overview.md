@@ -32,7 +32,7 @@
 ## 启动入口
 
 - 应用运行配置：复制 `.env.sample` 为 `.env` 后填写；`.env.development.agent` 仅保留智能体开发专用变量。
-- 开发：`bun run dev`；网页端口 5173，本地服务端口 4173。
+- 开发：`bun run dev`；网页端口 15173，本地服务端口 14173。
 - 生产：`bun run build && bun run start`，前端和 API 同源。
 - macOS 单文件：`bun run package`。
 
