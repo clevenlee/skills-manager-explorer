@@ -1,8 +1,18 @@
 # Skills Manager Explorer
 
-> 本项目是上游 [https://github.com/xingkongliang/skills-manager](https://github.com/xingkongliang/skills-manager) 的浏览器扩展，为本地 Skills Manager SQLite 数据库提供 Web 端的浏览、比对和场景归属调整界面。
+> 本项目是上游 [https://github.com/xingkongliang/skills-manager](https://github.com/xingkongliang/skills-manager) 的扩展，为本地 Skills Manager SQLite 数据库提供 Web 端的浏览、比对和场景归属调整界面。
+>
+> English version: [README.en-US.md](./README.en-US.md)
 
 一个由 Bun 驱动的本地全栈 Web 应用，在你的电脑上把 Skills Manager 的 Skill、来源和场景数据以更易读的方式呈现，并让你在不直接操作 SQLite 的前提下安全调整单个 Skill 的场景归属。
+
+## 截图
+
+![screenshot_skills.png](docs/assets/screenshot/screenshot_skills.png)
+
+![screenshot_sources.png](docs/assets/screenshot/screenshot_sources.png)
+
+![screenshot_set_comparison.png](docs/assets/screenshot/screenshot_set_comparison.png)
 
 ## 环境要求
 
@@ -47,7 +57,7 @@ bun run dev
 2. 进入**来源**或**场景**浏览各自清单与详情；点击名称进入已过滤的 Skill 列表。
 3. 在**Skill 列表**搜索关键词、勾选来源与场景、切换块状/表格视图；进入**Skill 详情**查看全字段并调整场景归属。
 4. 在**比对**选两个集合（来源/场景），看共有、仅左、仅右与对称差；可一键交换左右。
-5. 通过顶栏切换中英文；偏好自动记忆在浏览器本地。
+5. 通过菜单切换中英文；偏好自动记忆在浏览器本地。
 
 ## 验证与契约
 

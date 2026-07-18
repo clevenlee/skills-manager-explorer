@@ -28,7 +28,8 @@
     "openapi:lint": "bunx --bun redocly lint docs/modules/skills-manager-explorer/openapi/skills-manager-explorer-local-openapi.yaml",
     "openapi:check": "bun scripts/verify-openapi-drift.ts",
     "mock": "bunx --bun prism mock docs/modules/skills-manager-explorer/openapi/skills-manager-explorer-local-openapi.yaml --host 127.0.0.1 --port 4010",
-    "verify": "bun run format:check && bun run lint && bun run typecheck && bun run test && bun run openapi:check && bun run openapi:lint && bun run build"
+    "readme:check": "bun scripts/check-readme-sync.mjs",
+    "verify": "bun run format:check && bun run lint && bun run typecheck && bun run test && bun run openapi:check && bun run openapi:lint && bun run readme:check && bun run build"
   },
   "dependencies": {
     "@ant-design/icons-vue": "7.0.1",

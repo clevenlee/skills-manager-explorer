@@ -22,7 +22,8 @@
 | 目录                     | 职责                                                                    | owner |
 | ------------------------ | ----------------------------------------------------------------------- | ----- |
 | `AGENTS.md`              | 仓库级地图，AI 与人类共同入口                                           | 仓库  |
-| `README.md`              | 人类读者的一句话定位                                                    | 仓库  |
+| `README.md`              | 人类读者的一句话定位（中文版，双语同步源）                              | 仓库  |
+| `README.en-US.md`        | `README.md` 的英文翻译版（由本仓库的双语 README 同步规则自动维护）      | 仓库  |
 | `.env.development.agent` | 智能体开发专用环境变量模板；应用运行配置见 `.env.sample`                | 仓库  |
 | `docs/project-specs/`    | 全局项目事实、技术栈、模块清单、验证入口                                | 仓库  |
 | `docs/modules/<module>/` | 业务模块文档（按需创建：exec-plans、openapi、review、test、handoff 等） | 模块  |
@@ -48,3 +49,15 @@
 ## 7. 改动前必须确认
 
 - 是否需要同步 `docs/project-specs/overview.md`、`docs/project-specs/module-inventory.md` 或对应模块文档。
+- 是否触发了 README 翻译同步（见下）。
+
+## 8. 双语 README 同步规则
+
+- `README.md`（中文）是项目主页唯一来源；`README.en-US.md`（英文）由其翻译而来，互链。
+- 任何对 `README.md` 的**章节级**改动（新增 / 删除 / 重命名 h2 章节，或新增关键 feature / 命令 / 端口）必须在**同一次提交**中同步翻译到 `README.en-US.md`，维持：
+  1. 同样的 h1（"Skills Manager Explorer"）；
+  2. 同样的 h2 章节集合（允许 EN 额外加 EN-only 元章节，如 "Documentation sync"）；
+  3. 同样的功能描述、命令、端口、仓库路径与产品定位措辞。
+- 兜底闸门：`bun run readme:check`（已接入 `bun run verify`）。当 EN 缺译时，构建会失败并打印缺失章节。
+- 截图占位符、链接、prism / bun 等品牌专名不翻译；保留原文。
+- 当改动仅是错别字、格式微调、文案打磨且不影响结构或功能列表时，可在中文版沉淀后单独提交 EN 同步。

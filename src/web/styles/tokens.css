@@ -126,6 +126,7 @@
   --duration-fast: 140ms;
   --duration-base: 200ms;
   --duration-slow: 320ms;
+  --duration-breath: 2.8s;
   --press-translate: translateY(1px);
   --press-scale: scale(0.985);
 

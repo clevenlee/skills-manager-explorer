@@ -219,8 +219,8 @@
   border-radius: var(--radius-pill);
   background: var(--color-accent-hover);
   box-shadow: 0 0 0 1px var(--color-accent-hover);
-  /* 轻微 "在线" 脉冲 */
-  animation: status-pulse var(--duration-slow) var(--ease-emphasized) infinite;
+  /* 慢速 "在线" 呼吸 */
+  animation: status-pulse var(--duration-breath) var(--ease-emphasized) infinite;
 }
 
 @keyframes status-pulse {
@@ -228,12 +228,12 @@
   100% {
     box-shadow:
       0 0 0 1px var(--color-accent-hover),
-      0 0 0 0 rgb(47 118 91 / 50%);
+      0 0 0 0 rgb(47 118 91 / 40%);
   }
   50% {
     box-shadow:
       0 0 0 1px var(--color-accent-hover),
-      0 0 0 6px rgb(47 118 91 / 0%);
+      0 0 0 8px rgb(47 118 91 / 0%);
   }
 }
 
