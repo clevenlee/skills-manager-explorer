@@ -274,6 +274,13 @@ export const enUS = {
       errorFallback: "Failed to load skill detail.",
     },
   },
+  notFound: {
+    eyebrow: "Page not found",
+    lead: "This page no longer exists.",
+    sub: "The link may be outdated or the address entered was wrong. Go back home or return to the previous page to keep exploring.",
+    backLast: "Go back",
+    backHome: "Back to home",
+  },
   comparison: {
     eyebrow: "SET COMPARISON",
     title: "Set comparison",

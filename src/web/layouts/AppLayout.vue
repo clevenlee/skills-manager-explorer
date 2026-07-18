@@ -1,6 +1,6 @@
 <!--
   应用主布局，提供可收起的桌面侧栏与窄屏抽屉导航，并持续显示本地只读优先边界。
-  导航文案与 aria-label 经 useI18n() 国际化；LocaleSwitcher 挂在桌面侧栏底部与移动端顶栏。
+  导航文案与 aria-label 经 useI18n() 国际化；桌面侧栏底部自上而下：收起 → 语言 → 数据库状态。
   作者：NDP Coding
   日期：2026-07-17 10:55:00
 -->
@@ -45,6 +45,9 @@ async function navigate(key: string): Promise<void> {
 
 <template>
   <div class="app-frame">
+    <a class="skip-link" href="#main-content">{{
+      t("common.skipToContent", "Skip to content")
+    }}</a>
     <nav
       :class="['sidebar', { collapsed: sidebarCollapsed }]"
       :aria-label="t('nav.primary')"
@@ -57,6 +60,15 @@ async function navigate(key: string): Promise<void> {
           ><strong>Skills<br />Manager<br />Explorer</strong
           ><small>{{ t("app.description") }}</small></span
         >
+      </div>
+      <a-menu
+        mode="inline"
+        :items="navItems"
+        :selected-keys="selectedKeys"
+        :inline-collapsed="sidebarCollapsed"
+        @click="navigate(String($event.key))"
+      />
+      <div class="sidebar-footer">
         <a-button
           class="collapse-button"
           type="text"
@@ -70,15 +82,9 @@ async function navigate(key: string): Promise<void> {
           <menu-unfold-outlined v-if="sidebarCollapsed" />
           <menu-fold-outlined v-else />
         </a-button>
-      </div>
-      <a-menu
-        mode="inline"
-        :items="navItems"
-        :selected-keys="selectedKeys"
-        :inline-collapsed="sidebarCollapsed"
-        @click="navigate(String($event.key))"
-      />
-      <div class="sidebar-footer">
+        <span class="sidebar-footer-divider" aria-hidden="true" />
+        <LocaleSwitcher class="locale-switcher-slot" />
+        <span class="sidebar-footer-divider" aria-hidden="true" />
         <router-link
           class="database-link"
           to="/status"
@@ -89,7 +95,6 @@ async function navigate(key: string): Promise<void> {
             >{{ t("nav.status") }}</span
           >
         </router-link>
-        <LocaleSwitcher class="locale-switcher-slot" />
       </div>
     </nav>
 

@@ -15,6 +15,7 @@ import SkillDetailView from "../views/SkillDetailView.vue";
 import SkillsView from "../views/SkillsView.vue";
 import SourcesView from "../views/SourcesView.vue";
 import StatusView from "../views/StatusView.vue";
+import NotFoundView from "../views/NotFoundView.vue";
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -78,6 +79,12 @@ export const router = createRouter({
           meta: { titleKey: "status.page.title" },
         },
       ],
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "not-found",
+      component: NotFoundView,
+      meta: { titleKey: "notFound.eyebrow" },
     },
   ],
 });

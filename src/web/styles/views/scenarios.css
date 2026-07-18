@@ -51,6 +51,7 @@
 }
 
 .scenario-card {
+  position: relative;
   display: grid;
   grid-template-columns: 54px 1fr auto;
   gap: var(--space-5);
@@ -62,11 +63,23 @@
   color: var(--color-ink);
   text-decoration: none;
   transition:
-    border-color var(--duration-base) var(--ease-standard),
-    box-shadow var(--duration-base) var(--ease-standard);
+    transform var(--duration-base) var(--ease-emphasized),
+    border-color var(--duration-base) var(--ease-emphasized),
+    box-shadow var(--duration-base) var(--ease-emphasized);
+  overflow: hidden;
+}
+
+.scenario-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: var(--gradient-card-highlight);
+  pointer-events: none;
 }
 
 .scenario-card:hover {
+  transform: translateY(-1px);
   border-color: #6b9586;
   box-shadow: var(--shadow-sm);
 }

@@ -265,6 +265,13 @@ export const zhCN = {
       errorFallback: "无法加载 Skill 详情。",
     },
   },
+  notFound: {
+    eyebrow: "Page not found",
+    lead: "这里没有内容。",
+    sub: "可能链接已失效，或地址输入有误。回到主页或上次访问的页面继续浏览。",
+    backLast: "回到上次",
+    backHome: "返回主页",
+  },
   comparison: {
     eyebrow: "SET COMPARISON",
     title: "集合比对",

@@ -120,6 +120,7 @@
 }
 
 .source-card {
+  position: relative;
   min-width: 0;
   padding: var(--space-6);
   border: 1px solid var(--color-border);
@@ -127,12 +128,23 @@
   background: var(--color-bg-elevated);
   text-decoration: none;
   transition:
-    transform var(--duration-base) var(--ease-standard),
-    border-color var(--duration-base) var(--ease-standard),
-    box-shadow var(--duration-base) var(--ease-standard);
+    transform var(--duration-base) var(--ease-emphasized),
+    border-color var(--duration-base) var(--ease-emphasized),
+    box-shadow var(--duration-base) var(--ease-emphasized);
+  overflow: hidden;
+}
+
+.source-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: var(--gradient-card-highlight);
+  pointer-events: none;
 }
 
 .source-card:hover {
+  transform: translateY(-2px);
   border-color: var(--color-border-strong);
   box-shadow: var(--shadow-md);
 }

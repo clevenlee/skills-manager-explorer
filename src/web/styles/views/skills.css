@@ -73,9 +73,14 @@
   padding: 10px var(--space-4);
   border: 1px solid #b5d1c5;
   border-radius: var(--radius-md);
-  background: var(--color-accent-bg);
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-bg-hover) 0%,
+    var(--color-accent-bg) 100%
+  );
   color: var(--color-accent-strong);
   font-weight: 600;
+  box-shadow: var(--shadow-sm);
 }
 
 .skill-grid {
@@ -103,12 +108,26 @@
   background: var(--color-bg-elevated);
   text-decoration: none;
   transition:
-    border-color var(--duration-base) var(--ease-standard),
-    background var(--duration-base) var(--ease-standard),
-    box-shadow var(--duration-base) var(--ease-standard);
+    border-color var(--duration-base) var(--ease-emphasized),
+    background var(--duration-base) var(--ease-emphasized),
+    box-shadow var(--duration-base) var(--ease-emphasized),
+    transform var(--duration-base) var(--ease-emphasized);
+}
+
+/* 顶部 1px 高光，给卡片"立体玻璃感" */
+.skill-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--gradient-card-highlight);
+  pointer-events: none;
+  opacity: 0.7;
 }
 
 .skill-card:hover {
+  transform: translateY(-2px);
   border-color: #6b9586;
   box-shadow: var(--shadow-md);
 }
@@ -116,6 +135,20 @@
 .skill-card-selected {
   border-color: var(--color-accent-hover);
   background: var(--color-accent-bg);
+  box-shadow: var(--shadow-sm);
+}
+
+.skill-card-selected::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    135deg,
+    rgb(47 118 91 / 6%) 0%,
+    rgb(47 118 91 / 0) 60%
+  );
+  pointer-events: none;
 }
 
 .skill-card-top {
@@ -225,7 +258,11 @@
 }
 
 .skill-row-selected {
-  background: var(--color-accent-bg);
+  background: linear-gradient(
+    180deg,
+    var(--color-accent-bg) 0%,
+    rgb(234 242 237 / 0.4) 100%
+  );
 }
 
 .col-select {
