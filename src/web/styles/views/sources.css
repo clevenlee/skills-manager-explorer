@@ -1,0 +1,223 @@
+/**
+ * SourcesView 样式：清单 + 详情（标题旁 ↗ 外链、元数据条、Skill 行）。
+ * 作者：NDP Coding
+ * 日期：2026-07-18 10:00:00
+ */
+.page {
+  max-width: var(--layout-max-width);
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 30px;
+  color: var(--color-ink-soft);
+}
+
+.page .eyebrow {
+  margin: 0 0 10px;
+  color: var(--color-ink-soft);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.page h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--fs-4xl);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+}
+
+.lead {
+  margin: 18px 0 38px;
+  color: var(--color-ink-muted);
+  font-size: var(--fs-lg);
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.title-row h1 {
+  margin: 0;
+}
+
+.external-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-elevated);
+  color: var(--color-accent-strong);
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
+}
+
+.external-link:hover {
+  border-color: var(--color-accent-hover);
+  color: var(--color-accent-strong);
+  background: var(--color-accent-bg);
+}
+
+.source-url {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  margin: -18px 0 var(--space-7);
+  padding: 10px var(--space-3);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-tint);
+}
+
+.url-label {
+  color: var(--color-ink-soft);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-meta);
+}
+
+.url-value {
+  overflow: hidden;
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.url-value:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: minmax(240px, 480px) 170px;
+  gap: var(--space-3);
+  margin-bottom: 30px;
+}
+
+.source-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: 28px;
+}
+
+.source-card {
+  min-width: 0;
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-elevated);
+  text-decoration: none;
+  transition:
+    transform var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+}
+
+.source-card:hover {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.source-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.source-card h2 {
+  margin: var(--space-6) 0 10px;
+  font-size: var(--fs-xl);
+}
+
+.source-key {
+  overflow: hidden;
+  color: var(--color-ink-soft);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.counts {
+  display: flex;
+  gap: var(--space-5);
+  margin-top: var(--space-7);
+  color: var(--color-ink-muted);
+  font-size: var(--fs-sm);
+}
+
+.counts strong {
+  margin-right: var(--space-1);
+  color: var(--color-ink);
+  font-size: 18px;
+}
+
+.skill-list {
+  display: grid;
+  gap: 10px;
+}
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 180px 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: 18px 20px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-elevated);
+  color: var(--color-ink);
+  text-decoration: none;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.skill-row:hover {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.skill-row span {
+  color: var(--color-ink-muted);
+}
+
+.skill-row small {
+  color: var(--color-ink-muted);
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .source-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .toolbar,
+  .source-grid {
+    grid-template-columns: 1fr;
+  }
+  .skill-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}

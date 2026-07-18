@@ -1,0 +1,103 @@
+/**
+ * Overview 视图样式：编辑风 Hero + 5 列 metric grid。
+ * 通过 tokens.css 的 CSS 变量驱动色板与节奏；hover 用提起的微位移与柔和阴影。
+ * 作者：NDP Coding
+ * 日期：2026-07-18 10:00:00
+ */
+.page {
+  max-width: var(--layout-max-width);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  color: var(--color-ink-soft);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.page h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--fs-5xl);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: var(--lh-tight);
+  white-space: pre-line;
+}
+
+.lead {
+  max-width: 600px;
+  margin: 26px 0 52px;
+  color: var(--color-ink-muted);
+  font-size: 18px;
+  line-height: var(--lh-relaxed);
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-4);
+}
+
+.metric-card {
+  display: flex;
+  min-height: 210px;
+  flex-direction: column;
+  padding: var(--space-7);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: rgb(255 253 247 / 92%);
+  color: var(--color-ink);
+  text-decoration: none;
+  transition:
+    transform var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard);
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-lg);
+}
+
+.metric-card strong {
+  margin: auto 0;
+  font-family: var(--font-serif);
+  font-size: 58px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.metric-card small {
+  color: var(--color-ink-soft);
+}
+
+.metric-card.accent {
+  color: #fff;
+  background: var(--color-accent);
+}
+
+.metric-card.accent small {
+  color: #d8e8df;
+}
+
+@media (max-width: 1000px) {
+  .metric-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+  .metric-card {
+    min-height: 150px;
+  }
+  .metric-card strong {
+    font-size: 46px;
+  }
+}

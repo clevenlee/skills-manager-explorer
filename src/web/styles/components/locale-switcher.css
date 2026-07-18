@@ -1,0 +1,9 @@
+/**
+ * LocaleSwitcher 样式：顶栏 / 侧栏语言切换按钮态。
+ * 作者：NDP Coding
+ * 日期：2026-07-18 10:00:00
+ */
+.locale-switcher {
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}

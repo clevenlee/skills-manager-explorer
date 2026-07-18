@@ -48,8 +48,4 @@ function pick(value: SupportedLocale): void {
   </a-dropdown>
 </template>
 
-<style scoped>
-.locale-switcher {
-  font-weight: 600;
-}
-</style>
+<style scoped src="../styles/components/locale-switcher.css"></style>

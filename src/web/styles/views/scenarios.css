@@ -1,0 +1,136 @@
+/**
+ * ScenariosView 样式：场景清单 / 详情 / Skill 行。
+ * 作者：NDP Coding
+ * 日期：2026-07-18 10:00:00
+ */
+.page {
+  max-width: 1000px;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 30px;
+  color: var(--color-ink-soft);
+}
+
+.page .eyebrow {
+  margin: 0 0 10px;
+  color: var(--color-ink-soft);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.page h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--fs-4xl);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+}
+
+.lead {
+  max-width: 680px;
+  margin: 18px 0 36px;
+  color: var(--color-ink-muted);
+  font-size: var(--fs-lg);
+  line-height: var(--lh-relaxed);
+}
+
+.search {
+  max-width: 480px;
+  margin-bottom: 30px;
+}
+
+.scenario-grid,
+.skill-list {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: 28px;
+}
+
+.scenario-card {
+  display: grid;
+  grid-template-columns: 54px 1fr auto;
+  gap: var(--space-5);
+  align-items: center;
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-elevated);
+  color: var(--color-ink);
+  text-decoration: none;
+  transition:
+    border-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+}
+
+.scenario-card:hover {
+  border-color: #6b9586;
+  box-shadow: var(--shadow-sm);
+}
+
+.order {
+  color: var(--color-ink-faint);
+  font-family: var(--font-serif);
+  font-size: 24px;
+}
+
+.scenario-card h2 {
+  margin: 0 5px 0 0;
+  font-size: var(--fs-xl);
+}
+
+.scenario-card p {
+  margin: 0;
+  color: var(--color-ink-muted);
+}
+
+.scenario-card > strong {
+  font-family: var(--font-serif);
+  font-size: 30px;
+}
+
+.scenario-card small {
+  color: var(--color-ink-soft);
+  font-family: inherit;
+  font-size: var(--fs-xs);
+}
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  gap: 18px;
+  padding: 18px 20px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-elevated);
+  color: var(--color-ink);
+  text-decoration: none;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.skill-row:hover {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.skill-row span {
+  color: var(--color-ink-muted);
+}
+
+@media (max-width: 560px) {
+  .scenario-card {
+    grid-template-columns: 38px 1fr;
+  }
+  .scenario-card > strong {
+    grid-column: 2;
+    font-size: 20px;
+  }
+  .skill-row {
+    grid-template-columns: 1fr;
+  }
+}

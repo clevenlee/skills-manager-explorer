@@ -1,0 +1,89 @@
+/**
+ * StatusView 样式：数据库状态卡片，左侧状态图标 + 右侧文案与按钮。
+ * 作者：NDP Coding
+ * 日期：2026-07-18 10:00:00
+ */
+.status-view {
+  max-width: 880px;
+}
+
+.status-view .eyebrow {
+  margin: 0 0 var(--space-3);
+  color: var(--color-ink-soft);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.status-view h1 {
+  margin: 0 0 42px;
+  font-family: var(--font-serif);
+  font-size: var(--fs-3xl);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+.status-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-6);
+  padding: clamp(24px, 5vw, 48px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  background: var(--color-bg-elevated);
+  box-shadow: var(--shadow-md);
+}
+
+.state-icon {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border-radius: var(--radius-lg);
+  color: #fff;
+  background: var(--color-warn);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.state-icon.ready {
+  background: var(--color-accent-hover);
+}
+
+.file-label {
+  margin: 2px 0 var(--space-2);
+  color: var(--color-ink-soft);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.status-card h2 {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 4vw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.state-copy,
+.issues {
+  margin: 14px 0 0;
+  color: var(--color-ink-muted);
+  line-height: var(--lh-relaxed);
+}
+
+.issues {
+  padding-left: 20px;
+}
+
+.retry {
+  margin-top: var(--space-6);
+}
+
+@media (max-width: 520px) {
+  .status-card {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,129 @@
+/**
+ * SkillDetailView 样式：标题 + 状态标签 / 场景归属操作条 / 全字段表格。
+ * 作者：NDP Coding
+ * 日期：2026-07-18 10:00:00
+ */
+.page {
+  max-width: 1000px;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 30px;
+  color: var(--color-ink-soft);
+}
+
+.page .eyebrow {
+  margin: 0 0 10px;
+  color: var(--color-ink-soft);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.title-row {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+.title-row h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(42px, 6vw, 68px);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+}
+
+.title-row p {
+  max-width: 680px;
+  color: var(--color-ink-muted);
+  font-size: var(--fs-lg);
+  line-height: var(--lh-relaxed);
+}
+
+.assignment {
+  display: grid;
+  grid-template-columns: 1fr minmax(260px, 1.5fr) auto;
+  gap: var(--space-4);
+  align-items: center;
+  margin: 40px 0 var(--space-6);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  color: #fff;
+  background: var(--color-accent);
+  box-shadow: 0 12px 32px rgb(31 87 71 / 18%);
+}
+
+.assignment h2,
+.assignment p {
+  margin: 0;
+}
+
+.assignment p {
+  margin-top: 5px;
+  color: #d5e6df;
+  font-size: var(--fs-sm);
+}
+
+.scenario-select {
+  width: 100%;
+}
+
+.fields {
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-elevated);
+  overflow: hidden;
+}
+
+.fields > div {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.fields > div:last-child {
+  border-bottom: 0;
+}
+
+.fields dt {
+  padding: 18px var(--space-5);
+  color: var(--color-ink-muted);
+  font-size: 13px;
+}
+
+.fields dd {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 18px var(--space-5);
+  border-left: 1px solid var(--color-border-soft);
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+  .assignment {
+    grid-template-columns: 1fr;
+  }
+  .fields > div {
+    grid-template-columns: 1fr;
+  }
+  .fields dt {
+    padding-bottom: 4px;
+  }
+  .fields dd {
+    padding-top: 4px;
+    border-left: 0;
+  }
+  .title-row {
+    flex-direction: column;
+  }
+}

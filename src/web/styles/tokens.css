@@ -1,0 +1,104 @@
+/**
+ * 设计 token：色彩、字体、间距、半径、阴影、缓动。
+ * 所有 Vue 视图与组件通过 CSS 自定义属性引用；新增视觉值先在此登记，避免页面散落硬编码。
+ * 作者：NDP Coding
+ * 日期：2026-07-18 10:00:00
+ */
+:root {
+  /* —— 品牌色（暖米黄 + 森林绿，P0 不引入新色） —— */
+  --color-bg: #f4f1e8;
+  --color-bg-elevated: #fffdf7;
+  --color-bg-sunken: #efece2;
+  --color-bg-tint: rgba(255, 253, 247, 0.6);
+  --color-border: rgb(25 52 45 / 14%);
+  --color-border-strong: rgb(25 52 45 / 24%);
+  --color-border-soft: rgb(25 52 45 / 10%);
+  --color-ink: #19342d;
+  --color-ink-muted: #526860;
+  --color-ink-soft: #71837c;
+  --color-ink-faint: #8a9a94;
+  --color-accent: #245c4c;
+  --color-accent-strong: #1f5747;
+  --color-accent-soft: #dfeadf;
+  --color-accent-bg: #eaf2ed;
+  --color-accent-hover: #2f765b;
+  --color-warn: #b77736;
+  --color-warn-soft: #e9d6c2;
+  --color-danger: #c14a3b;
+  --color-focus-ring: rgb(31 87 71 / 35%);
+
+  /* —— 字体 —— */
+  --font-sans:
+    "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-serif:
+    Georgia, "Times New Roman", "Songti SC", "Source Han Serif SC",
+    "Noto Serif CJK SC", serif;
+  --font-mono:
+    ui-monospace, "SFMono-Regular", Menlo, Consolas, "Courier New", monospace;
+
+  /* —— 类型尺度 —— */
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-base: 14px;
+  --fs-md: 16px;
+  --fs-lg: 17px;
+  --fs-xl: 22px;
+  --fs-2xl: 28px;
+  --fs-3xl: clamp(38px, 6vw, 56px);
+  --fs-4xl: clamp(46px, 7vw, 76px);
+  --fs-5xl: clamp(48px, 8vw, 88px);
+
+  --lh-tight: 1.05;
+  --lh-snug: 1.25;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.7;
+  --tracking-eyebrow: 0.16em;
+  --tracking-meta: 0.04em;
+
+  /* —— 间距 4px 基准 —— */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 56px;
+  --space-10: 72px;
+
+  /* —— 半径 —— */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-2xl: 28px;
+  --radius-pill: 999px;
+
+  /* —— 阴影 —— */
+  --shadow-sm: 0 1px 2px rgb(32 56 48 / 6%);
+  --shadow-md: 0 8px 24px rgb(32 56 48 / 8%);
+  --shadow-lg: 0 24px 60px rgb(32 56 48 / 12%);
+  --shadow-focus: 0 0 0 3px var(--color-focus-ring);
+
+  /* —— 动效 —— */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 260ms;
+
+  /* —— 布局 —— */
+  --sidebar-width: 210px;
+  --sidebar-width-collapsed: 80px;
+  --layout-max-width: 1100px;
+  --content-pad-x: clamp(18px, 4vw, 70px);
+  --content-pad-y: 56px;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --content-pad-x: 18px;
+    --content-pad-y: 24px;
+  }
+}
