@@ -87,6 +87,15 @@
   font-size: var(--fs-sm);
 }
 
+/* 1.0.6.x：保存归属按钮在 disabled 状态下 Ant Design 默认把主按钮文字
+   渲染为深绿，叠加在 #245c4c 背景上几乎不可见。这里强制主按钮
+   （含 disabled 态）字色为白色，对比度符合 WCAG AA。 */
+.assignment :deep(.ant-btn-primary),
+.assignment :deep(.ant-btn-primary:disabled),
+.assignment :deep(.ant-btn-primary[disabled]) {
+  color: #fff;
+}
+
 .scenario-select {
   width: 100%;
 }

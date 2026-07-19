@@ -644,6 +644,7 @@ watch(scenarioIds, () => void load());
           ? t('skills.edit.modalTitle', { name: editModalSkill.name })
           : ''
       "
+      :width="620"
       :ok-text="t('skills.edit.save')"
       :cancel-text="t('skills.edit.cancel')"
       :confirm-loading="editModalSaving"
@@ -651,19 +652,19 @@ watch(scenarioIds, () => void load());
       @cancel="cancelEdit"
     >
       <p class="modal-hint">{{ t("skills.edit.replaceHelp") }}</p>
-      <a-select
+      <a-checkbox-group
         v-model:value="editModalScenarios"
-        mode="multiple"
-        allow-clear
-        :placeholder="t('skillDetail.assignment.placeholder')"
+        class="scenario-checkbox-grid"
+        :aria-label="t('skills.filters.scenarios')"
       >
-        <a-select-option
+        <a-checkbox
           v-for="scenario in scenarios"
           :key="scenario.id"
           :value="scenario.id"
-          >{{ scenario.name }}</a-select-option
+          class="scenario-checkbox-option"
+          >{{ scenario.name }}</a-checkbox
         >
-      </a-select>
+      </a-checkbox-group>
     </a-modal>
   </section>
 </template>
